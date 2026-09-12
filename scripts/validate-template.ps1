@@ -139,10 +139,11 @@ function Test-TemplateLinks {
             $targetPath = $rawTarget.Split('#')[0]
             if ([string]::IsNullOrWhiteSpace($targetPath)) { continue }
 
-            $resolved = Join-Path (Split-Path -Parent $file.FullName) $targetPath
+            $resolved = [System.IO.Path]::GetFullPath((Join-Path (Split-Path -Parent $file.FullName) $targetPath))
             if (-not (Test-Path $resolved)) {
-                $rootResolved = Join-Path $RepoRoot $targetPath
-                if (-not (Test-Path $rootResolved)) {
+                $rootResolved = [System.IO.Path]::GetFullPath((Join-Path $RepoRoot $targetPath))
+                $coreResolved = $resolved -replace '([\\/]+)modules[\\/]+[^\\/]+([\\/]+)', '$1core$2'
+                if (-not (Test-Path $rootResolved) -and -not (Test-Path $coreResolved)) {
                     Write-Host "  [FAIL] Broken link in $($file.Name): `"$rawTarget`"" -ForegroundColor Red
                     $bad++
                 }
