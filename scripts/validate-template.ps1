@@ -195,7 +195,8 @@ function Test-TemplatePlaceholders {
     }
 
     foreach ($ph in $placeholders.Keys) {
-        $found = ($regContent.Contains($ph)) -or ($coreRegContent.Contains($ph)) -or ($manifestContent.Contains($ph)) -or ($moduleRegContent.Contains($ph))
+        $variableName = $ph -replace '^\{\{|\}\}$', ''
+        $found = ($regContent.Contains($variableName)) -or ($coreRegContent.Contains($variableName)) -or ($manifestContent.Contains($variableName)) -or ($moduleRegContent.Contains($variableName))
         if (-not $found) {
             Write-Host "  [FAIL] Unregistered placeholder: $ph in $Dir" -ForegroundColor Red
             $unregistered++
