@@ -1,5 +1,7 @@
 # Forsetum Harness Protocol
 
+[![Cross-platform validation](https://github.com/forsetum/forsetum-harness/actions/workflows/validate.yml/badge.svg)](https://github.com/forsetum/forsetum-harness/actions/workflows/validate.yml)
+
 Forsetum Harness Protocol is a local-first governance methodology for reliable
 AI-assisted work. Forsetum Harness is its public reference implementation and
 tooling: it gives repository-aware AI agents the context, decisions,
@@ -8,8 +10,7 @@ change a project.
 
 ## Quick Start
 
-The public repository is planned, but is not published yet. After publication,
-the intended flow will be:
+Clone the public repository and initialize a project-local harness:
 
 ```bash
 git clone https://github.com/forsetum/forsetum-harness
@@ -25,9 +26,8 @@ Set-Location forsetum-harness
 .\scripts\init.ps1
 ```
 
-The URL above is an intended future location, not a claim that the repository
-already exists. The initializer supports interactive setup and real options
-such as `--lang`, `--module`, `--target`, and `--name`.
+The initializer supports interactive setup and real options such as `--lang`,
+`--module`, `--target`, and `--name`.
 
 ## Why Forsetum Exists
 
