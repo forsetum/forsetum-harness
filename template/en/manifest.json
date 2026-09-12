@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "2.0.0",
+  "language": "en",
+  "name": "AI Harness Modular Template Library",
+  "core": {
+    "directory": "core",
+    "required_variables": [
+      {
+        "key": "PROJECT_NAME",
+        "description": "The title or display name of the project"
+      },
+      {
+        "key": "PROJECT_MISSION",
+        "description": "High-level purpose and core objective of this project"
+      },
+      {
+        "key": "DECISION_OWNER",
+        "description": "Name or role of the human stakeholder authorized to confirm decisions"
+      }
+    ]
+  },
+  "modules": {
+    "web-fullstack": {
+      "name": "Fullstack Web Application",
+      "category": "tech",
+      "description": "Production-grade harness for database-driven web applications, microservices, and APIs.",
+      "directory": "modules/web-fullstack",
+      "variables": [
+        { "key": "PRIMARY_LANGUAGE", "description": "Core programming language" },
+        { "key": "FRAMEWORK_OR_PLATFORM", "description": "Backend and frontend frameworks" },
+        { "key": "PERSISTENCE_STRATEGY", "description": "Database or storage engine" },
+        { "key": "AUTH_STRATEGY", "description": "Authentication strategy (Recommended default: NextAuth.js/Auth.js; Alternatives: Supabase Auth, Clerk, or Custom Manual Session)" },
+        { "key": "DEPLOYMENT_PLATFORM", "description": "Hosting provider or cloud runtime" }
+      ],
+      "readiness_checks": [
+        "Data persistence and schema defined",
+        "API contract and authentication boundaries established",
+        "Deployment targets and environment configurations verified"
+      ]
+    },
+    "landing-page": {
+      "name": "Landing Page / Static Web",
+      "category": "tech",
+      "description": "Lean harness for high-converting marketing landing pages and responsive static sites.",
+      "directory": "modules/landing-page",
+      "variables": [
+        { "key": "TARGET_AUDIENCE", "description": "Intended visitor or customer persona" },
+        { "key": "PRIMARY_CTA", "description": "Main call-to-action button or conversion goal" },
+        { "key": "HOSTING_TARGET", "description": "Static web host (e.g. Vercel, Cloudflare, Netlify)" }
+      ],
+      "readiness_checks": [
+        "Headline, value proposition, and CTA copy approved",
+        "Section wireframe hierarchy and mobile responsiveness defined",
+        "Publishing host and analytics tracking confirmed"
+      ]
+    },
+    "sales-outreach": {
+      "name": "Sales & B2B Outreach",
+      "category": "growth",
+      "description": "Operational harness for targeted sales outreach campaigns, lead pipelines, and deal closing.",
+      "directory": "modules/sales-outreach",
+      "variables": [
+        { "key": "SALES_TARGET", "description": "Target quota or revenue milestone" },
+        { "key": "ICP_PROFILE", "description": "Ideal customer profile criteria" },
+        { "key": "OUTREACH_CHANNELS", "description": "Primary contact channels (e.g. Email, LinkedIn, WhatsApp)" }
+      ],
+      "readiness_checks": [
+        "Ideal Customer Profile (ICP) and lead source lists prepared",
+        "Pitch messaging templates and objection scripts reviewed",
+        "Discount approval boundaries and follow-up cadence established"
+      ]
+    },
+    "general-office": {
+      "name": "General Operations & Office Workflow",
+      "category": "operations",
+      "description": "Structured harness for corporate operations, recurring reporting, research, and procedural tasks.",
+      "directory": "modules/general-office",
+      "variables": [
+        { "key": "OPERATION_SCOPE", "description": "Scope of work and departmental boundaries" },
+        { "key": "PRIMARY_DELIVERABLE", "description": "Main deliverable format (e.g. Weekly Report, Audit Sheet)" },
+        { "key": "REPORTING_SCHEDULE", "description": "Frequency of progress updates" }
+      ],
+      "readiness_checks": [
+        "Standard Operating Procedures (SOP) and approval matrix defined",
+        "Resource access and data inputs verified",
+        "Deliverable formats and review milestones confirmed"
+      ]
+    },
+    "mobile-app": {
+      "name": "Mobile Application",
+      "category": "tech",
+      "description": "Production harness for native and cross-platform mobile apps, store compliance, permissions, and build signing.",
+      "directory": "modules/mobile-app",
+      "variables": [
+        { "key": "MOBILE_FRAMEWORK", "description": "Mobile framework or language (e.g. Flutter, React Native, Swift, Kotlin)" },
+        { "key": "TARGET_OS", "description": "Target mobile operating systems (iOS, Android, or Both)" },
+        { "key": "MIN_OS_VERSION", "description": "Minimum supported mobile OS versions" },
+        { "key": "APP_BUNDLE_ID", "description": "Application package name or bundle identifier" }
+      ],
+      "readiness_checks": [
+        "Target mobile operating systems and minimum OS versions defined",
+        "Hardware permissions and privacy manifests documented",
+        "App Store and Google Play compliance and signing keys configured"
+      ]
+    },
+    "cli-automation": {
+      "name": "CLI Tool & Automation Script",
+      "category": "tech",
+      "description": "Lightweight harness for command-line tools, background daemons, cron batch jobs, and data automation scripts.",
+      "directory": "modules/cli-automation",
+      "variables": [
+        { "key": "CLI_LANGUAGE", "description": "Scripting or systems programming language (e.g. Bash, Python, Go, Node.js)" },
+        { "key": "COMMAND_NAME", "description": "Primary CLI binary or command alias" },
+        { "key": "RUN_MODE", "description": "Execution model (e.g. Interactive CLI, Scheduled Cron, Daemon Worker)" },
+        { "key": "LOG_OUTPUT_TARGET", "description": "Log destination (e.g. stdout, syslog, file rotation)" }
+      ],
+      "readiness_checks": [
+        "CLI command syntax, flags, and exit codes defined",
+        "Process signal handling and daemon lifecycle established",
+        "Batch retry logic and failure quarantine procedures documented"
+      ]
+    },
+    "content-marketing": {
+      "name": "Content Marketing & Social Media",
+      "category": "growth",
+      "description": "Operational harness for editorial content planning, SEO keyword clusters, brand copywriting, and multi-channel publishing.",
+      "directory": "modules/content-marketing",
+      "variables": [
+        { "key": "CONTENT_PILLARS", "description": "Core themes or topical pillars for content production" },
+        { "key": "TARGET_KEYWORDS", "description": "Primary SEO keywords and search intent clusters" },
+        { "key": "BRAND_TONE", "description": "Brand tone of voice and editorial persona" },
+        { "key": "PRIMARY_CHANNELS", "description": "Publishing channels (e.g. Blog, Newsletter, LinkedIn, YouTube, X)" }
+      ],
+      "readiness_checks": [
+        "Editorial calendar cadence and content pillars established",
+        "SEO keyword clusters and search intent mapped",
+        "Brand tone of voice guidelines and review checklist approved"
+      ]
+    },
+    "research-analysis": {
+      "name": "Research & Market Analysis",
+      "category": "operations",
+      "description": "Analytical harness for industry research, competitor benchmarking, feasibility studies, and executive decision memos.",
+      "directory": "modules/research-analysis",
+      "variables": [
+        { "key": "RESEARCH_TOPIC", "description": "Core research question or problem statement" },
+        { "key": "RESEARCH_METHODOLOGY", "description": "Primary research approach (e.g. Qualitative, Quantitative, Literature Review, Competitive Matrix)" },
+        { "key": "PRIMARY_SOURCES", "description": "Data sources and verification hierarchy" },
+        { "key": "EXECUTIVE_AUDIENCE", "description": "Primary stakeholder audience for findings and recommendations" }
+      ],
+      "readiness_checks": [
+        "Research questions, hypothesis, and scope boundaries confirmed",
+        "Primary data sources and citation standards defined",
+        "Executive decision memo format and risk trade-off criteria established"
+      ]
+    },
+    "web-starter": {
+      "name": "Web Application Starter",
+      "category": "tech",
+      "description": "Lightweight, beginner-friendly starter harness for MVP web applications, quick prototypes, and static previews.",
+      "directory": "modules/web-starter",
+      "variables": [
+        { "key": "PRIMARY_LANGUAGE", "description": "Core programming language" },
+        { "key": "FRAMEWORK_OR_PLATFORM", "description": "Web framework or frontend library" },
+        { "key": "PERSISTENCE_STRATEGY", "description": "Database or lightweight storage solution" }
+      ],
+      "readiness_checks": [
+        "Core user flow and MVP page requirements defined",
+        "Framework, component architecture, and styling approach confirmed",
+        "Data persistence and basic testing criteria established"
+      ]
+    },
+    "it-infra-ops": {
+      "name": "IT Infrastructure Operations & Maintenance",
+      "category": "operations",
+      "description": "SOP-driven harness for on-premises server maintenance, node inventory, incident runbooks, backup/restore drills, and downtime mitigation.",
+      "directory": "modules/it-infra-ops",
+      "variables": [
+        { "key": "INFRA_ENVIRONMENT", "description": "Infrastructure environment (e.g. On-Premises Data Center, Private Cloud, Virtualization Cluster)" },
+        { "key": "PRIMARY_OS", "description": "Primary operating system (e.g. Ubuntu Server 22.04 LTS, Debian 12, RHEL, Windows Server)" },
+        { "key": "MAINTENANCE_WINDOW", "description": "Scheduled recurring maintenance window" },
+        { "key": "BACKUP_DESTINATION", "description": "Backup destination storage (e.g. Local NAS, NFS Mount, Offsite Storage)" }
+      ],
+      "readiness_checks": [
+        "Physical/VM server inventory and IP allocation mapped",
+        "Routine maintenance SOP and critical incident runbooks approved",
+        "Backup cadence and rollback mitigation procedures verified"
+      ]
+    },
+    "app-maintenance": {
+      "name": "Application Maintenance & Brownfield Engineering",
+      "category": "tech",
+      "description": "Existing-system engineering harness for surgical bug patching, isolated custom module extensions, anti-regression, and upstream compatibility.",
+      "directory": "modules/app-maintenance",
+      "variables": [
+        { "key": "HOST_APPLICATION", "description": "Host/upstream application name and version (e.g. Odoo 17, WordPress, Legacy Custom ERP, Laravel Monolith)" },
+        { "key": "SOURCE_MODEL", "description": "Code source model (e.g. Open Source Upstream, Closed Source Vendor, Internal Proprietary)" },
+        { "key": "PRIMARY_LANGUAGE", "description": "Core programming language of the module/application" },
+        { "key": "EXTENSION_PATTERN", "description": "Extension or integration pattern (e.g. Modular Plugin, Event Hook/Listener, Core Patch, Middleware API)" }
+      ],
+      "readiness_checks": [
+        "System context map and no-touch core boundaries defined",
+        "Bug reproduction SOP, impact assessment, and non-regression checklist established",
+        "Custom module isolation and upstream compatibility strategy confirmed"
+      ]
+    }
+  }
+}

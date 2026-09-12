@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "2.0.0",
+  "language": "id",
+  "name": "Pustaka Template Modular AI Harness",
+  "interview_contract": {
+    "question_budget": "4-7 pertanyaan terarah",
+    "option_rule": "Berikan 2-3 pilihan konkret pada setiap pertanyaan",
+    "recommendation_rule": "Sertakan tepat 1 rekomendasi terbaik untuk mengarahkan pengguna"
+  },
+  "core": {
+    "directory": "core",
+    "required_variables": [
+      {
+        "key": "PROJECT_NAME",
+        "description": "Nama resmi atau judul tampilan proyek"
+      },
+      {
+        "key": "PROJECT_MISSION",
+        "description": "Tujuan tingkat tinggi dan misi utama proyek"
+      },
+      {
+        "key": "DECISION_OWNER",
+        "description": "Nama atau peran pemangku kepentingan manusia yang berwenang mengonfirmasi keputusan"
+      }
+    ]
+  },
+  "modules": {
+    "web-fullstack": {
+      "name": "Aplikasi Web Fullstack",
+      "category": "tech",
+      "description": "Harness berstandar produksi untuk aplikasi web berbasis database, microservices, dan API backend.",
+      "directory": "modules/web-fullstack",
+      "variables": [
+        { "key": "PRIMARY_LANGUAGE", "description": "Bahasa pemrograman utama" },
+        { "key": "FRAMEWORK_OR_PLATFORM", "description": "Framework backend dan frontend" },
+        { "key": "PERSISTENCE_STRATEGY", "description": "Basis data atau engine penyimpanan data" },
+        { "key": "AUTH_STRATEGY", "description": "Strategi autentikasi (Rekomendasi utama: NextAuth.js/Auth.js; Alternatif: Supabase Auth, Clerk, atau Custom Manual Session)" },
+        { "key": "DEPLOYMENT_PLATFORM", "description": "Penyedia hosting atau runtime cloud" }
+      ],
+      "readiness_checks": [
+        "Persistensi data dan skema telah didefinisikan",
+        "Kontrak API dan batas autentikasi telah ditetapkan",
+        "Target deployment dan konfigurasi lingkungan telah diverifikasi"
+      ]
+    },
+    "landing-page": {
+      "name": "Landing Page / Situs Statis",
+      "category": "tech",
+      "description": "Harness ramping untuk halaman promosi berkonversi tinggi dan situs web statis responsif.",
+      "directory": "modules/landing-page",
+      "variables": [
+        { "key": "TARGET_AUDIENCE", "description": "Persona pengunjung atau target audiens" },
+        { "key": "PRIMARY_CTA", "description": "Teks tombol aksi utama atau tujuan konversi" },
+        { "key": "HOSTING_TARGET", "description": "Platform hosting statis (e.g. Vercel, Cloudflare, Netlify)" }
+      ],
+      "readiness_checks": [
+        "Judul utama (headline), proposisi nilai, dan teks aksi (CTA) telah disetujui",
+        "Hierarki tata letak (wireframe) dan responsivitas mobile telah ditentukan",
+        "Penyedia hosting publik dan pelacakan analitik telah dikonfirmasi"
+      ]
+    },
+    "sales-outreach": {
+      "name": "Penjualan & Kampanye B2B Outreach",
+      "category": "growth",
+      "description": "Harness operasional untuk kampanye penjualan prospek terarah, pipeline prospek, dan penutupan transaksi (closing).",
+      "directory": "modules/sales-outreach",
+      "variables": [
+        { "key": "SALES_TARGET", "description": "Target kuota atau pencapaian pendapatan" },
+        { "key": "ICP_PROFILE", "description": "Kriteria Profil Pelanggan Ideal (ICP)" },
+        { "key": "OUTREACH_CHANNELS", "description": "Saluran komunikasi utama (e.g. Email, LinkedIn, WhatsApp, Cold Calling)" }
+      ],
+      "readiness_checks": [
+        "Profil Pelanggan Ideal (ICP) dan daftar sumber prospek telah disiapkan",
+        "Template pesan penawaran dan skrip penanganan keberatan telah ditinjau",
+        "Batas wewenang diskon dan jadwal tindak lanjut (follow-up) telah ditetapkan"
+      ]
+    },
+    "general-office": {
+      "name": "Operasional Umum & Alur Kerja Kantor",
+      "category": "operations",
+      "description": "Harness terstruktur untuk operasional perusahaan, pelaporan berkala, riset, dan tugas prosedural administratif.",
+      "directory": "modules/general-office",
+      "variables": [
+        { "key": "OPERATION_SCOPE", "description": "Ruang lingkup kerja dan batasan divisi/departemen" },
+        { "key": "PRIMARY_DELIVERABLE", "description": "Format deliverable utama (e.g. Laporan Mingguan, Audit Sheet, Dokumen SOP)" },
+        { "key": "REPORTING_SCHEDULE", "description": "Frekuensi pembaruan progres kerja" }
+      ],
+      "readiness_checks": [
+        "Standar Operasional Prosedur (SOP) dan matriks persetujuan telah didefinisikan",
+        "Akses perangkat/sumber daya dan data masukan telah diverifikasi",
+        "Format hasil deliverable dan tonggak peninjauan telah dikonfirmasi"
+      ]
+    },
+    "mobile-app": {
+      "name": "Aplikasi Seluler (Mobile App)",
+      "category": "tech",
+      "description": "Harness terstruktur untuk aplikasi seluler lintas platform atau native, kepatuhan toko aplikasi, izin perangkat, dan build signing.",
+      "directory": "modules/mobile-app",
+      "variables": [
+        { "key": "MOBILE_FRAMEWORK", "description": "Framework atau bahasa seluler (contoh: Flutter, React Native, Swift, Kotlin)" },
+        { "key": "TARGET_OS", "description": "Sistem operasi target (iOS, Android, atau Keduanya)" },
+        { "key": "MIN_OS_VERSION", "description": "Versi OS minimal yang didukung" },
+        { "key": "APP_BUNDLE_ID", "description": "Nama paket aplikasi atau bundle identifier" }
+      ],
+      "readiness_checks": [
+        "Sistem operasi target dan versi OS minimal telah ditentukan",
+        "Izin perangkat keras dan deklarasi privasi telah terdokumentasi",
+        "Kepatuhan App Store/Google Play serta kunci penandatanganan telah dikonfigurasi"
+      ]
+    },
+    "cli-automation": {
+      "name": "Perkakas CLI & Skrip Otomasi",
+      "category": "tech",
+      "description": "Harness ringkas untuk perkakas antarmuka baris perintah (CLI), daemon latar belakang, cron job berkala, dan skrip data.",
+      "directory": "modules/cli-automation",
+      "variables": [
+        { "key": "CLI_LANGUAGE", "description": "Bahasa skrip atau sistem (contoh: Bash, Python, Go, Node.js)" },
+        { "key": "COMMAND_NAME", "description": "Nama biner CLI atau alias perintah utama" },
+        { "key": "RUN_MODE", "description": "Model eksekusi (contoh: CLI Interaktif, Cron Terjadwal, Daemon Worker)" },
+        { "key": "LOG_OUTPUT_TARGET", "description": "Tujuan output log (contoh: stdout, syslog, rotasi berkas)" }
+      ],
+      "readiness_checks": [
+        "Sintaks argumen CLI, opsi flag, dan exit code telah ditentukan",
+        "Penanganan sinyal proses dan daur hidup daemon telah ditetapkan",
+        "Logika retry batch dan prosedur karantina kegagalan telah terdokumentasi"
+      ]
+    },
+    "content-marketing": {
+      "name": "Pemasaran Konten & Media Sosial",
+      "category": "growth",
+      "description": "Harness operasional untuk perencanaan editorial konten, klaster kata kunci SEO, copywriting brand, dan publikasi multi-kanal.",
+      "directory": "modules/content-marketing",
+      "variables": [
+        { "key": "CONTENT_PILLARS", "description": "Tema utama atau pilar topik produksi konten" },
+        { "key": "TARGET_KEYWORDS", "description": "Kata kunci SEO utama dan klaster niat pencarian" },
+        { "key": "BRAND_TONE", "description": "Tone of voice merek dan persona editorial" },
+        { "key": "PRIMARY_CHANNELS", "description": "Kanal distribusi publikasi (contoh: Blog, Buletin/Newsletter, LinkedIn, YouTube, X)" }
+      ],
+      "readiness_checks": [
+        "Irama kalender editorial dan pilar konten telah ditetapkan",
+        "Klaster kata kunci SEO dan niat pencarian telah dipetakan",
+        "Panduan tone of voice merek dan daftar periksa tinjauan telah disetujui"
+      ]
+    },
+    "research-analysis": {
+      "name": "Riset & Analisis Pasar",
+      "category": "operations",
+      "description": "Harness analitis untuk riset industri, pembandingan kompetitor, studi kelayakan, dan memo keputusan eksekutif.",
+      "directory": "modules/research-analysis",
+      "variables": [
+        { "key": "RESEARCH_TOPIC", "description": "Pertanyaan riset utama atau rumusan masalah" },
+        { "key": "RESEARCH_METHODOLOGY", "description": "Pendekatan metodologi riset (contoh: Kualitatif, Kuantitatif, Kajian Literatur, Matriks Kompetitif)" },
+        { "key": "PRIMARY_SOURCES", "description": "Hierarki sumber data dan verifikasi fakta" },
+        { "key": "EXECUTIVE_AUDIENCE", "description": "Pemangku kepentingan utama penerima rekomendasi riset" }
+      ],
+      "readiness_checks": [
+        "Pertanyaan riset, hipotesis, dan batasan cakupan telah dikonfirmasi",
+        "Hierarki sumber data primer dan standar sitasi telah ditentukan",
+        "Format memo keputusan eksekutif dan kriteria kompromi risiko telah ditetapkan"
+      ]
+    },
+    "web-starter": {
+      "name": "Aplikasi Web Starter",
+      "category": "tech",
+      "description": "Harness starter ringan dan ramah pemula untuk aplikasi web MVP, purwarupa cepat, dan preview statis.",
+      "directory": "modules/web-starter",
+      "variables": [
+        { "key": "PRIMARY_LANGUAGE", "description": "Bahasa pemrograman utama" },
+        { "key": "FRAMEWORK_OR_PLATFORM", "description": "Framework web atau pustaka antarmuka" },
+        { "key": "PERSISTENCE_STRATEGY", "description": "Basis data atau solusi penyimpanan ringan" }
+      ],
+      "readiness_checks": [
+        "Alur pengguna utama dan kebutuhan halaman MVP telah ditentukan",
+        "Framework, arsitektur komponen, dan pendekatan styling telah dikonfirmasi",
+        "Persistensi data dan kriteria pengujian dasar telah ditetapkan"
+      ]
+    },
+    "it-infra-ops": {
+      "name": "Operasional & Pemeliharaan Infrastruktur TI",
+      "category": "operations",
+      "description": "Harness berbasis SOP untuk pemeliharaan server on-premises, inventarisasi node, runbook insiden, backup/restore, dan mitigasi downtime.",
+      "directory": "modules/it-infra-ops",
+      "variables": [
+        { "key": "INFRA_ENVIRONMENT", "description": "Lingkungan infrastruktur (contoh: On-Premises Data Center, Private Cloud, Virtualization Cluster)" },
+        { "key": "PRIMARY_OS", "description": "Sistem operasi utama server (contoh: Ubuntu Server 22.04 LTS, Debian 12, RHEL, Windows Server)" },
+        { "key": "MAINTENANCE_WINDOW", "description": "Jadwal jendela pemeliharaan rutin resmi" },
+        { "key": "BACKUP_DESTINATION", "description": "Lokasi target media backup (contoh: NAS Lokal, NFS Mount, Offsite Storage)" }
+      ],
+      "readiness_checks": [
+        "Inventarisasi server fisik/VM dan alokasi IP telah dipetakan",
+        "SOP pemeliharaan rutin dan runbook insiden kritis telah disetujui",
+        "Jadwal backup berkala dan prosedur mitigasi rollback telah diverifikasi"
+      ]
+    },
+    "app-maintenance": {
+      "name": "Perawatan & Modifikasi Aplikasi (Brownfield)",
+      "category": "tech",
+      "description": "Harness rekayasa sistem eksisting untuk penambalan bug terarah, pembuatan custom modul/ekstensi terisolasi, anti-regresi, dan kompatibilitas upstream.",
+      "directory": "modules/app-maintenance",
+      "variables": [
+        { "key": "HOST_APPLICATION", "description": "Nama dan versi aplikasi induk/upstream (contoh: Odoo 17, WordPress, Custom Legacy ERP, Laravel Monolith)" },
+        { "key": "SOURCE_MODEL", "description": "Model lisensi/sumber kode (contoh: Open Source Upstream, Closed Source Vendor, Internal Proprietary)" },
+        { "key": "PRIMARY_LANGUAGE", "description": "Bahasa pemrograman utama modul/aplikasi" },
+        { "key": "EXTENSION_PATTERN", "description": "Pola ekstensi atau integrasi modul (contoh: Modular Plugin, Event Hook/Listener, Core Patch, Middleware API)" }
+      ],
+      "readiness_checks": [
+        "Peta konteks sistem eksisting dan batas area kode terlarang telah ditentukan",
+        "SOP reproduksi bug, pelacakan dampak, dan daftar periksa non-regresi telah ditetapkan",
+        "Pola isolasi modul custom dan strategi kompatibilitas upstream telah dikonfirmasi"
+      ]
+    }
+  }
+}

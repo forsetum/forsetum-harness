@@ -1,0 +1,18 @@
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Temporary artifacts
+tmp/
+scratch/
+*.tmp
+
+# Distribution artifacts
+dist/*
+!dist/previews/
+!dist/previews/*.zip
+dist/public-repo/
+dist/public-export-manifest.json
+dist/public-export-report.txt
