@@ -1,0 +1,61 @@
+name: Cross-platform validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linux-validation:
+    name: Linux Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Check Bash syntax
+        shell: bash
+        run: |
+          bash -n scripts/init.sh
+          bash -n scripts/bundle.sh
+          bash -n scripts/validate-template.sh
+          bash -n scripts/build-previews.sh
+      - name: Validate templates and root
+        shell: bash
+        run: ./scripts/validate-template.sh --all
+      - name: Build static previews
+        shell: bash
+        run: ./scripts/build-previews.sh
+
+  windows-powershell-validation:
+    name: Windows PowerShell Validation
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Parse PowerShell scripts
+        shell: pwsh
+        run: |
+          $allErrors = @()
+          Get-ChildItem scripts/*.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $_.FullName,
+              [ref]$tokens,
+              [ref]$errors
+            )
+            if ($errors) { $allErrors += $errors }
+          }
+          if ($allErrors.Count -gt 0) {
+            $allErrors | Format-List
+            exit 1
+          }
+      - name: Validate templates and root
+        shell: pwsh
+        run: .\scripts\validate-template.ps1 -All
+      - name: Build static previews
+        shell: pwsh
+        run: .\scripts\build-previews.ps1
