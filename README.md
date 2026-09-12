@@ -2,11 +2,11 @@
 
 [![Cross-platform validation](https://github.com/forsetum/forsetum-harness/actions/workflows/validate.yml/badge.svg)](https://github.com/forsetum/forsetum-harness/actions/workflows/validate.yml)
 
-Forsetum Harness Protocol is a local-first governance methodology for reliable
-AI-assisted work. Forsetum Harness is its public reference implementation and
-tooling: it gives repository-aware AI agents the context, decisions,
-constraints, readiness gates, and verification workflow they need before they
-change a project.
+Forsetum Harness Protocol is a governance protocol for controlled, reliable
+AI-assisted execution. Forsetum Harness is its local-first public reference
+implementation and tooling: it gives repository-aware AI agents the context,
+decisions, constraints, readiness gates, and verification workflow they need
+before they change a project.
 
 ## Quick Start
 
@@ -132,3 +132,5 @@ See `CONTRIBUTING.md`, `SECURITY.md`, and `CHANGELOG.md` in the public
 distribution. The public distribution is licensed under Apache-2.0;
 that license applies only to intentionally published Harness files, not to
 private Forsetum Platform source code.
+
+Copyright 2026 Rachmanto. See `NOTICE` for attribution.
