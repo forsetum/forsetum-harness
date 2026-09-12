@@ -172,9 +172,12 @@ function Test-TemplatePlaceholders {
     $manifestContent = if (Test-Path $manifestPath) { Get-Content -Path $manifestPath -Raw } else { "" }
 
     $moduleRegContent = ""
-    $moduleRegs = Get-ChildItem -Path $Dir -Filter "template-variables.md" -Recurse | Where-Object { $_.FullName -like "*modules*" }
-    foreach ($m in $moduleRegs) {
-        $moduleRegContent += "`n" + (Get-Content -Path $m.FullName -Raw)
+    $modulesDir = Join-Path $Dir "modules"
+    if (Test-Path $modulesDir) {
+        $moduleRegs = Get-ChildItem -Path $modulesDir -Filter "template-variables.md" -Recurse -File
+        foreach ($m in $moduleRegs) {
+            $moduleRegContent += "`n" + (Get-Content -Path $m.FullName -Raw)
+        }
     }
 
     $unregistered = 0
