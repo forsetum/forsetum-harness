@@ -10,6 +10,28 @@ before they change a project.
 
 ## Quick Start
 
+### Install as an Agent Skill
+
+For the recommended agent-first workflow, install the curated skill from
+GitHub:
+
+```bash
+npx skills add forsetum/forsetum-harness
+```
+
+To make the skill available across projects, use a global install:
+
+```bash
+npx skills add forsetum/forsetum-harness -g
+```
+
+Add `-y` to skip confirmation prompts, or use `-a codex` to target Codex
+explicitly. The skill provides the adoption workflow, repository inspector,
+and bundled runtime generated from the canonical templates and scripts in
+this repository.
+
+### Use the CLI Directly
+
 Clone the public repository and initialize a project-local harness:
 
 ```bash
