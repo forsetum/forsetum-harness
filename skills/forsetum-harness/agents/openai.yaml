@@ -1,0 +1,4 @@
+interface:
+  display_name: "Forsetum Harness"
+  short_description: "Adopt a governance harness with explicit conflict review"
+  default_prompt: "Inspect this repository, recommend a Forsetum Harness profile, preview the affected files, and ask for explicit conflict decisions before making any changes."

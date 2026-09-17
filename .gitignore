@@ -9,6 +9,9 @@ tmp/
 scratch/
 *.tmp
 
+# Local environment secrets
+.env
+
 # Distribution artifacts
 dist/*
 !dist/previews/
