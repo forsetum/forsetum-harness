@@ -53,39 +53,84 @@ means invalid inspection input or manifest parity failure.
 
 When `AGENTS.md`, `README.md`, `backlog.md`, `mission.md`, `governance.md`,
 `docs/`, or another preview path already exists or overlaps the proposed
-change, remain in `CONFLICT_REVIEW`. Present the exact path, create/update/
-merge/overwrite action, impact, and available decisions. Do not invoke the
-initializer, `--force`, merge, delete, rename, or validator while any conflict
-lacks a decision.
+change, remain in `CONFLICT_REVIEW`. Present one record per exact path:
+
+```text
+Path: <exact existing path>
+Operation: PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP
+Impact: <concrete effect on this exact path>
+Backup behavior: <none | exact protected content and timing>
+Backup path: <exact path | not_applicable>
+Rollback command: <exact command | not_applicable>
+Gitignore decision: YES | NO | not_applicable
+Approval decision: <explicit decision for this exact path and operation>
+Next state: <CONFLICT_REVIEW | BOOTSTRAP_APPROVED | CANCELLED | DEFERRED>
+```
+
+Do not invoke the initializer, merge, delete, rename, or validator while any
+conflict lacks a decision. A replacement requires all displayed recovery
+metadata before its backup directory is created.
+
+```text
+PRESERVE/SKIP outcome: State: DEFERRED, Mutation: none, Target: unchanged
+Next action: manual handling | CHANGE_TARGET
+```
+
+An approved `PRESERVE` or `SKIP` is not bootstrap approval for that target.
+Do not invoke the initializer or validator; leave the target unchanged and
+route to manual handling outside the skill or a changed target.
 
 ### 3. Explicit approval
 
 For a non-conflicting preview, ask the user to approve the exact displayed
 target, paths, profile, and commands. For conflicts, record one of
-`APPROVE_OVERWRITE`, `APPROVE_MERGE`, `CHANGE_TARGET`, or `CANCEL` for every
-reported conflict. A changed preview invalidates the previous approval.
+`APPROVE_PRESERVE`, `APPROVE_MERGE`, `APPROVE_REPLACE_WITH_BACKUP`,
+`APPROVE_SKIP`, `CHANGE_TARGET`, `CANCEL`, or `DEFER` for every reported
+conflict. A changed preview invalidates the previous approval.
 
 Record the decision before mutation:
 
 ```text
-Decision: APPROVE_OVERWRITE | APPROVE_MERGE | CANCEL | CHANGE_TARGET
+Decision: APPROVE_PRESERVE | APPROVE_MERGE | APPROVE_REPLACE_WITH_BACKUP | APPROVE_SKIP | CANCEL | DEFER | CHANGE_TARGET
 Target: <preview target>
-Conflicts: <exact preview paths>
+Path: <exact preview path>
+Operation: <PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP>
+Impact: <displayed impact>
+Backup behavior: <displayed backup behavior>
+Backup path: <exact path | not_applicable>
+Rollback command: <exact command | not_applicable>
+Gitignore decision: YES | NO | not_applicable
+Next state: <displayed next state>
 Scope: <preview files and command>
 ```
 
 ### 4. Delegate to the canonical initializer
 
-After explicit approval only, delegate to the existing initializer:
+After explicit approval only, route the exact target, language, module, and
+complete conflict decision set through `scripts/decision-handoff.sh`. For each
+replacement, supply exact backup and rollback mappings; the handoff verifies
+inventory/hash and creates the backup before delegation.
+
+On Windows use the native PowerShell handoff with the same contract:
+
+```text
+<skill-dir>/scripts/decision-handoff.ps1 -Decision <decision> -Target <dir> \
+  -Lang <id|en> -Module <manifest-module-id> \
+  -Initializer <runtime-init-command> -Validator <runtime-validator-command>
+```
+
+The handoff delegates to the existing initializer only after the exact safety
+gate is satisfied:
 
 ```text
 <skill-dir>/runtime/scripts/init.sh --lang <id|en> --module <manifest-module-id> \
   --target <dir> --name <name>
 ```
 
-Use `--force` only when that exact overwrite action was explicitly approved.
-For Windows, use `<skill-dir>/runtime/scripts/init.ps1` equivalent. Do not replace
-these commands with adapter-owned file generation.
+Do not append unpreviewed or destructive options. For Windows, use
+`<skill-dir>/runtime/scripts/init.ps1` equivalent. Do not replace these commands
+with adapter-owned file generation; stop for manual handling if the canonical
+initializer cannot express the approved operation safely.
 
 ### 5. Validate and report
 
@@ -96,9 +141,11 @@ command and exit code:
 <skill-dir>/runtime/scripts/validate-template.sh --all
 ```
 
-On PowerShell, use `<skill-dir>/runtime/scripts/validate-template.ps1 -All`.
-Only report `VALIDATED` after the validator completes successfully; report a
-failure without retrying with destructive options.
+On PowerShell, the handoff passes `-Target <dir> -Mode instantiated` to
+`<skill-dir>/runtime/scripts/validate-template.ps1`; do not translate the
+handoff through Bash or use `bash -x`. Only report `VALIDATED` after the
+validator completes successfully; report a failure without retrying with
+destructive options.
 
 ### 6. Cancellation safety
 

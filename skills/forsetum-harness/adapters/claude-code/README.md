@@ -69,14 +69,45 @@ tool permission prompt: both gates must pass.
      --template-root <skill-dir>/runtime
    ```
 
-4. Present the profile, target, paths, initializer/validator commands, and all
-   conflict actions/impacts. Inspector exit code `3` means `CONFLICT_REVIEW`;
-   stop and collect explicit decisions before any bootstrap or validation.
+4. Present the profile, target, paths, initializer/validator commands, and one
+   complete conflict record per exact path:
+
+   ```text
+   Path: <exact existing path>
+   Operation: PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP
+   Impact: <concrete effect on this exact path>
+   Backup behavior: <none | exact protected content and timing>
+   Backup path: <exact path | not_applicable>
+   Rollback command: <exact command | not_applicable>
+   Gitignore decision: YES | NO | not_applicable
+   Approval decision: <explicit decision for this exact path and operation>
+   Next state: <CONFLICT_REVIEW | BOOTSTRAP_APPROVED | CANCELLED | DEFERRED>
+   ```
+
+   Inspector exit code `3` means `CONFLICT_REVIEW`; stop and collect explicit
+   decisions before any bootstrap or validation. A replacement requires its
+   displayed recovery metadata before its backup directory is created.
+
+   ```text
+   PRESERVE/SKIP outcome: State: DEFERRED, Mutation: none, Target: unchanged
+   Next action: manual handling | CHANGE_TARGET
+   ```
+
+   An approved `PRESERVE` or `SKIP` is not bootstrap approval for that target.
+   Do not invoke the initializer or validator; leave the target unchanged and
+   route to manual handling outside the skill or a changed target.
 5. After approval of the exact non-conflicting or explicitly resolved preview,
-   delegate to `.claude/skills/forsetum-harness/runtime/scripts/init.sh` (or
-   its `init.ps1` equivalent on Windows). Use a force flag only for an
-   explicitly approved overwrite decision.
-6. Run the bundled canonical validator and record its exit code and evidence.
+   route the target, language, module, complete per-path decision set, and
+   replacement backup mappings through the package-local handoff. Use
+   `.claude/skills/forsetum-harness/scripts/decision-handoff.sh` on Unix-like
+   hosts and `.claude/skills/forsetum-harness/scripts/decision-handoff.ps1`
+   natively on Windows. The handoff verifies inventory/hash and creates each
+   approved backup before invoking the canonical initializer; do not translate
+   the Windows path through Bash or use `bash -x`.
+6. The handoff delegates bootstrap to the bundled canonical
+   `<skill-dir>/runtime/scripts/init.sh` (or `init.ps1` on Windows), then runs
+   the bundled canonical validator with the exact target and
+   instantiated mode; record its exit code and evidence.
 
    ```bash
    <skill-dir>/runtime/scripts/validate-template.sh --all

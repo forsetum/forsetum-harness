@@ -44,14 +44,88 @@ instructions.
 **Inspection:** Report `AGENTS.md` as an exact governance conflict and do not
 assume that its contents can be merged.
 
-**Expected preview:** State whether the displayed initializer would create or
-overwrite `AGENTS.md`, describe the impact, and enter `CONFLICT_REVIEW`.
+**Expected preview:** State the exact path, `PRESERVE` operation, impact, and
+recovery fields. The operation's next state must describe the outcome after
+the user approves it.
 
-**Decision and outcome:** No mutation or validation may occur until the user
-chooses `APPROVE_OVERWRITE`, supplies a concrete safe `APPROVE_MERGE` plan, or
-chooses `CHANGE_TARGET`. `CANCEL` leaves the target byte-for-byte unchanged.
+```text
+Path: AGENTS.md
+Operation: PRESERVE
+Impact: project-local instructions remain authoritative and are not changed
+Backup behavior: none; the existing path is retained
+Backup path: not_applicable
+Rollback command: not_applicable
+Gitignore decision: not_applicable
+Approval decision: APPROVE_PRESERVE
+Next state: DEFERRED after APPROVE_PRESERVE
+```
 
-## Fixture D — Existing `docs/`
+**Decision and outcome:** `APPROVE_PRESERVE` produces:
+
+```text
+PRESERVE outcome: State: DEFERRED, Mutation: none, Target: unchanged
+Next action: manual handling | CHANGE_TARGET
+```
+
+Do not invoke the initializer or validator for this target. A different
+operation requires a new exact preview; `CANCEL` or `DEFER` also leaves the
+target byte-for-byte unchanged.
+
+## Fixture D — Existing `README.md` targeted merge
+
+**State:** The target contains a synthetic `README.md` with project overview
+content and a reviewed marker for a governance section.
+
+**Inspection:** Report `README.md` as an exact conflict. The displayed merge
+is limited to that reviewed governance section; all other README content is
+preserved.
+
+**Expected preview:**
+
+```text
+Path: README.md
+Operation: MERGE
+Impact: add only the reviewed governance section; preserve all other README content
+Backup behavior: none for the reviewed additive merge
+Backup path: not_applicable
+Rollback command: not_applicable
+Gitignore decision: not_applicable
+Approval decision: APPROVE_MERGE
+Next state: CONFLICT_REVIEW until every other conflict is decided
+```
+
+**Decision and outcome:** The merge may proceed only after explicit approval
+of the exact reviewed section. If its merge plan creates a backup directory,
+it must instead name the exact backup path and rollback command and receive an
+explicit `.gitignore` `YES` or `NO` decision before mutation.
+
+## Fixture E — Existing `backlog.md` replacement with backup
+
+**State:** The target contains a synthetic `backlog.md` that is explicitly
+approved for replacement.
+
+**Inspection:** Report `backlog.md` as an exact conflict and do not replace it
+until the pre-mutation backup is available.
+
+**Expected preview:**
+
+```text
+Path: backlog.md
+Operation: REPLACE_WITH_BACKUP
+Impact: replace the displayed backlog.md only after preserving its current content
+Backup behavior: copy the current backlog.md before replacement
+Backup path: .forsetum-backups/2026-09-17T00-00-00Z/backlog.md
+Rollback command: cp .forsetum-backups/2026-09-17T00-00-00Z/backlog.md backlog.md
+Gitignore decision: YES | NO
+Approval decision: APPROVE_REPLACE_WITH_BACKUP
+Next state: CONFLICT_REVIEW until every other conflict is decided
+```
+
+**Decision and outcome:** Neither the backup nor the replacement occurs before
+the exact approval. The `.gitignore` choice applies only to the displayed
+backup directory and may not be made implicitly.
+
+## Fixture F — Existing `docs/`
 
 **State:** The target contains a synthetic `docs/` directory with an existing
 `docs/README.md`.
@@ -59,20 +133,44 @@ chooses `CHANGE_TARGET`. `CANCEL` leaves the target byte-for-byte unchanged.
 **Inspection:** Report `docs/` and any directly affected child paths as
 governance conflicts; do not treat the directory as empty or disposable.
 
-**Expected preview:** List the exact proposed paths under `docs/`, the action
-for each path, the impact, and `CONFLICT_REVIEW` as the next state.
+**Expected preview:** List the exact `docs/` path, `SKIP` operation, impact,
+and recovery fields. The operation's next state must describe the outcome
+after the user approves it.
 
-**Decision and outcome:** Bootstrap is blocked until every reported conflict
-has an explicit decision. A merge requires a recoverable plan. Cancellation or
-deferral performs no write and leaves all existing documentation unchanged.
+```text
+Path: docs/
+Operation: SKIP
+Impact: retain the existing documentation tree and omit it from bootstrap
+Backup behavior: none; the existing tree is not changed
+Backup path: not_applicable
+Rollback command: not_applicable
+Gitignore decision: not_applicable
+Approval decision: APPROVE_SKIP
+Next state: DEFERRED after APPROVE_SKIP
+```
 
-## Fixture E — User cancellation
+**Decision and outcome:** `APPROVE_SKIP` produces:
+
+```text
+SKIP outcome: State: DEFERRED, Mutation: none, Target: unchanged
+Next action: manual handling | CHANGE_TARGET
+```
+
+Do not invoke the initializer or validator for this target. A merge requires a
+recoverable plan in a new exact preview. Cancellation or deferral performs no
+write and leaves all existing documentation unchanged.
+
+## Fixture G — User cancellation or deferral
 
 **State:** Any inspection result, including a conflict-free preview or one or
 more reported conflicts.
 
-**Action:** The user selects `CANCEL` or defers a decision.
+**Action:** The user selects `CANCEL` or `DEFER` for an unresolved conflict.
 
-**Expected outcome:** Do not invoke the initializer, validator, overwrite
-flags, merge, delete, or rename operations. Report `Mutation: none` and leave
-the target unchanged.
+**Expected cancellation outcome:** Do not invoke the initializer, validator,
+overwrite flags, merge, delete, or rename operations. Report `State:
+CANCELLED`, `Mutation: none`, and leave the target unchanged.
+
+**Expected deferral outcome:** Do not invoke the initializer, validator,
+overwrite flags, merge, delete, or rename operations. Report `State:
+DEFERRED`, `Mutation: none`, and leave the target unchanged.

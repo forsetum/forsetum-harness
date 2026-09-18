@@ -29,9 +29,9 @@ combined with a universal governance core.
 
 ## Supported Environments
 
-Bash 4.0+ is supported on Linux, macOS, and Git Bash. Windows PowerShell 5.1
-and PowerShell 7+ are supported. GitHub Actions validates Linux and Windows
-paths.
+Bash 4.0+ is supported on Linux, macOS, and Git Bash. PowerShell 7.6.6 has
+passed the handoff regression test on Linux. Windows PowerShell 5.1 and native
+Windows path behavior remain untested and are not claimed as supported here.
 
 ## Known Limitations
 

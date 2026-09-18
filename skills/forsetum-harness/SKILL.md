@@ -27,14 +27,43 @@ Before any write or bootstrap command:
 If any governance path exists or overlaps the preview, stop and report:
 
 - the exact conflicting path;
-- whether the initializer would create, update, or overwrite it;
-- the effect on the existing project; and
-- the available decisions: cancel, choose another target, or explicitly
-  approve the displayed overwrite/merge action.
+- the normalized operation, impact, backup behavior, approval decision, and
+  next state for that exact path; and
+- the recovery metadata required before any replacement.
 
-Do not run bootstrap, use `--force`, merge, delete, rename, or modify any
-conflicting file until the user has explicitly decided for every reported
-conflict. A cancellation or deferral must leave the target unchanged.
+For every existing path, present this complete record before asking for a
+decision:
+
+```text
+Path: <exact existing path>
+Operation: <PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP>
+Impact: <concrete effect on this exact path>
+Backup behavior: <none | exact protected content and timing>
+Replacement metadata: backup_path, rollback_command, gitignore_decision
+Backup path: <exact path | not_applicable>
+Rollback command: <exact command | not_applicable>
+Gitignore decision: YES | NO | not_applicable
+Approval decision: <explicit decision for this exact path and operation>
+Next state: <CONFLICT_REVIEW | BOOTSTRAP_APPROVED | CANCELLED | DEFERRED>
+```
+
+`PRESERVE` and `SKIP` leave the displayed path untouched. `MERGE` must be
+targeted to the exact reviewed subpaths. `REPLACE_WITH_BACKUP` requires the
+displayed `backup_path`, `rollback_command`, and explicit `gitignore_decision`
+before its backup directory is created or its path is replaced. Do not run
+bootstrap, merge, delete, rename, or modify any conflicting file until the
+user has explicitly decided for every reported conflict. A cancellation or
+deferral must leave the target unchanged.
+
+```text
+PRESERVE/SKIP outcome: State: DEFERRED, Mutation: none, Target: unchanged
+Next action: manual handling | CHANGE_TARGET
+```
+
+An approved `PRESERVE` or `SKIP` on any conflict is never bootstrap approval
+for that target. Do not invoke the initializer or validator; leave the target
+unchanged and route the user to manual handling outside this skill or a changed
+target.
 
 ## Approved Flow
 
@@ -60,19 +89,45 @@ Exit code `0` means `PROCEED_PENDING_APPROVAL`; exit code `3` means
 inputs or manifest are invalid. The adapter must finish before any initializer
 command is considered.
 
-After the user explicitly approves the displayed action, delegate deterministic
-file generation to the existing initializer bundled in the installed
-package's runtime:
+After the user records the decision, route it through the package-local,
+shell-native handoff before delegating any command:
+
+`<skill-dir>/scripts/decision-handoff.sh --decision <decision> --target <dir> --lang <id|en> --module <module_id> --preview-fingerprint <sha256> --initializer <approved-initializer-command> --validator <approved-validator-command>`
+
+For `APPROVE_REPLACE_WITH_BACKUP`, repeat `--conflict path=APPROVE_*` for
+every exact conflict in the current preview, then pass one exact
+`--backup-mapping path=backup` and `--rollback-mapping path=command` for every
+approved replacement plus `--gitignore-decision YES|NO`. The handoff rejects
+missing, extra, or unapproved paths; creates or verifies each approved backup
+with native shell operations; verifies source and backup inventory/hashes; and
+only then invokes the initializer. The handoff returns `CANCELLED` or
+`DEFERRED` without invoking either command for cancellation, deferral,
+preserve, or skip.
+
+On Windows, use the PowerShell-native equivalent without Bash translation:
+
+`<skill-dir>/scripts/decision-handoff.ps1 -Decision <decision> -Target <dir> -Lang <id|en> -Module <module_id> -PreviewFingerprint <sha256> -Initializer <approved-initializer-command> -Validator <approved-validator-command>`
+
+`<sha256>` must be copied from the current `PREVIEW_FINGERPRINT` emitted by the
+read-only inspector. If the target, language, module, or governed paths change,
+the handoff rejects the stale approval before creating backups or invoking the
+initializer and validator.
+
+After the user explicitly approves an action with no `PRESERVE` or `SKIP`
+conflict, delegate deterministic file generation to the existing initializer
+bundled in the installed package's runtime:
 
 - Unix-like environments: `<skill-dir>/runtime/scripts/init.sh --lang <id|en> --module <module_id> --target <dir> --name <name>`
 - Windows PowerShell: `<skill-dir>/runtime/scripts/init.ps1 -Lang <id|en> -Module <module_id> -Target <dir> -Name <name>`
 
-Use `--force` or `-Force` only when the user explicitly approved that exact
-overwrite decision in the preview. Do not replace the initializer with a
-second implementation in this skill.
+Do not append any unpreviewed or destructive option to the initializer. Do not
+replace the initializer with a second implementation in this skill. If the
+canonical initializer cannot express the approved targeted merge or replacement
+without data loss, stop and require a safe target or manual handling.
 
-After bootstrap, run the matching validator from the same package runtime and
-report its complete result and exit code:
+After bootstrap, the handoff runs the matching validator from the same package
+runtime with the approved target and `-Mode instantiated`/`--mode instantiated`
+context. Report its complete result and exit code:
 
 - Unix-like environments: `<skill-dir>/runtime/scripts/validate-template.sh --all`
 - Windows PowerShell: `<skill-dir>/runtime/scripts/validate-template.ps1 -All`
@@ -90,16 +145,22 @@ validator.
 When a conflict is approved, summarize the user's decision before acting:
 
 ```text
-Decision: APPROVE_OVERWRITE | APPROVE_MERGE | CANCEL | CHANGE_TARGET
+Decision: APPROVE_PRESERVE | APPROVE_MERGE | APPROVE_REPLACE_WITH_BACKUP | APPROVE_SKIP | CANCEL | DEFER | CHANGE_TARGET
 Target: <displayed target path>
-Conflicts: <exact paths>
+Path: <exact conflicting path>
+Operation: <PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP>
+Impact: <displayed impact>
+Backup behavior: <displayed backup behavior>
+Backup path: <exact path | not_applicable>
+Rollback command: <exact command | not_applicable>
+Gitignore decision: YES | NO | not_applicable
+Next state: <displayed next state>
 Scope: <displayed files and command>
 ```
 
 If the user chooses merge, require a concrete merge plan and keep the original
-files recoverable. If the initializer cannot express the approved merge
-without data loss, stop and ask the user to choose a safe target or perform the
-merge manually.
+files recoverable. A replacement may proceed only after its backup exists and
+its rollback command has been recorded.
 
 ## References
 

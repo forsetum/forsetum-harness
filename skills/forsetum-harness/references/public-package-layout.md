@@ -9,6 +9,8 @@ authoring source.
 
 discoverable_entrypoint: skills/forsetum-harness/SKILL.md
 bundled_inspector: skills/forsetum-harness/scripts/inspect-repository.sh
+bundled_decision_handoff_bash: skills/forsetum-harness/scripts/decision-handoff.sh
+bundled_decision_handoff_powershell: skills/forsetum-harness/scripts/decision-handoff.ps1
 runtime_root: skills/forsetum-harness/runtime
 runtime_scripts: skills/forsetum-harness/runtime/scripts
 runtime_templates: skills/forsetum-harness/runtime/template/{id,en}
@@ -36,6 +38,8 @@ The exporter must implement these mappings explicitly:
 ```text
 skills/forsetum-harness/SKILL.md <- skills/forsetum-harness/SKILL.md
 skills/forsetum-harness/scripts/inspect-repository.sh <- skills/forsetum-harness/scripts/inspect-repository.sh
+skills/forsetum-harness/scripts/decision-handoff.sh <- skills/forsetum-harness/scripts/decision-handoff.sh
+skills/forsetum-harness/scripts/decision-handoff.ps1 <- skills/forsetum-harness/scripts/decision-handoff.ps1
 skills/forsetum-harness/runtime/scripts/init.sh <- scripts/init.sh
 skills/forsetum-harness/runtime/scripts/init.ps1 <- scripts/init.ps1
 skills/forsetum-harness/runtime/scripts/bundle.sh <- scripts/bundle.sh
@@ -58,6 +62,14 @@ installed `SKILL.md`:
 bash <skill-dir>/scripts/inspect-repository.sh \
   --target <target> --lang <id|en> --module <manifest-module-id> \
   --template-root <skill-dir>/runtime
+<skill-dir>/scripts/decision-handoff.sh --decision <decision> \
+  --target <target> --lang <id|en> --module <manifest-module-id> \
+  --preview-fingerprint <sha256> \
+  --initializer <runtime-init-command> --validator <runtime-validator-command>
+<skill-dir>/scripts/decision-handoff.ps1 -Decision <decision> \
+  -Target <target> -Lang <id|en> -Module <manifest-module-id> \
+  -PreviewFingerprint <sha256> \
+  -Initializer <runtime-init-command> -Validator <runtime-validator-command>
 <skill-dir>/runtime/scripts/init.sh --lang <id|en> \
   --module <manifest-module-id> --target <target> --name <name>
 <skill-dir>/runtime/scripts/validate-template.sh --all
@@ -67,6 +79,15 @@ The inspector receives the runtime root explicitly and reads
 `<skill-dir>/runtime/template/{id,en}/manifest.json`. The initializer and
 validator are the canonical scripts copied into the same runtime and retain
 their existing relative layout.
+
+The decision handoff is package-local and fail-closed. It returns `CANCELLED`
+for `CANCEL`, `DEFERRED` for `DEFER`, `PRESERVE`, or `SKIP`, and delegates the
+initializer and validator only for `APPROVE_REPLACE_WITH_BACKUP` after the
+exact conflict set, the current inspector `PREVIEW_FINGERPRINT`, backup
+mappings, rollback mappings, and explicit `YES` or `NO` `.gitignore` decision
+are supplied. It creates or verifies each approved
+backup with native shell operations before delegation and never resolves a
+command from the caller's working directory.
 
 When exercising the skill from the canonical source checkout, the repository
 root may be passed explicitly as `--template-root` for local development.
