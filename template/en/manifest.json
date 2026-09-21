@@ -27,16 +27,116 @@
       "description": "Production-grade harness for database-driven web applications, microservices, and APIs.",
       "directory": "modules/web-fullstack",
       "variables": [
-        { "key": "PRIMARY_LANGUAGE", "description": "Core programming language" },
-        { "key": "FRAMEWORK_OR_PLATFORM", "description": "Backend and frontend frameworks" },
-        { "key": "PERSISTENCE_STRATEGY", "description": "Database or storage engine" },
-        { "key": "AUTH_STRATEGY", "description": "Authentication strategy (Recommended default: NextAuth.js/Auth.js; Alternatives: Supabase Auth, Clerk, or Custom Manual Session)" },
-        { "key": "DEPLOYMENT_PLATFORM", "description": "Hosting provider or cloud runtime" }
+        {
+          "key": "PRIMARY_LANGUAGE",
+          "description": "Core programming language"
+        },
+        {
+          "key": "FRAMEWORK_OR_PLATFORM",
+          "description": "Backend and frontend frameworks"
+        },
+        {
+          "key": "PERSISTENCE_STRATEGY",
+          "description": "Database or storage engine"
+        },
+        {
+          "key": "AUTH_STRATEGY",
+          "description": "Authentication strategy (Recommended default: NextAuth.js/Auth.js; Alternatives: Supabase Auth, Clerk, or Custom Manual Session)"
+        },
+        {
+          "key": "DEPLOYMENT_PLATFORM",
+          "description": "Hosting provider or cloud runtime"
+        }
       ],
       "readiness_checks": [
         "Data persistence and schema defined",
         "API contract and authentication boundaries established",
+        "User profile page and hybrid account management (Credentials vs OAuth SSO) are defined",
         "Deployment targets and environment configurations verified"
+      ],
+      "tier": "pro",
+      "persona": {
+        "title": "Fullstack & Cloud Software Solutions Architect",
+        "role_description": "senior consultant architecting fullstack web systems, microservices, relational databases, and repository coding agent governance",
+        "target_user_title": "software engineer, fullstack developer, or engineering lead",
+        "domain_context": "fullstack web architecture, database persistence, authentication boundaries, and cloud deployment",
+        "deliverable_title": "Fullstack Software Architecture Blueprint Summary",
+        "decision_owner_roles": [
+          "Tech Lead / Engineering Manager",
+          "Principal Software Engineer",
+          "Project Lead"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "System Vision & Core Initiative",
+          "objective": "Identify the official project name and core architectural goals.",
+          "probing_guide": "Explore the core business objective and primary problem solved for end users.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Language Ecosystem & Runtime",
+          "objective": "Select the primary programming language across the fullstack system.",
+          "probing_guide": "Evaluate TypeScript for end-to-end type safety vs Go/Python/Rust for specialized throughput.",
+          "variables": [
+            "PRIMARY_LANGUAGE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Framework Architecture & Interface",
+          "objective": "Establish the frontend and backend framework stack.",
+          "probing_guide": "Discuss suitability of Next.js App Router, Vite React, or detached backend frameworks like NestJS/FastAPI.",
+          "variables": [
+            "FRAMEWORK_OR_PLATFORM"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Database & Persistence Model",
+          "objective": "Lock down database persistence strategy and transaction scaling.",
+          "probing_guide": "Explore PostgreSQL for ACID relational integrity vs SQLite/embedded engines for lightweight prototyping.",
+          "variables": [
+            "PERSISTENCE_STRATEGY"
+          ]
+        },
+        {
+          "phase": 5,
+          "name": "Architecture Pattern & API Surface",
+          "objective": "Define core modularity boundaries and API contracts.",
+          "probing_guide": "Determine whether Modular Monolith or Microservices architecture best aligns with team velocity.",
+          "variables": [
+            "AUTH_STRATEGY"
+          ]
+        },
+        {
+          "phase": 6,
+          "name": "Production Deployment & Cloud Target",
+          "objective": "Establish production container runtime and CI/CD targets.",
+          "probing_guide": "Evaluate serverless/edge platforms (Vercel/Cloudflare) vs container orchestration (Docker/Kubernetes).",
+          "variables": [
+            "DEPLOYMENT_PLATFORM"
+          ]
+        },
+        {
+          "phase": 7,
+          "name": "Technical Authority & Architectural Sign-off",
+          "objective": "Designate the primary engineering lead authorized to approve architecture revisions.",
+          "probing_guide": "Provide the name and role of the technical lead responsible for architecture sign-off.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Storing unencrypted API keys or production database credentials directly in repository code",
+        "FORBIDDEN: Proceeding with destructive database schema migrations without automated backup mechanisms and rollback scripts",
+        "MANDATORY: Verify clean compilation, linting, and passing unit test suites before production deployment"
       ]
     },
     "landing-page": {
@@ -45,14 +145,81 @@
       "description": "Lean harness for high-converting marketing landing pages and responsive static sites.",
       "directory": "modules/landing-page",
       "variables": [
-        { "key": "TARGET_AUDIENCE", "description": "Intended visitor or customer persona" },
-        { "key": "PRIMARY_CTA", "description": "Main call-to-action button or conversion goal" },
-        { "key": "HOSTING_TARGET", "description": "Static web host (e.g. Vercel, Cloudflare, Netlify)" }
+        {
+          "key": "TARGET_AUDIENCE",
+          "description": "Intended visitor or customer persona"
+        },
+        {
+          "key": "PRIMARY_CTA",
+          "description": "Main call-to-action button or conversion goal"
+        },
+        {
+          "key": "HOSTING_TARGET",
+          "description": "Static web host (e.g. Vercel, Cloudflare, Netlify)"
+        }
       ],
       "readiness_checks": [
         "Headline, value proposition, and CTA copy approved",
         "Section wireframe hierarchy and mobile responsiveness defined",
         "Publishing host and analytics tracking confirmed"
+      ],
+      "tier": "free",
+      "persona": {
+        "title": "Conversion Rate Optimization (CRO) & Growth Web Specialist",
+        "role_description": "lead growth strategist and conversion specialist optimizing landing page messaging, conversion funnels, and high-performance lead acquisition",
+        "target_user_title": "growth marketer, digital marketer, product marketing manager, or founder",
+        "domain_context": "conversion rate optimization (CRO), high-converting copy, page speed, and tracking analytics",
+        "deliverable_title": "High-Converting Landing Page Strategy Blueprint",
+        "decision_owner_roles": [
+          "Head of Growth / Marketing",
+          "Conversion Specialist",
+          "Product Marketing Lead"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Campaign Identity & Value Proposition",
+          "objective": "Identify the product name and core value proposition.",
+          "probing_guide": "Clarify the single primary benefit and compelling hook that grabs visitor attention within 3 seconds.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Visual Design System & Performance Styling",
+          "objective": "Establish aesthetic style tokens, responsiveness, and performance styling.",
+          "probing_guide": "Recommend modern Vanilla CSS or Tailwind utility tokens optimized for sub-second Core Web Vitals.",
+          "variables": [
+            "TARGET_AUDIENCE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Conversion Funnel & Lead Capture Action",
+          "objective": "Define the primary call to action (CTA) and lead capture mechanism.",
+          "probing_guide": "Explore high-value lead magnet offers: free whitepaper, live demo trial, or newsletter subscription.",
+          "variables": [
+            "PRIMARY_CTA",
+            "HOSTING_TARGET"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Growth Campaign Lead & Decision Authority",
+          "objective": "Designate the marketing lead holding decision authority over copy and conversion funnels.",
+          "probing_guide": "Provide the name of the growth marketing lead or founder responsible for conversion sign-off.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Publishing landing page forms without client-side RFC 5322 email validation and spam protection",
+        "FORBIDDEN: Introducing heavy uncompressed assets that degrade Core Web Vitals (LCP > 2.5s)",
+        "MANDATORY: Ensure explicit privacy disclosures and clear terms before capturing user lead data"
       ]
     },
     "sales-outreach": {
@@ -61,14 +228,81 @@
       "description": "Operational harness for targeted sales outreach campaigns, lead pipelines, and deal closing.",
       "directory": "modules/sales-outreach",
       "variables": [
-        { "key": "SALES_TARGET", "description": "Target quota or revenue milestone" },
-        { "key": "ICP_PROFILE", "description": "Ideal customer profile criteria" },
-        { "key": "OUTREACH_CHANNELS", "description": "Primary contact channels (e.g. Email, LinkedIn, WhatsApp)" }
+        {
+          "key": "SALES_TARGET",
+          "description": "Target quota or revenue milestone"
+        },
+        {
+          "key": "ICP_PROFILE",
+          "description": "Ideal customer profile criteria"
+        },
+        {
+          "key": "OUTREACH_CHANNELS",
+          "description": "Primary contact channels (e.g. Email, LinkedIn, WhatsApp)"
+        }
       ],
       "readiness_checks": [
         "Ideal Customer Profile (ICP) and lead source lists prepared",
         "Pitch messaging templates and objection scripts reviewed",
         "Discount approval boundaries and follow-up cadence established"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "B2B Sales Outreach & Pipeline Acceleration Strategist",
+        "role_description": "senior revenue operations consultant orchestrating cold outreach cadences, ICP qualification, deliverability safeguards, and CRM synchronization",
+        "target_user_title": "Sales Director, Head of Business Development, SDR Manager, or Account Executive",
+        "domain_context": "B2B prospecting, ICP qualification, multi-touch cadences, email deliverability, and CRM synchronization",
+        "deliverable_title": "High-Performance B2B Outreach Campaign Framework",
+        "decision_owner_roles": [
+          "VP of Sales / Chief Revenue Officer",
+          "Head of Business Development",
+          "Lead SDR / Revenue Ops"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Outreach Initiative & Commercial Objectives",
+          "objective": "Identify campaign name and primary revenue target.",
+          "probing_guide": "Clarify target qualified meetings per month and expected deal pipeline size.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION",
+            "SALES_TARGET"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Target ICP & Outbound Channel Mix",
+          "objective": "Define Ideal Customer Profile (ICP) demographics and outbound channels.",
+          "probing_guide": "Focus on exact decision-maker job titles (VP, Director) and multi-channel touchpoints (Email + LinkedIn).",
+          "variables": [
+            "ICP_PROFILE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Cadence Structure & Deliverability Safeguards",
+          "objective": "Establish touchpoint sequencing and inbox deliverability safeguards.",
+          "probing_guide": "Recommend a 4-to-6 step cadence with dedicated warm-up domains and daily sending caps.",
+          "variables": [
+            "OUTREACH_CHANNELS"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Revenue Leadership & Outreach Campaign Ownership",
+          "objective": "Designate the sales executive responsible for pipeline cadence sign-off.",
+          "probing_guide": "Provide the name and role of the sales director or business development lead.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Initiating cold email campaigns without verified SPF, DKIM, DMARC, and custom tracking domains",
+        "FORBIDDEN: Exceeding recommended daily sending limits per mailbox to safeguard domain sender reputation",
+        "MANDATORY: Provide clear one-click unsubscribe links and respect opt-out requests within 24 hours"
       ]
     },
     "general-office": {
@@ -77,14 +311,85 @@
       "description": "Structured harness for corporate operations, recurring reporting, research, and procedural tasks.",
       "directory": "modules/general-office",
       "variables": [
-        { "key": "OPERATION_SCOPE", "description": "Scope of work and departmental boundaries" },
-        { "key": "PRIMARY_DELIVERABLE", "description": "Main deliverable format (e.g. Weekly Report, Audit Sheet)" },
-        { "key": "REPORTING_SCHEDULE", "description": "Frequency of progress updates" }
+        {
+          "key": "OPERATION_SCOPE",
+          "description": "Scope of work and departmental boundaries"
+        },
+        {
+          "key": "PRIMARY_DELIVERABLE",
+          "description": "Main deliverable format (e.g. Weekly Report, Audit Sheet)"
+        },
+        {
+          "key": "REPORTING_SCHEDULE",
+          "description": "Frequency of progress updates"
+        },
+        {
+          "key": "APPROVAL_CHAIN",
+          "description": "Document approval hierarchy and authority delegation chain"
+        }
       ],
       "readiness_checks": [
         "Standard Operating Procedures (SOP) and approval matrix defined",
         "Resource access and data inputs verified",
         "Deliverable formats and review milestones confirmed"
+      ],
+      "tier": "free",
+      "persona": {
+        "title": "Corporate Administration & Office Operations Director",
+        "role_description": "senior executive administrator streamlining corporate documentation, SOP compliance, operational approval workflows, and record retention",
+        "target_user_title": "Office Manager, Operations Lead, Administrative Director, or Chief of Staff",
+        "domain_context": "office governance, approval hierarchies, official corporate correspondence, and compliance filing",
+        "deliverable_title": "Standardized Corporate Office Operations Manual",
+        "decision_owner_roles": [
+          "Chief Operating Officer (COO)",
+          "General Affairs Director",
+          "Head of Corporate Administration"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Operational Scope & Departmental Mandate",
+          "objective": "Identify administrative project title and operating department scope.",
+          "probing_guide": "Clarify whether this covers company-wide administration, General Affairs, or executive office workflows.",
+          "variables": [
+            "PROJECT_NAME",
+            "OPERATION_SCOPE"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Document Standards & Retention Policy",
+          "objective": "Establish official corporate correspondence formats and archiving classification.",
+          "probing_guide": "Standardize numbering formats, confidentiality markings, and retention schedules.",
+          "variables": [
+            "PRIMARY_DELIVERABLE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Workflow Routing & Approval Hierarchy",
+          "objective": "Establish multi-tier review chains and disbursement authorization limits.",
+          "probing_guide": "Define tiered approval thresholds for operational purchasing and contract execution.",
+          "variables": [
+            "REPORTING_SCHEDULE",
+            "APPROVAL_CHAIN"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Operational Authority & Administrative Ownership",
+          "objective": "Designate the executive lead holding administrative sign-off authority.",
+          "probing_guide": "Provide the name and title of the administrative director or office manager.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Disseminating confidential corporate agreements or employee records through unvetted public channels",
+        "FORBIDDEN: Authorizing operational procurement or expenditure without documented two-tier management approval",
+        "MANDATORY: Maintain audit logs for all official administrative document revisions and approvals"
       ]
     },
     "mobile-app": {
@@ -93,15 +398,91 @@
       "description": "Production harness for native and cross-platform mobile apps, store compliance, permissions, and build signing.",
       "directory": "modules/mobile-app",
       "variables": [
-        { "key": "MOBILE_FRAMEWORK", "description": "Mobile framework or language (e.g. Flutter, React Native, Swift, Kotlin)" },
-        { "key": "TARGET_OS", "description": "Target mobile operating systems (iOS, Android, or Both)" },
-        { "key": "MIN_OS_VERSION", "description": "Minimum supported mobile OS versions" },
-        { "key": "APP_BUNDLE_ID", "description": "Application package name or bundle identifier" }
+        {
+          "key": "MOBILE_FRAMEWORK",
+          "description": "Mobile framework or language (e.g. Flutter, React Native, Swift, Kotlin)"
+        },
+        {
+          "key": "TARGET_OS",
+          "description": "Target mobile operating systems (iOS, Android, or Both)"
+        },
+        {
+          "key": "MIN_OS_VERSION",
+          "description": "Minimum supported mobile OS versions"
+        },
+        {
+          "key": "APP_BUNDLE_ID",
+          "description": "Application package name or bundle identifier"
+        },
+        {
+          "key": "BACKEND_API",
+          "description": "Backend API endpoint base or BaaS service (e.g. REST API, GraphQL, Supabase, Firebase)"
+        }
       ],
       "readiness_checks": [
         "Target mobile operating systems and minimum OS versions defined",
         "Hardware permissions and privacy manifests documented",
         "App Store and Google Play compliance and signing keys configured"
+      ],
+      "tier": "pro",
+      "persona": {
+        "title": "Lead Mobile App Architect & Platform Engineer",
+        "role_description": "senior mobile solutions architect guiding cross-platform and native app development, offline state persistence, API synchronization, and store compliance",
+        "target_user_title": "mobile developer, iOS/Android engineer, or engineering lead",
+        "domain_context": "mobile app architecture, native platform capabilities, store publishing guidelines, and responsive mobile UX",
+        "deliverable_title": "Mobile Application Technical Architecture Blueprint",
+        "decision_owner_roles": [
+          "Mobile Engineering Lead",
+          "Lead Mobile Architect",
+          "Head of Mobile Engineering"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "App Initiative & Core Product Proposition",
+          "objective": "Identify official mobile app name and primary user utility.",
+          "probing_guide": "Explore core user problem and key workflow executed in under 3 taps.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Platform Strategy & Engineering Framework",
+          "objective": "Determine target mobile operating systems and cross-platform framework.",
+          "probing_guide": "Evaluate React Native / Expo vs Flutter vs pure native Kotlin/Swift.",
+          "variables": [
+            "MOBILE_FRAMEWORK",
+            "TARGET_OS",
+            "MIN_OS_VERSION"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Offline Persistence & API Synchronization",
+          "objective": "Establish local device caching, offline queuing, and network synchronization.",
+          "probing_guide": "Select SQLite / WatermelonDB / MMKV for zero-latency offline performance.",
+          "variables": [
+            "APP_BUNDLE_ID",
+            "BACKEND_API"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Mobile Engineering Lead & Release Sign-off",
+          "objective": "Designate the mobile tech lead holding store publishing approval authority.",
+          "probing_guide": "Provide the name and title of the mobile engineering lead.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Storing unencrypted sensitive user tokens or credentials in insecure mobile device storage",
+        "FORBIDDEN: Submitting app builds containing private SDK APIs or violating Apple App Store / Google Play guidelines",
+        "MANDATORY: Test mobile applications across varying network conditions, including offline and degraded connections"
       ]
     },
     "cli-automation": {
@@ -110,15 +491,86 @@
       "description": "Lightweight harness for command-line tools, background daemons, cron batch jobs, and data automation scripts.",
       "directory": "modules/cli-automation",
       "variables": [
-        { "key": "CLI_LANGUAGE", "description": "Scripting or systems programming language (e.g. Bash, Python, Go, Node.js)" },
-        { "key": "COMMAND_NAME", "description": "Primary CLI binary or command alias" },
-        { "key": "RUN_MODE", "description": "Execution model (e.g. Interactive CLI, Scheduled Cron, Daemon Worker)" },
-        { "key": "LOG_OUTPUT_TARGET", "description": "Log destination (e.g. stdout, syslog, file rotation)" }
+        {
+          "key": "CLI_LANGUAGE",
+          "description": "Scripting or systems programming language (e.g. Bash, Python, Go, Node.js)"
+        },
+        {
+          "key": "COMMAND_NAME",
+          "description": "Primary CLI binary or command alias"
+        },
+        {
+          "key": "RUN_MODE",
+          "description": "Execution model (e.g. Interactive CLI, Scheduled Cron, Daemon Worker)"
+        },
+        {
+          "key": "LOG_OUTPUT_TARGET",
+          "description": "Log destination (e.g. stdout, syslog, file rotation)"
+        }
       ],
       "readiness_checks": [
         "CLI command syntax, flags, and exit codes defined",
         "Process signal handling and daemon lifecycle established",
         "Batch retry logic and failure quarantine procedures documented"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Systems Automation & CLI Tooling Engineer",
+        "role_description": "senior DevOps tooling engineer crafting robust terminal applications, automated scripts, idempotent workflows, and shell integration",
+        "target_user_title": "DevOps engineer, site reliability engineer (SRE), or systems programmer",
+        "domain_context": "CLI ergonomics, POSIX compatibility, exit code handling, idempotency, and shell automation",
+        "deliverable_title": "Command-Line Tooling & Automation Specification",
+        "decision_owner_roles": [
+          "DevOps Lead / SRE Manager",
+          "Staff Infrastructure Engineer",
+          "Automation Architect"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "CLI Tooling Mandate & Operational Mission",
+          "objective": "Identify CLI binary name and core operational task.",
+          "probing_guide": "Clarify command syntax, flags structure, and target automation environment.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "CLI Runtime & Execution Engine",
+          "objective": "Select runtime engine and dependency packaging strategy.",
+          "probing_guide": "Evaluate Go or Rust for single compiled static binaries vs Node/Python with npx/uv.",
+          "variables": [
+            "CLI_LANGUAGE",
+            "COMMAND_NAME"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Argument Parsing & Exit Code Standards",
+          "objective": "Define CLI flag parser and standardized POSIX exit code mappings.",
+          "probing_guide": "Ensure strict semantic exit codes (0 for success, non-zero for distinct failure modes).",
+          "variables": [
+            "RUN_MODE",
+            "LOG_OUTPUT_TARGET"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Infrastructure Authority & CLI Tool Ownership",
+          "objective": "Designate the DevOps or systems engineer owning the CLI codebase.",
+          "probing_guide": "Provide the name and role of the technical owner.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Executing destructive shell commands without explicit interactive confirmation",
+        "FORBIDDEN: Hardcoding credentials, secrets, or sensitive tokens in CLI scripts or shell history",
+        "MANDATORY: Return standard semantic POSIX exit codes (0 for success, non-zero for distinct failure modes)"
       ]
     },
     "content-marketing": {
@@ -127,15 +579,86 @@
       "description": "Operational harness for editorial content planning, SEO keyword clusters, brand copywriting, and multi-channel publishing.",
       "directory": "modules/content-marketing",
       "variables": [
-        { "key": "CONTENT_PILLARS", "description": "Core themes or topical pillars for content production" },
-        { "key": "TARGET_KEYWORDS", "description": "Primary SEO keywords and search intent clusters" },
-        { "key": "BRAND_TONE", "description": "Brand tone of voice and editorial persona" },
-        { "key": "PRIMARY_CHANNELS", "description": "Publishing channels (e.g. Blog, Newsletter, LinkedIn, YouTube, X)" }
+        {
+          "key": "CONTENT_PILLARS",
+          "description": "Core themes or topical pillars for content production"
+        },
+        {
+          "key": "TARGET_KEYWORDS",
+          "description": "Primary SEO keywords and search intent clusters"
+        },
+        {
+          "key": "BRAND_TONE",
+          "description": "Brand tone of voice and editorial persona"
+        },
+        {
+          "key": "PRIMARY_CHANNELS",
+          "description": "Publishing channels (e.g. Blog, Newsletter, LinkedIn, YouTube, X)"
+        }
       ],
       "readiness_checks": [
         "Editorial calendar cadence and content pillars established",
         "SEO keyword clusters and search intent mapped",
         "Brand tone of voice guidelines and review checklist approved"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Content Marketing Strategist & Editorial Director",
+        "role_description": "senior editorial director developing multi-channel editorial calendars, SEO content clusters, brand storytelling, and audience retention",
+        "target_user_title": "Content Marketing Manager, Editor-in-Chief, or Growth Content Strategist",
+        "domain_context": "content marketing, SEO topic clusters, brand voice consistency, editorial governance, and conversion attribution",
+        "deliverable_title": "Strategic Multi-Channel Content Marketing Playbook",
+        "decision_owner_roles": [
+          "VP of Marketing / Head of Content",
+          "Editorial Director",
+          "Lead Content Strategist"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Content Initiative & Editorial Goals",
+          "objective": "Identify content campaign title and primary marketing goal.",
+          "probing_guide": "Clarify whether goal is organic search growth, thought leadership, or sales pipeline nurturing.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Target Readership & Core Thematic Pillars",
+          "objective": "Define target audience persona and core content thematic pillars.",
+          "probing_guide": "Map out 3 to 5 thematic pillars addressing acute customer pain points.",
+          "variables": [
+            "CONTENT_PILLARS",
+            "TARGET_KEYWORDS"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Publishing Cadence & Distribution Channels",
+          "objective": "Establish publishing schedule and omnichannel syndication network.",
+          "probing_guide": "Balance weekly blog releases with LinkedIn carousels and email newsletter syndication.",
+          "variables": [
+            "BRAND_TONE",
+            "PRIMARY_CHANNELS"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Editorial Governance & Publishing Authority",
+          "objective": "Designate the editor-in-chief holding editorial publishing approval.",
+          "probing_guide": "Provide the name of the content marketing lead or editor.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Publishing unsubstantiated factual claims or statistics without verifying primary source citations",
+        "FORBIDDEN: Deploying programmatic AI content without human editorial review and plagiarism screening",
+        "MANDATORY: Maintain tone-of-voice alignment and brand guidelines across all published material"
       ]
     },
     "research-analysis": {
@@ -144,15 +667,78 @@
       "description": "Analytical harness for industry research, competitor benchmarking, feasibility studies, and executive decision memos.",
       "directory": "modules/research-analysis",
       "variables": [
-        { "key": "RESEARCH_TOPIC", "description": "Core research question or problem statement" },
-        { "key": "RESEARCH_METHODOLOGY", "description": "Primary research approach (e.g. Qualitative, Quantitative, Literature Review, Competitive Matrix)" },
-        { "key": "PRIMARY_SOURCES", "description": "Data sources and verification hierarchy" },
-        { "key": "EXECUTIVE_AUDIENCE", "description": "Primary stakeholder audience for findings and recommendations" }
+        {
+          "key": "RESEARCH_TOPIC",
+          "description": "Core research question or problem statement"
+        },
+        {
+          "key": "RESEARCH_METHODOLOGY",
+          "description": "Primary research approach (e.g. Qualitative, Quantitative, Literature Review, Competitive Matrix)"
+        },
+        {
+          "key": "PRIMARY_SOURCES",
+          "description": "Data sources and verification hierarchy"
+        },
+        {
+          "key": "EXECUTIVE_AUDIENCE",
+          "description": "Primary stakeholder audience for findings and recommendations"
+        }
       ],
       "readiness_checks": [
         "Research questions, hypothesis, and scope boundaries confirmed",
         "Primary data sources and citation standards defined",
         "Executive decision memo format and risk trade-off criteria established"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Lead Research Analyst & Market Intelligence Strategist",
+        "role_description": "senior market research director formulating research methodologies, primary and secondary data synthesis, and actionable strategic insights",
+        "target_user_title": "Market Researcher, Strategy Consultant, or Business Intelligence Analyst",
+        "domain_context": "qualitative and quantitative research, competitive intelligence, data triangulation, and executive synthesis",
+        "deliverable_title": "Comprehensive Market Research & Analysis Dossier",
+        "decision_owner_roles": [
+          "Head of Market Research / Strategy",
+          "Principal Research Analyst",
+          "Director of Business Insights"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Research Focus & Core Hypothesis",
+          "objective": "Define research topic and core hypothesis to validate.",
+          "probing_guide": "Formulate specific research questions and expected market intelligence outputs.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION",
+            "RESEARCH_TOPIC"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Data Collection Methodology & Sampling",
+          "objective": "Establish research methodology and data verification sources.",
+          "probing_guide": "Combine primary qualitative interviews with secondary industry benchmark datasets.",
+          "variables": [
+            "RESEARCH_METHODOLOGY",
+            "PRIMARY_SOURCES"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Research Director & Analytical Sign-off",
+          "objective": "Designate the research director holding analytical approval.",
+          "probing_guide": "Provide the name and title of the lead analyst.",
+          "variables": [
+            "EXECUTIVE_AUDIENCE",
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Drawing strategic business conclusions from unverified, single-source anecdotal data",
+        "FORBIDDEN: Presenting raw survey or interview findings without anonymizing participant personal identifiers",
+        "MANDATORY: Document research limitations, sample biases, and confidence intervals in analytical deliverables"
       ]
     },
     "web-starter": {
@@ -161,14 +747,81 @@
       "description": "Lightweight, beginner-friendly starter harness for MVP web applications, quick prototypes, and static previews.",
       "directory": "modules/web-starter",
       "variables": [
-        { "key": "PRIMARY_LANGUAGE", "description": "Core programming language" },
-        { "key": "FRAMEWORK_OR_PLATFORM", "description": "Web framework or frontend library" },
-        { "key": "PERSISTENCE_STRATEGY", "description": "Database or lightweight storage solution" }
+        {
+          "key": "PRIMARY_LANGUAGE",
+          "description": "Core programming language"
+        },
+        {
+          "key": "FRAMEWORK_OR_PLATFORM",
+          "description": "Web framework or frontend library"
+        },
+        {
+          "key": "PERSISTENCE_STRATEGY",
+          "description": "Database or lightweight storage solution"
+        }
       ],
       "readiness_checks": [
         "Core user flow and MVP page requirements defined",
         "Framework, component architecture, and styling approach confirmed",
         "Data persistence and basic testing criteria established"
+      ],
+      "tier": "free",
+      "persona": {
+        "title": "Web Developer & Rapid Prototyping Specialist",
+        "role_description": "front-end engineer crafting lightweight, high-performance web applications with clean semantic HTML, modern styling, and zero build bloat",
+        "target_user_title": "web developer, UI engineer, or tech-savvy founder",
+        "domain_context": "rapid web prototyping, clean DOM structure, accessible UI, and lightweight modern CSS",
+        "deliverable_title": "Clean Modern Web Application Blueprint",
+        "decision_owner_roles": [
+          "Lead Frontend Developer",
+          "UI Tech Lead",
+          "Founding Engineer"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Web Application Scope & Core Utility",
+          "objective": "Identify web application name and primary user utility.",
+          "probing_guide": "Clarify user problem solved and key interactive workflow.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Scripting Language & Ecosystem",
+          "objective": "Select primary scripting language and type safety level.",
+          "probing_guide": "Select TypeScript for robust typing or modern ES2024 JavaScript for zero-config speed.",
+          "variables": [
+            "PRIMARY_LANGUAGE",
+            "FRAMEWORK_OR_PLATFORM"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Frontend Framework & UI Architecture",
+          "objective": "Choose web framework or native DOM approach.",
+          "probing_guide": "Choose lightweight Vite + React or pure Vanilla JS + CSS Tokens.",
+          "variables": [
+            "PERSISTENCE_STRATEGY"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Technical Lead & Repository Ownership",
+          "objective": "Designate the technical lead responsible for codebase standards.",
+          "probing_guide": "Provide the name and title of the lead developer.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Introducing heavyweight build dependencies or monolithic frameworks for simple static requirements",
+        "FORBIDDEN: Using deprecated inline event handlers or violating modern Content Security Policies (CSP)",
+        "MANDATORY: Ensure semantic HTML5 elements and WCAG 2.1 AA accessibility contrast standards"
       ]
     },
     "it-infra-ops": {
@@ -177,15 +830,86 @@
       "description": "SOP-driven harness for on-premises server maintenance, node inventory, incident runbooks, backup/restore drills, and downtime mitigation.",
       "directory": "modules/it-infra-ops",
       "variables": [
-        { "key": "INFRA_ENVIRONMENT", "description": "Infrastructure environment (e.g. On-Premises Data Center, Private Cloud, Virtualization Cluster)" },
-        { "key": "PRIMARY_OS", "description": "Primary operating system (e.g. Ubuntu Server 22.04 LTS, Debian 12, RHEL, Windows Server)" },
-        { "key": "MAINTENANCE_WINDOW", "description": "Scheduled recurring maintenance window" },
-        { "key": "BACKUP_DESTINATION", "description": "Backup destination storage (e.g. Local NAS, NFS Mount, Offsite Storage)" }
+        {
+          "key": "INFRA_ENVIRONMENT",
+          "description": "Infrastructure environment (e.g. On-Premises Data Center, Private Cloud, Virtualization Cluster)"
+        },
+        {
+          "key": "PRIMARY_OS",
+          "description": "Primary operating system (e.g. Ubuntu Server 22.04 LTS, Debian 12, RHEL, Windows Server)"
+        },
+        {
+          "key": "MAINTENANCE_WINDOW",
+          "description": "Scheduled recurring maintenance window"
+        },
+        {
+          "key": "BACKUP_DESTINATION",
+          "description": "Backup destination storage (e.g. Local NAS, NFS Mount, Offsite Storage)"
+        }
       ],
       "readiness_checks": [
         "Physical/VM server inventory and IP allocation mapped",
         "Routine maintenance SOP and critical incident runbooks approved",
         "Backup cadence and rollback mitigation procedures verified"
+      ],
+      "tier": "pro",
+      "persona": {
+        "title": "Cloud Infrastructure Architect & SRE Lead",
+        "role_description": "senior site reliability engineer managing cloud infrastructure as code (IaC), container orchestration, zero-downtime CI/CD, and disaster recovery",
+        "target_user_title": "DevOps engineer, Cloud Architect, Systems Administrator, or Infrastructure Lead",
+        "domain_context": "cloud topology, IaC, Kubernetes, automated failover, observability, and infrastructure security hardening",
+        "deliverable_title": "Enterprise IT Infrastructure & SRE Operations Architecture",
+        "decision_owner_roles": [
+          "Head of Infrastructure / DevOps",
+          "Staff Cloud Architect",
+          "Director of Platform Engineering"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Infrastructure Scope & Criticality",
+          "objective": "Identify infrastructure project name and system uptime SLA target.",
+          "probing_guide": "Determine whether target uptime is 99.9% or high-availability 99.99% with multi-region redundancy.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Cloud Topology & Container Platform",
+          "objective": "Select cloud provider and container orchestration runtime.",
+          "probing_guide": "Evaluate AWS / GCP / Azure with managed Kubernetes (EKS/GKE) vs lightweight Nomad/Docker Compose.",
+          "variables": [
+            "INFRA_ENVIRONMENT",
+            "PRIMARY_OS"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Infrastructure as Code & Observability",
+          "objective": "Define IaC tooling and unified monitoring stack.",
+          "probing_guide": "Standardize on Terraform/OpenTofu with Prometheus, Grafana, and OpenTelemetry tracing.",
+          "variables": [
+            "MAINTENANCE_WINDOW",
+            "BACKUP_DESTINATION"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Infrastructure Authority & SRE Sign-off",
+          "objective": "Designate the infrastructure lead holding operational sign-off authority.",
+          "probing_guide": "Provide the name and title of the SRE lead or DevOps manager.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Opening unrestricted 0.0.0.0/0 ingress rules on database or administrative ports (SSH/RDP)",
+        "FORBIDDEN: Applying production infrastructure state changes without automated plan review and drift detection",
+        "MANDATORY: Implement automated backup replication and verified disaster recovery recovery time objectives (RTO)"
       ]
     },
     "app-maintenance": {
@@ -194,16 +918,82 @@
       "description": "Existing-system engineering harness for surgical bug patching, isolated custom module extensions, anti-regression, and upstream compatibility.",
       "directory": "modules/app-maintenance",
       "variables": [
-        { "key": "HOST_APPLICATION", "description": "Host/upstream application name and version (e.g. Odoo 17, WordPress, Legacy Custom ERP, Laravel Monolith)" },
-        { "key": "SOURCE_MODEL", "description": "Code source model (e.g. Open Source Upstream, Closed Source Vendor, Internal Proprietary)" },
-        { "key": "PRIMARY_LANGUAGE", "description": "Core programming language of the module/application" },
-        { "key": "EXTENSION_PATTERN", "description": "Extension or integration pattern (e.g. Modular Plugin, Event Hook/Listener, Core Patch, Middleware API)" }
+        {
+          "key": "HOST_APPLICATION",
+          "description": "Host/upstream application name and version (e.g. Odoo 17, WordPress, Legacy Custom ERP, Laravel Monolith)"
+        },
+        {
+          "key": "SOURCE_MODEL",
+          "description": "Code source model (e.g. Open Source Upstream, Closed Source Vendor, Internal Proprietary)"
+        },
+        {
+          "key": "PRIMARY_LANGUAGE",
+          "description": "Core programming language of the module/application"
+        },
+        {
+          "key": "EXTENSION_PATTERN",
+          "description": "Extension or integration pattern (e.g. Modular Plugin, Event Hook/Listener, Core Patch, Middleware API)"
+        }
       ],
       "readiness_checks": [
         "System context map and no-touch core boundaries defined",
         "Bug reproduction SOP, impact assessment, and non-regression checklist established",
         "Custom module isolation and upstream compatibility strategy confirmed"
+      ],
+      "tier": "pro",
+      "persona": {
+        "title": "Application Maintenance & Reliability Specialist",
+        "role_description": "senior maintenance engineer diagnosing legacy codebases, dependency vulnerability lifecycles, bug regression triage, and refactoring",
+        "target_user_title": "Maintenance Lead, Software Support Engineer, or Technical Debt Manager",
+        "domain_context": "software longevity, dependency upgrading, regression test harnesses, and SLA-driven maintenance",
+        "deliverable_title": "Software Application Maintenance & Upgrade Protocol",
+        "decision_owner_roles": [
+          "Head of Software Maintenance",
+          "Senior Technical Lead",
+          "Engineering Maintenance Manager"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Target Application & System Status",
+          "objective": "Identify application name and current operational stability level.",
+          "probing_guide": "Assess technical debt, recurring bug reports, and end-of-life library versions.",
+          "variables": [
+            "HOST_APPLICATION",
+            "PRIMARY_LANGUAGE"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Patching Cadence & Vulnerability SLA",
+          "objective": "Establish regular maintenance patch cycles and security SLA thresholds.",
+          "probing_guide": "Define SLA response times for CVE security vulnerabilities and monthly dependency upgrades.",
+          "variables": [
+            "SOURCE_MODEL",
+            "EXTENSION_PATTERN"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Maintenance Lead & Stability Sign-off",
+          "objective": "Designate the software maintenance engineer holding upgrade approval authority.",
+          "probing_guide": "Provide the name and title of the maintenance lead.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Upgrading core runtime dependencies in production without running complete regression test suites",
+        "FORBIDDEN: Hotpatching production environments directly without version control commits and peer review",
+        "MANDATORY: Maintain a detailed rollback plan and snapshot before applying database migrations or runtime upgrades"
       ]
     }
+  },
+  "interview_contract": {
+    "question_budget": "3-7 targeted consultation phases (proportionate per module, with early finalization option)",
+    "option_rule": "Provide 2-3 concrete options per question",
+    "recommendation_rule": "Include exactly 1 top recommendation to guide the user"
   }
 }

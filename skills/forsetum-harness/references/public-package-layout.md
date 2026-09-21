@@ -46,9 +46,20 @@ skills/forsetum-harness/runtime/scripts/bundle.sh <- scripts/bundle.sh
 skills/forsetum-harness/runtime/scripts/bundle.ps1 <- scripts/bundle.ps1
 skills/forsetum-harness/runtime/scripts/validate-template.sh <- scripts/validate-template.sh
 skills/forsetum-harness/runtime/scripts/validate-template.ps1 <- scripts/validate-template.ps1
-skills/forsetum-harness/runtime/template/id/ <- template/id/
-skills/forsetum-harness/runtime/template/en/ <- template/en/
+skills/forsetum-harness/runtime/template/id/ <- filtered public template/id/ (11 approved modules)
+skills/forsetum-harness/runtime/template/en/ <- filtered public template/en/ (11 approved modules)
 ```
+
+The curated package contains exactly these module IDs in both languages:
+
+```text
+web-fullstack, landing-page, sales-outreach, general-office, mobile-app,
+cli-automation, content-marketing, research-analysis, web-starter,
+it-infra-ops, app-maintenance
+```
+
+Canonical module directories outside this list and their manifest objects are
+private and must not appear in the public tree or package-local runtime.
 
 Reviewed adapters and references beside the entry point are package content.
 Private plans, repository metadata, credentials, and unlisted files are not.

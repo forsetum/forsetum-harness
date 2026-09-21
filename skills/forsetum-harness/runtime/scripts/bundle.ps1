@@ -10,7 +10,7 @@
     Template language ('en' or 'id'). Default: en.
 
 .PARAMETER Module
-    Domain module to bundle (web-fullstack, landing-page, sales-outreach, general-office, mobile-app, cli-automation, content-marketing, research-analysis, web-starter, it-infra-ops, app-maintenance).
+    Domain module declared by template/<lang>/manifest.json.
 
 .PARAMETER Name
     Project name (interpolates {{PROJECT_NAME}} across markdown files).
@@ -33,7 +33,6 @@ param (
     [string]$Lang = 'en',
 
     [Parameter(Mandatory = $true)]
-    [ValidateSet('web-fullstack', 'landing-page', 'sales-outreach', 'general-office', 'mobile-app', 'cli-automation', 'content-marketing', 'research-analysis', 'web-starter', 'it-infra-ops', 'app-maintenance')]
     [string]$Module,
 
     [Parameter()]
@@ -60,6 +59,19 @@ $TemplateDir = Join-Path $RepoRoot "template\$Lang"
 $CoreDir = Join-Path $TemplateDir "core"
 $ModuleDir = Join-Path $TemplateDir "modules\$Module"
 
+$ManifestPath = Join-Path $TemplateDir 'manifest.json'
+if (-not (Test-Path $ManifestPath)) {
+    Write-Error "Manifest not found: $ManifestPath"
+    exit 1
+}
+$Manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
+$CatalogModuleIds = @($Manifest.modules.PSObject.Properties | ForEach-Object { $_.Name })
+if ($CatalogModuleIds -notcontains $Module) {
+    Write-Error "Module is not declared in ${ManifestPath}: $Module"
+    exit 2
+}
+$ModuleMetadata = @($Manifest.modules.PSObject.Properties | Where-Object { $_.Name -eq $Module } | Select-Object -First 1).Value
+
 if (-not (Test-Path $CoreDir)) {
     Write-Error "Core directory not found: $CoreDir"
     exit 1
@@ -79,6 +91,19 @@ try {
 
     Write-Host "==> Applying overlay module: $Module" -ForegroundColor Cyan
     Copy-Item -Path "$ModuleDir\*" -Destination $StagingDir -Recurse -Force
+
+    # Keep core stitching targets intact when a legacy overlay ships stale copies.
+    foreach ($protectedFile in @('docs\INDEX.md', 'docs\08-reference\template-variables.md', 'docs\09-governance\implementation-readiness.md')) {
+        $coreProtected = Join-Path $CoreDir $protectedFile
+        if (Test-Path $coreProtected) {
+            $stagingProtected = Join-Path $StagingDir $protectedFile
+            $stagingProtectedParent = Split-Path -Parent $stagingProtected
+            if (-not (Test-Path $stagingProtectedParent)) {
+                New-Item -ItemType Directory -Path $stagingProtectedParent -Force | Out-Null
+            }
+            Copy-Item -LiteralPath $coreProtected -Destination $stagingProtected -Force
+        }
+    }
 
     # Inject validator scripts
     $stagingScripts = Join-Path $StagingDir "scripts"
@@ -370,6 +395,58 @@ try {
 | Bug Triage & Regression Checklist Ready | app-maintenance | 4-phase bug workflow and reproduction criteria established | [ ] | In bug-triage-sop.md |
 "@
         }
+        default {
+            $IndexTable = @"
+| Section | Document | Description |
+|---|---|---|
+"@
+            $moduleDocsDir = Join-Path $ModuleDir 'docs'
+            if (Test-Path $moduleDocsDir) {
+                Get-ChildItem -Path $moduleDocsDir -Filter '*.md' -Recurse | Sort-Object FullName | ForEach-Object {
+                    $relative = $_.FullName.Substring($moduleDocsDir.Length + 1).Replace('\', '/')
+                    $section = $relative.Split('/')[0]
+                    $heading = Get-Content -LiteralPath $_.FullName | Where-Object { $_ -match '^#\s+' } | Select-Object -First 1
+                    $description = if ($heading) { $heading -replace '^#\s+', '' } else { $relative }
+                    $IndexTable += "| **$section** | [``$relative``]($relative) | $description |`n"
+                }
+            }
+        }
+    }
+
+    # Manifest metadata is authoritative for variables and readiness content.
+    $VarsTable = @"
+| Variable Name | Module | Status | Description | Instantiation Value |
+|---|---|---|---|---|
+"@
+    foreach ($variable in @($ModuleMetadata.variables)) {
+        $key = [string]$variable.key
+        $description = [string]$variable.description
+        $VarsTable += "| ``{{$key}}`` | $Module | Required | $description | ``{{$key}}`` |`n"
+    }
+    if ($ModuleMetadata.persona) {
+        $VarsTable += "`n### Module Persona`n`n"
+        $VarsTable += "- **Title:** $($ModuleMetadata.persona.title)`n"
+        $VarsTable += "- **Role:** $($ModuleMetadata.persona.role_description)`n"
+        $VarsTable += "- **Target users:** $($ModuleMetadata.persona.target_user_title)`n"
+    }
+    if ($ModuleMetadata.interview_phases) {
+        $VarsTable += "`n### Interview Phases`n`n| Phase | Name | Variables |`n|---|---|---|`n"
+        foreach ($phase in @($ModuleMetadata.interview_phases)) {
+            $phaseVariables = (@($phase.variables) -join ', ')
+            $VarsTable += "| $($phase.phase) | $($phase.name) | $phaseVariables |`n"
+        }
+    }
+
+    $ReadinessTable = @"
+| Check Item | Module | Requirement | Status | Evidence / Notes |
+|---|---|---|---|---|
+"@
+    foreach ($check in @($ModuleMetadata.readiness_checks)) {
+        $ReadinessTable += "| $check | $Module | $check | [ ] | Manifest readiness check |`n"
+    }
+    $ReadinessTable += "`n### Domain Guardrails`n`n"
+    foreach ($guardrail in @($ModuleMetadata.domain_guardrails)) {
+        $ReadinessTable += "- $guardrail`n"
     }
 
     # Stitch INDEX.md

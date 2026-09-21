@@ -10,7 +10,7 @@
     Template language ('id' for Indonesian, 'en' for English). Default: en.
 
 .PARAMETER Module
-    Domain module (web-fullstack, landing-page, sales-outreach, general-office, mobile-app, cli-automation, content-marketing, research-analysis, web-starter, it-infra-ops, app-maintenance). Default: web-fullstack.
+    Domain module declared by template/<lang>/manifest.json. Default: web-fullstack.
 
 .PARAMETER Target
     Target project directory. Default: . (current directory).
@@ -34,7 +34,6 @@ param (
     [string]$Lang = 'en',
 
     [Parameter()]
-    [ValidateSet('web-fullstack', 'landing-page', 'sales-outreach', 'general-office', 'mobile-app', 'cli-automation', 'content-marketing', 'research-analysis', 'web-starter', 'it-infra-ops', 'app-maintenance')]
     [string]$Module = 'web-fullstack',
 
     [Parameter()]
@@ -70,43 +69,24 @@ if ($PSBoundParameters.Count -eq 0 -and [Environment]::UserInteractive) {
 
     $coreCheck = Join-Path $RepoRoot "template\$Lang\core"
     if (Test-Path $coreCheck) {
+        $interactiveManifestPath = Join-Path $RepoRoot "template\$Lang\manifest.json"
+        $interactiveManifest = Get-Content -LiteralPath $interactiveManifestPath -Raw | ConvertFrom-Json
+        $CatalogModuleIds = @($interactiveManifest.modules.PSObject.Properties | ForEach-Object { $_.Name })
         Write-Host ""
         Write-Host "Select domain module:"
-        Write-Host "  1) Fullstack Web Application (web-fullstack) [default]"
-        Write-Host "  2) Landing Page / Static Web (landing-page)"
-        Write-Host "  3) Sales & B2B Outreach (sales-outreach)"
-        Write-Host "  4) General Operations & Office (general-office)"
-        Write-Host "  5) Mobile Application (mobile-app)"
-        Write-Host "  6) CLI Tool & Automation Script (cli-automation)"
-        Write-Host "  7) Content Marketing & Social Media (content-marketing)"
-        Write-Host "  8) Research & Market Analysis (research-analysis)"
-        Write-Host "  9) Web Application Starter (web-starter)"
-        Write-Host " 10) IT Infrastructure Operations (it-infra-ops)"
-        Write-Host " 11) Application Maintenance & Brownfield (app-maintenance)"
-        $modChoice = Read-Host "Choose [1-11, default: 1]"
-        switch ($modChoice) {
-            '2' { $Module = 'landing-page' }
-            'landing-page' { $Module = 'landing-page' }
-            '3' { $Module = 'sales-outreach' }
-            'sales-outreach' { $Module = 'sales-outreach' }
-            '4' { $Module = 'general-office' }
-            'general-office' { $Module = 'general-office' }
-            '5' { $Module = 'mobile-app' }
-            'mobile-app' { $Module = 'mobile-app' }
-            '6' { $Module = 'cli-automation' }
-            'cli-automation' { $Module = 'cli-automation' }
-            '7' { $Module = 'content-marketing' }
-            'content-marketing' { $Module = 'content-marketing' }
-            '8' { $Module = 'research-analysis' }
-            'research-analysis' { $Module = 'research-analysis' }
-            '9' { $Module = 'web-starter' }
-            'web-starter' { $Module = 'web-starter' }
-            '10' { $Module = 'it-infra-ops' }
-            'it-infra-ops' { $Module = 'it-infra-ops' }
-            '11' { $Module = 'app-maintenance' }
-            'app-maintenance' { $Module = 'app-maintenance' }
-            default { $Module = 'web-fullstack' }
+        for ($catalogIndex = 0; $catalogIndex -lt $CatalogModuleIds.Count; $catalogIndex++) {
+            $suffix = if ($catalogIndex -eq 0) { ' [default]' } else { '' }
+            Write-Host (" {0,2}) {1}{2}" -f ($catalogIndex + 1), $CatalogModuleIds[$catalogIndex], $suffix)
         }
+        $modChoice = Read-Host "Choose [1-$($CatalogModuleIds.Count), default: 1]"
+        $parsedIndex = 0
+        $selectedIndex = 0
+        if ([int]::TryParse($modChoice, [ref]$parsedIndex) -and $parsedIndex -ge 1 -and $parsedIndex -le $CatalogModuleIds.Count) {
+            $selectedIndex = $parsedIndex - 1
+        } elseif ($CatalogModuleIds -contains $modChoice) {
+            $selectedIndex = [Array]::IndexOf([string[]]$CatalogModuleIds, [string]$modChoice)
+        }
+        $Module = $CatalogModuleIds[$selectedIndex]
     }
 
     $targetChoice = Read-Host "Target directory [default: .]"
@@ -136,6 +116,18 @@ $TemplateDir = Join-Path $RepoRoot "template\$Lang"
 if (-not (Test-Path $TemplateDir)) {
     Write-Error "Template directory not found: $TemplateDir"
     exit 1
+}
+
+$ManifestPath = Join-Path $TemplateDir 'manifest.json'
+if (-not (Test-Path $ManifestPath)) {
+    Write-Error "Manifest not found: $ManifestPath"
+    exit 1
+}
+$Manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
+$CatalogModuleIds = @($Manifest.modules.PSObject.Properties | ForEach-Object { $_.Name })
+if ($CatalogModuleIds -notcontains $Module) {
+    Write-Error "Module is not declared in ${ManifestPath}: $Module"
+    exit 2
 }
 
 # Resolve and ensure target directory

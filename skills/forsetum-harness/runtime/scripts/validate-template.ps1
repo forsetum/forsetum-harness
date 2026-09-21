@@ -211,6 +211,132 @@ function Test-TemplatePlaceholders {
     return $true
 }
 
+function Get-ManifestShape {
+    param ([object]$Value)
+
+    if ($null -eq $Value) { return 'null' }
+    if ($Value -is [string] -or $Value -is [ValueType]) { return 'scalar' }
+    if ($Value -is [System.Array]) {
+        $items = @($Value | ForEach-Object { Get-ManifestShape -Value $_ })
+        return "array[$($items -join ',')]"
+    }
+
+    $properties = @($Value.PSObject.Properties | Sort-Object Name)
+    $parts = @($properties | ForEach-Object {
+        "$($_.Name)=$(Get-ManifestShape -Value $_.Value)"
+    })
+    return "object{$($parts -join ',')}"
+}
+
+function Test-ManifestModule {
+    param (
+        [object]$Manifest,
+        [string]$Language,
+        [string]$ModuleId
+    )
+
+    $entryProperty = $Manifest.modules.PSObject.Properties[$ModuleId]
+    if ($null -eq $entryProperty) {
+        Write-Host "  [FAIL] Module is missing from $Language manifest: $ModuleId" -ForegroundColor Red
+        return $false
+    }
+
+    $entry = $entryProperty.Value
+    $required = @('category', 'tier', 'variables', 'persona', 'interview_phases', 'domain_guardrails', 'readiness_checks', 'directory')
+    $ok = $true
+    foreach ($field in $required) {
+        if ($null -eq $entry.PSObject.Properties[$field]) {
+            Write-Host "  [FAIL] Module $ModuleId is missing manifest field: $field" -ForegroundColor Red
+            $ok = $false
+        }
+    }
+
+    foreach ($field in @('variables', 'interview_phases', 'domain_guardrails', 'readiness_checks')) {
+        $property = $entry.PSObject.Properties[$field]
+        if ($null -ne $property -and $property.Value -isnot [System.Array]) {
+            Write-Host "  [FAIL] Module $ModuleId field is not an array: $field" -ForegroundColor Red
+            $ok = $false
+        }
+    }
+
+    $persona = $entry.PSObject.Properties['persona']
+    if ($null -ne $persona -and ($persona.Value -is [string] -or $persona.Value -is [ValueType] -or $persona.Value -is [System.Array])) {
+        Write-Host "  [FAIL] Module $ModuleId field is not an object: persona" -ForegroundColor Red
+        $ok = $false
+    }
+
+    $directory = $entry.PSObject.Properties['directory']
+    $expectedDirectory = "modules/$ModuleId"
+    if ($null -ne $directory -and $directory.Value -ne $expectedDirectory) {
+        Write-Host "  [FAIL] Module $ModuleId directory does not match $expectedDirectory" -ForegroundColor Red
+        $ok = $false
+    }
+    return $ok
+}
+
+function Test-ManifestCatalog {
+    $enPath = Join-Path $RepoRoot 'template/en/manifest.json'
+    $idPath = Join-Path $RepoRoot 'template/id/manifest.json'
+    if (-not (Test-Path $enPath) -or -not (Test-Path $idPath)) {
+        Write-Error 'Both EN and ID manifests are required for canonical catalog validation.'
+        return $false
+    }
+
+    try {
+        $enManifest = Get-Content -Path $enPath -Raw | ConvertFrom-Json
+        $idManifest = Get-Content -Path $idPath -Raw | ConvertFrom-Json
+    }
+    catch {
+        Write-Error "Manifest JSON parsing failed: $_"
+        return $false
+    }
+
+    $enIds = @($enManifest.modules.PSObject.Properties.Name | Sort-Object)
+    $idIds = @($idManifest.modules.PSObject.Properties.Name | Sort-Object)
+    $ok = $true
+    $parity = Compare-Object -ReferenceObject $enIds -DifferenceObject $idIds
+    if ($null -ne $parity) {
+        Write-Host '  [FAIL] EN and ID manifest module keys differ:' -ForegroundColor Red
+        $parity | ForEach-Object { Write-Host "    $($_.SideIndicator) $($_.InputObject)" -ForegroundColor Red }
+        $ok = $false
+    }
+
+    foreach ($moduleId in $enIds) {
+        if (-not (Test-ManifestModule -Manifest $enManifest -Language 'en' -ModuleId $moduleId)) { $ok = $false }
+        if (-not (Test-ManifestModule -Manifest $idManifest -Language 'id' -ModuleId $moduleId)) { $ok = $false }
+
+        $enEntry = $enManifest.modules.PSObject.Properties[$moduleId].Value
+        $idEntry = $idManifest.modules.PSObject.Properties[$moduleId].Value
+        if ((Get-ManifestShape -Value $enEntry) -ne (Get-ManifestShape -Value $idEntry)) {
+            Write-Host "  [FAIL] EN and ID manifest structural shapes differ: $moduleId" -ForegroundColor Red
+            $ok = $false
+        }
+    }
+
+    foreach ($language in @('en', 'id')) {
+        $modulesPath = Join-Path $RepoRoot "template/$language/modules"
+        $directoryIds = @((Get-ChildItem -Path $modulesPath -Directory | Select-Object -ExpandProperty Name | Sort-Object))
+        if ($language -eq 'en') {
+            $manifestDirectories = @($enIds | Sort-Object)
+        } else {
+            $manifestDirectories = @($idIds | Sort-Object)
+        }
+        $directoryParity = Compare-Object -ReferenceObject $manifestDirectories -DifferenceObject $directoryIds
+        if ($null -ne $directoryParity) {
+            Write-Host "  [FAIL] Manifest-to-directory parity failed for template/$language" -ForegroundColor Red
+            $directoryParity | ForEach-Object { Write-Host "    $($_.SideIndicator) $($_.InputObject)" -ForegroundColor Red }
+            $ok = $false
+        }
+    }
+
+    if (-not $ok) {
+        Write-Error 'Canonical manifest catalog validation failed.'
+        return $false
+    }
+    Write-Host "  [PASS] EN/ID manifests and module directories contain $($enIds.Count) canonical modules with equal structural shapes." -ForegroundColor Green
+    return $true
+}
+
 function Test-ModularTemplate {
     param ([string]$Dir)
     Write-Host "==> Validating modular template library in: $Dir" -ForegroundColor Cyan
@@ -225,12 +351,16 @@ function Test-ModularTemplate {
     $modulesDir = Join-Path $Dir "modules"
 
     $coreOk = (Test-TemplateFiles -Dir $coreDir)
-    $mods = @("web-fullstack", "landing-page", "sales-outreach", "general-office", "mobile-app", "cli-automation", "content-marketing", "research-analysis", "web-starter", "it-infra-ops", "app-maintenance")
+    $manifest = Get-Content -Path $manifestPath -Raw | ConvertFrom-Json
+    $mods = @($manifest.modules.PSObject.Properties.Name | Sort-Object)
     $modsOk = $true
     foreach ($m in $mods) {
         $mp = Join-Path $modulesDir $m
         if (-not (Test-Path $mp)) {
             Write-Host "  [FAIL] Missing module directory: $m" -ForegroundColor Red
+            $modsOk = $false
+        } elseif (@(Get-ChildItem -Path $mp -Filter '*.md' -Recurse -File).Count -eq 0) {
+            Write-Host "  [FAIL] Module has no documentation files: $m" -ForegroundColor Red
             $modsOk = $false
         }
     }
@@ -292,9 +422,10 @@ try {
             $idPath = Join-Path $RepoRoot "template/id"
             $enPath = Join-Path $RepoRoot "template/en"
 
-            $pass1 = (Test-ModularTemplate -Dir $idPath)
+            $catalogPass = Test-ManifestCatalog
+            $pass1 = $catalogPass -and (Test-ModularTemplate -Dir $idPath)
             Write-Host ""
-            $pass2 = (Test-ModularTemplate -Dir $enPath)
+            $pass2 = $catalogPass -and (Test-ModularTemplate -Dir $enPath)
             Write-Host ""
             $pass3 = Test-RootHarness
 
@@ -308,11 +439,11 @@ try {
     }
     elseif ($Template) {
         if ($Template -eq 'en') {
-            $pass = Test-ModularTemplate -Dir (Join-Path $RepoRoot "template/en")
+            $pass = (Test-ManifestCatalog) -and (Test-ModularTemplate -Dir (Join-Path $RepoRoot "template/en"))
             if (-not $pass) { exit 1 }
             Write-Host "SUCCESS: Template en is valid!" -ForegroundColor Green
         } elseif ($Template -eq 'id') {
-            $pass = Test-ModularTemplate -Dir (Join-Path $RepoRoot "template/id")
+            $pass = (Test-ManifestCatalog) -and (Test-ModularTemplate -Dir (Join-Path $RepoRoot "template/id"))
             if (-not $pass) { exit 1 }
             Write-Host "SUCCESS: Template id is valid!" -ForegroundColor Green
         }

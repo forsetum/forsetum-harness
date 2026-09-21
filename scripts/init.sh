@@ -9,7 +9,7 @@ Scaffold an AI Agent Harness for a new or existing project.
 
 Options:
   -l, --lang <id|en>        Template language ('id' for Indonesian, 'en' for English). Default: en
-  -m, --module <module_id>  Domain module (web-fullstack, landing-page, sales-outreach, general-office, mobile-app, cli-automation, content-marketing, research-analysis, web-starter, it-infra-ops, app-maintenance). Default: web-fullstack
+  -m, --module <module_id>  Domain module declared by template/<lang>/manifest.json. Default: web-fullstack
   -t, --target <dir>        Target project directory. Default: .
   -n, --name <name>         Project name (interpolates {{PROJECT_NAME}}).
   -f, --force               Overwrite existing files in target directory.
@@ -89,32 +89,28 @@ if (( INTERACTIVE == 1 )); then
   esac
 
   if [[ -d "${REPO_ROOT}/template/${LANG_VAL}/core" ]]; then
+    mapfile -t CATALOG_MODULE_IDS < <(awk '
+      /^  "modules": \{/ { in_modules=1; next }
+      in_modules && /^  \},?$/ { exit }
+      in_modules && /^    "[^"]+": \{/ {
+        id=$0; sub(/^    "/, "", id); sub(/".*$/, "", id); print id
+      }
+    ' "${REPO_ROOT}/template/${LANG_VAL}/manifest.json")
     printf '\nSelect domain module:\n'
-    printf '  1) Fullstack Web Application (web-fullstack) [default]\n'
-    printf '  2) Landing Page / Static Web (landing-page)\n'
-    printf '  3) Sales & B2B Outreach (sales-outreach)\n'
-    printf '  4) General Operations & Office (general-office)\n'
-    printf '  5) Mobile Application (mobile-app)\n'
-    printf '  6) CLI Tool & Automation Script (cli-automation)\n'
-    printf '  7) Content Marketing & Social Media (content-marketing)\n'
-    printf '  8) Research & Market Analysis (research-analysis)\n'
-    printf '  9) Web Application Starter (web-starter)\n'
-    printf ' 10) IT Infrastructure Operations (it-infra-ops)\n'
-    printf ' 11) Application Maintenance & Brownfield (app-maintenance)\n'
-    read -r -p 'Choose [1-11, default: 1]: ' mod_choice
-    case "${mod_choice}" in
-      2|landing-page) MODULE_ID="landing-page" ;;
-      3|sales-outreach) MODULE_ID="sales-outreach" ;;
-      4|general-office) MODULE_ID="general-office" ;;
-      5|mobile-app) MODULE_ID="mobile-app" ;;
-      6|cli-automation) MODULE_ID="cli-automation" ;;
-      7|content-marketing) MODULE_ID="content-marketing" ;;
-      8|research-analysis) MODULE_ID="research-analysis" ;;
-      9|web-starter) MODULE_ID="web-starter" ;;
-      10|it-infra-ops) MODULE_ID="it-infra-ops" ;;
-      11|app-maintenance) MODULE_ID="app-maintenance" ;;
-      *) MODULE_ID="web-fullstack" ;;
-    esac
+    for index in "${!CATALOG_MODULE_IDS[@]}"; do
+      number=$((index + 1))
+      suffix=""
+      (( index == 0 )) && suffix=" [default]"
+      printf ' %2d) %s%s\n' "${number}" "${CATALOG_MODULE_IDS[index]}" "${suffix}"
+    done
+    read -r -p "Choose [1-${#CATALOG_MODULE_IDS[@]}, default: 1]: " mod_choice
+    if [[ "${mod_choice}" =~ ^[0-9]+$ ]] && (( mod_choice >= 1 && mod_choice <= ${#CATALOG_MODULE_IDS[@]} )); then
+      MODULE_ID="${CATALOG_MODULE_IDS[mod_choice-1]}"
+    elif printf '%s\n' "${CATALOG_MODULE_IDS[@]}" | grep -Fxq -- "${mod_choice}"; then
+      MODULE_ID="${mod_choice}"
+    else
+      MODULE_ID="${CATALOG_MODULE_IDS[0]}"
+    fi
   fi
 
   read -r -p 'Target directory [default: .]: ' target_choice
@@ -153,6 +149,16 @@ TEMPLATE_DIR="${REPO_ROOT}/template/${LANG_VAL}"
 if [[ ! -d "${TEMPLATE_DIR}" ]]; then
   printf 'ERROR: Template directory not found: %s\n' "${TEMPLATE_DIR}" >&2
   exit 1
+fi
+
+if ! awk -v wanted="${MODULE_ID}" '
+  /^  "modules": \{/ { in_modules=1; next }
+  in_modules && /^  \},?$/ { exit }
+  in_modules && $0 ~ "^    \"" wanted "\": \\{" { found=1 }
+  END { exit(found ? 0 : 1) }
+' "${TEMPLATE_DIR}/manifest.json"; then
+  printf 'ERROR: Module is not declared in %s/manifest.json: %s\n' "${LANG_VAL}" "${MODULE_ID}" >&2
+  exit 2
 fi
 
 mkdir -p "${TARGET_DIR}"

@@ -9,7 +9,7 @@ Bundle an AI Harness project by combining Core and a Domain Module.
 
 Options:
   -l, --lang <en|id>        Template language (default: en)
-  -m, --module <module_id>  Domain module to bundle (web-fullstack, landing-page, sales-outreach, general-office, mobile-app, cli-automation, content-marketing, research-analysis, web-starter, it-infra-ops, app-maintenance)
+  -m, --module <module_id>  Domain module declared by template/<lang>/manifest.json
   -n, --name <name>         Project name (interpolates {{PROJECT_NAME}})
   -o, --output <file.zip>   Output zip archive destination (e.g. ./dist/my-project.zip)
   -d, --dir <directory>     Output uncompressed directory instead of zip
@@ -70,7 +70,7 @@ while (($# > 0)); do
 done
 
 if [[ -z "${MODULE_ID}" ]]; then
-  printf 'ERROR: --module is required. Choose one from: web-fullstack, landing-page, sales-outreach, general-office, mobile-app, cli-automation, content-marketing, research-analysis, web-starter, it-infra-ops, app-maintenance\n' >&2
+  printf 'ERROR: --module is required. Choose one declared by template/<lang>/manifest.json\n' >&2
   exit 2
 fi
 
@@ -82,6 +82,50 @@ fi
 TEMPLATE_DIR="${REPO_ROOT}/template/${LANG_VAL}"
 CORE_DIR="${TEMPLATE_DIR}/core"
 MODULE_DIR="${TEMPLATE_DIR}/modules/${MODULE_ID}"
+
+manifest_module_ids() {
+  awk '
+    /^  "modules": \{/ { in_modules=1; next }
+    in_modules && /^  \},?$/ { exit }
+    in_modules && /^    "[^"]+": \{/ {
+      id=$0; sub(/^    "/, "", id); sub(/".*$/, "", id); print id
+    }
+  ' "${TEMPLATE_DIR}/manifest.json"
+}
+
+manifest_module_block() {
+  local wanted="$1"
+  awk -v wanted="${wanted}" '
+    function brace_delta(line,    i,ch,escaped,in_string,delta) {
+      escaped=0; in_string=0; delta=0
+      for (i=1; i<=length(line); i++) {
+        ch=substr(line,i,1)
+        if (in_string) {
+          if (escaped) escaped=0
+          else if (ch == "\\") escaped=1
+          else if (ch == "\"") in_string=0
+        } else if (ch == "\"") in_string=1
+        else if (ch == "{") delta++
+        else if (ch == "}") delta--
+      }
+      return delta
+    }
+    /^  "modules": \{/ { in_modules=1; next }
+    in_modules && /^  \},?$/ { exit }
+    in_modules && /^    "[^"]+": \{/ {
+      id=$0; sub(/^    "/,"",id); sub(/".*$/,"",id)
+      if (id == wanted) { active=1; depth=brace_delta($0); print; next }
+    }
+    active { print; depth+=brace_delta($0); if (depth == 0) exit }
+  ' "${TEMPLATE_DIR}/manifest.json"
+}
+
+if ! manifest_module_ids | grep -Fxq -- "${MODULE_ID}"; then
+  printf 'ERROR: Module is not declared in %s/manifest.json: %s\n' "${LANG_VAL}" "${MODULE_ID}" >&2
+  printf 'Available modules:\n' >&2
+  manifest_module_ids >&2
+  exit 2
+fi
 
 if [[ ! -d "${CORE_DIR}" ]]; then
   printf 'ERROR: Core directory not found: %s\n' "${CORE_DIR}" >&2
@@ -109,6 +153,18 @@ cp -R "${CORE_DIR}/." "${STAGING_DIR}/"
 
 printf '==> Applying overlay module: %s\n' "${MODULE_ID}"
 cp -R "${MODULE_DIR}/." "${STAGING_DIR}/"
+
+# Keep the core stitching targets intact when a legacy module overlay ships its
+# own stale registry or governance copy. Manifest metadata is stitched below.
+for protected_file in \
+  "docs/INDEX.md" \
+  "docs/08-reference/template-variables.md" \
+  "docs/09-governance/implementation-readiness.md"; do
+  if [[ -f "${CORE_DIR}/${protected_file}" ]]; then
+    mkdir -p "${STAGING_DIR}/$(dirname "${protected_file}")"
+    cp "${CORE_DIR}/${protected_file}" "${STAGING_DIR}/${protected_file}"
+  fi
+done
 
 # Inject validator scripts
 mkdir -p "${STAGING_DIR}/scripts"
@@ -441,7 +497,85 @@ EOF
 EOF
 )
     ;;
+  *)
+    INDEX_TABLE=$'| Section | Document | Description |\n|---|---|---|\n'
+    while IFS= read -r module_file; do
+      module_rel="${module_file#${MODULE_DIR}/docs/}"
+      section="${module_rel%%/*}"
+      description="$(sed -n 's/^# \+//p' "${module_file}" | head -n 1)"
+      [[ -n "${description}" ]] || description="${module_rel}"
+      INDEX_TABLE+="| **${section}** | [\`${module_rel}\`](${module_rel}) | ${description} |"$'\n'
+    done < <(find "${MODULE_DIR}/docs" -type f -name '*.md' | sort)
+    ;;
 esac
+
+# Manifest metadata is authoritative for all module variables and readiness
+# content. Specialized index tables above remain stable for the original 11.
+MODULE_BLOCK="$(manifest_module_block "${MODULE_ID}")"
+VARS_TABLE=$'| Variable Name | Module | Status | Description | Instantiation Value |\n|---|---|---|---|---|\n'
+in_variables=0
+current_key=''
+while IFS= read -r line; do
+  if [[ "${line}" =~ ^[[:space:]]+\"variables\": ]]; then in_variables=1; continue; fi
+  (( in_variables == 1 )) || continue
+  if [[ "${line}" =~ ^[[:space:]]+\],? ]]; then in_variables=0; continue; fi
+  if [[ "${line}" =~ \"key\":\ \"([^\"]+)\" ]]; then current_key="${BASH_REMATCH[1]}"; fi
+  if [[ "${line}" =~ \"description\":\ \"([^\"]*)\" ]] && [[ -n "${current_key}" ]]; then
+    VARS_TABLE+="| \`{{${current_key}}}\` | ${MODULE_ID} | Required | ${BASH_REMATCH[1]} | \`{{${current_key}}}\` |"$'\n'
+    current_key=''
+  fi
+done <<<"${MODULE_BLOCK}"
+
+persona_title=''
+persona_role=''
+persona_users=''
+in_persona=0
+while IFS= read -r line; do
+  if [[ "${line}" =~ ^[[:space:]]+\"persona\": ]]; then in_persona=1; continue; fi
+  (( in_persona == 1 )) || continue
+  [[ "${line}" =~ ^[[:space:]]{4}\},?$ ]] && { in_persona=0; continue; }
+  [[ "${line}" =~ \"title\":\ \"([^\"]*)\" ]] && persona_title="${BASH_REMATCH[1]}"
+  [[ "${line}" =~ \"role_description\":\ \"([^\"]*)\" ]] && persona_role="${BASH_REMATCH[1]}"
+  [[ "${line}" =~ \"target_user_title\":\ \"([^\"]*)\" ]] && persona_users="${BASH_REMATCH[1]}"
+done <<<"${MODULE_BLOCK}"
+if [[ -n "${persona_title}${persona_role}${persona_users}" ]]; then
+  VARS_TABLE+=$'\n### Module Persona\n\n'
+  [[ -n "${persona_title}" ]] && VARS_TABLE+="- **Title:** ${persona_title}"$'\n'
+  [[ -n "${persona_role}" ]] && VARS_TABLE+="- **Role:** ${persona_role}"$'\n'
+  [[ -n "${persona_users}" ]] && VARS_TABLE+="- **Target users:** ${persona_users}"$'\n'
+fi
+
+VARS_TABLE+=$'\n### Interview Phases\n\n| Phase | Name |\n|---|---|\n'
+current_phase=''
+current_phase_name=''
+while IFS= read -r line; do
+  if [[ "${line}" =~ \"phase\":\ ([0-9]+) ]]; then current_phase="${BASH_REMATCH[1]}"; fi
+  if [[ "${line}" =~ \"name\":\ \"([^\"]*)\" ]] && [[ -n "${current_phase}" ]]; then
+    current_phase_name="${BASH_REMATCH[1]}"
+    VARS_TABLE+="| ${current_phase} | ${current_phase_name} |"$'\n'
+    current_phase=''
+  fi
+done <<<"${MODULE_BLOCK}"
+
+READINESS_TABLE=$'| Check Item | Module | Requirement | Status | Evidence / Notes |\n|---|---|---|---|---|\n'
+in_readiness=0
+while IFS= read -r line; do
+  if [[ "${line}" =~ ^[[:space:]]+\"readiness_checks\": ]]; then in_readiness=1; continue; fi
+  (( in_readiness == 1 )) || continue
+  if [[ "${line}" =~ ^[[:space:]]+\],? ]]; then in_readiness=0; continue; fi
+  if [[ "${line}" =~ \"([^\"]+)\"[,]*$ ]]; then
+    check="${BASH_REMATCH[1]}"
+    READINESS_TABLE+="| ${check} | ${MODULE_ID} | ${check} | [ ] | Manifest readiness check |"$'\n'
+  fi
+done <<<"${MODULE_BLOCK}"
+READINESS_TABLE+=$'\n### Domain Guardrails\n\n'
+in_guardrails=0
+while IFS= read -r line; do
+  if [[ "${line}" =~ ^[[:space:]]+\"domain_guardrails\": ]]; then in_guardrails=1; continue; fi
+  (( in_guardrails == 1 )) || continue
+  if [[ "${line}" =~ ^[[:space:]]+\],? ]]; then in_guardrails=0; continue; fi
+  if [[ "${line}" =~ \"([^\"]+)\"[,]*$ ]]; then READINESS_TABLE+="- ${BASH_REMATCH[1]}"$'\n'; fi
+done <<<"${MODULE_BLOCK}"
 
 # Stitch INDEX.md
 INDEX_FILE="${STAGING_DIR}/docs/INDEX.md"
