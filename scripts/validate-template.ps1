@@ -18,16 +18,20 @@ param (
     [string]$Mode = 'source'
 )
 
+$ErrorActionPreference = 'Stop'
+
 Write-Warning 'validate-template.ps1 is deprecated; use validate-harness.ps1.'
 $Canonical = Join-Path $PSScriptRoot 'validate-harness.ps1'
-$ForwardedArguments = @()
+$ForwardedArguments = @{}
 switch ($PSCmdlet.ParameterSetName) {
-    'All' { $ForwardedArguments += '-All' }
-    'Template' { $ForwardedArguments += @('-Template', $Template) }
-    'Root' { $ForwardedArguments += '-Root' }
+    'All' { $ForwardedArguments.All = $true }
+    'Template' { $ForwardedArguments.Template = $Template }
+    'Root' { $ForwardedArguments.Root = $true }
     'Target' {
-        $ForwardedArguments += @('-Target', $Target, '-Mode', $Mode)
+        $ForwardedArguments.Target = $Target
+        $ForwardedArguments.Mode = $Mode
     }
 }
+$global:LASTEXITCODE = 0
 & $Canonical @ForwardedArguments
 exit $LASTEXITCODE

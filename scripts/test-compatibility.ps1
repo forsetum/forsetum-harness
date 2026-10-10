@@ -19,6 +19,65 @@ try {
     Write-Output "OS: $([Environment]::OSVersion.VersionString)"
     Write-Output "PowerShell: $($PSVersionTable.PSVersion) Edition: $($PSVersionTable.PSEdition)"
     Write-Output "Root: $Root"
+    # Exercise named forwarding and process status using the installed native interpreter.
+    # A positional splat breaks Template/Target binding; a swallowed exit makes CI green.
+    $wrapperFixture = Join-Path $work 'wrapper regression'
+    New-Item -ItemType Directory -Path $wrapperFixture | Out-Null
+    $wrapper = Join-Path $wrapperFixture 'validate-template.ps1'
+    $canonical = Join-Path $wrapperFixture 'validate-harness.ps1'
+    $record = Join-Path $wrapperFixture 'record.json'
+    Copy-Item -LiteralPath (Join-Path $Root 'scripts/validate-template.ps1') -Destination $wrapper
+    @'
+[CmdletBinding(DefaultParameterSetName = 'All')]
+param(
+    [Parameter(ParameterSetName = 'All')][switch]$All,
+    [Parameter(ParameterSetName = 'Template')][string]$Template,
+    [Parameter(ParameterSetName = 'Root')][switch]$Root,
+    [Parameter(ParameterSetName = 'Target')][string]$Target,
+    [Parameter(ParameterSetName = 'Target')][string]$Mode = 'source'
+)
+[ordered]@{ParameterSet=$PSCmdlet.ParameterSetName;All=[bool]$All;Template=$Template;Root=[bool]$Root;Target=$Target;Mode=$Mode} |
+    ConvertTo-Json | Set-Content -LiteralPath (Join-Path $PSScriptRoot 'record.json')
+'@ | Set-Content -LiteralPath $canonical
+    $interpreter = (Get-Process -Id $PID).Path
+    $forwardCases = @(
+        @{Label='default All';Arguments=@();Set='All'},
+        @{Label='explicit All';Arguments=@('-All');Set='All'},
+        @{Label='Template';Arguments=@('-Template','id');Set='Template'},
+        @{Label='Root';Arguments=@('-Root');Set='Root'},
+        @{Label='Target source';Arguments=@('-Target',(Join-Path $work 'target with spaces'));Set='Target'},
+        @{Label='Target instantiated';Arguments=@('-Target',(Join-Path $work 'target with spaces'),'-Mode','instantiated');Set='Target'}
+    )
+    foreach ($case in $forwardCases) {
+        if (Test-Path -LiteralPath $record) { Remove-Item -LiteralPath $record }
+        $arguments = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',$wrapper) + $case.Arguments
+        & $interpreter @arguments | Out-Null
+        Assert ($LASTEXITCODE -eq 0) "wrapper $($case.Label) process failed"
+        Assert (Test-Path -LiteralPath $record) "wrapper $($case.Label) did not invoke canonical validator"
+        $observed = Get-Content -LiteralPath $record -Raw | ConvertFrom-Json
+        Assert ($observed.ParameterSet -eq $case.Set) "wrapper $($case.Label) parameter set"
+        switch ($case.Set) {
+            'All' { Assert $observed.All 'wrapper All switch lost' }
+            'Template' { Assert ($observed.Template -eq 'id') 'wrapper Template value lost' }
+            'Root' { Assert $observed.Root 'wrapper Root switch lost' }
+            'Target' {
+                Assert ($observed.Target -eq (Join-Path $work 'target with spaces')) 'wrapper spaced Target value lost'
+                $expectedMode = 'source'
+                if ($case.Label -eq 'Target instantiated') { $expectedMode = 'instantiated' }
+                Assert ($observed.Mode -eq $expectedMode) 'wrapper Target Mode lost'
+            }
+        }
+        Write-Output "PASS: wrapper $($case.Label) forwarding"
+    }
+    Set-Content -LiteralPath $canonical -Value 'exit 23'
+    $process = Start-Process -FilePath $interpreter -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',('"' + $wrapper + '"')) -Wait -PassThru
+    Assert ($process.ExitCode -eq 23) 'wrapper swallowed canonical exit 23'
+    Set-Content -LiteralPath $canonical -Value "throw 'expected wrapper regression failure'"
+    # Isolate expected terminating diagnostics in a child process.
+    $failureLog = Join-Path $wrapperFixture 'expected-error.log'
+    $process = Start-Process -FilePath $interpreter -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',('"' + $wrapper + '"')) -Wait -PassThru -RedirectStandardError $failureLog
+    Assert ($process.ExitCode -ne 0) 'wrapper swallowed canonical terminating error'
+    Write-Output 'PASS: wrapper canonical nonzero exit and terminating error propagation'
     $installed = Join-Path $work 'installed skill'
     Copy-Item -LiteralPath (Join-Path $Root 'skills/forsetum-harness') -Destination $installed -Recurse
     $runtime = Join-Path $installed 'runtime'
