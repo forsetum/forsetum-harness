@@ -5,6 +5,17 @@
 Setiap laporan bug pada `{{HOST_APPLICATION}}` wajib diselesaikan melalui 4 tahap disiplin:
 **Reproduksi → Isolasi Akar Masalah → Patch Bedah Minimal → Verifikasi Non-Regresi**.
 
+Sebelum mengubah kode target existing, minta persetujuan manusia kecuali
+`FULL_ALLOW` yang eksplisit dengan jelas mencakup perubahan non-destruktif yang
+diusulkan. Di dalam batas scope tersebut, pilih pendekatan secure-first dan
+perubahan minimum. Zona yang secara teknis dapat ditulis atau berstatus `OPEN`
+bukanlah izin untuk mengubahnya. Perubahan destruktif selalu memerlukan
+persetujuan manusia yang eksplisit dan khusus untuk tindakan tersebut.
+
+Jadikan kode, konfigurasi, data, perilaku existing, dan perilaku terdokumentasi
+yang sudah ada pada target sebagai baseline faktual. Template Forsetum memberi
+panduan kerja, tetapi tidak menetapkan fakta tentang target.
+
 ## 2. Prosedur 4 Tahap
 
 ### Tahap 1: Reproduksi Bug (Reproduction Steps)

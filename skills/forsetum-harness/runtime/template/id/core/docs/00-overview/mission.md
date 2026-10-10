@@ -17,6 +17,12 @@
 ### 2.1. Latar Belakang
 `{{PROJECT_NAME}}` menjawab kebutuhan penting dengan menyediakan eksekusi yang terstruktur, terarah, dan dapat diverifikasi bagi tim manusia dan agen AI otonom.
 
+Untuk pekerjaan brownfield, kode, konfigurasi, data, perilaku existing, dan
+perilaku terdokumentasi yang sudah ada pada target menjadi baseline faktual.
+Rekomendasi template menjelaskan kerangka tata kelola; rekomendasi itu tidak
+menetapkan fakta tentang target. Temukan fakta target dari bukti di proyek
+yang sebenarnya.
+
 ### 2.2. Pernyataan Masalah
 Tanpa batasan yang tegas dan tata kelola yang jelas, proyek sering mengalami pembengkakan cakupan (*scope creep*), ketidaksesuaian deliverable, dan asumsi yang tidak pernah diverifikasi.
 

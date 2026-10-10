@@ -17,6 +17,11 @@
 ### 2.1. Background
 `{{PROJECT_NAME}}` addresses critical requirements by providing structured, verifiable execution for human teams and autonomous AI agents.
 
+For brownfield work, the target's existing code, configuration, data, behavior,
+and existing documented behavior are the factual baseline. Template
+recommendations describe the governance framework; they do not establish facts
+about the target. Discover target facts from evidence in the actual project.
+
 ### 2.2. Problem Statement
 Without clear boundaries and explicit constraints, projects suffer from scope drift, misaligned deliverables, and unverified assumptions.
 

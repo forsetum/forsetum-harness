@@ -5,6 +5,16 @@
 Every reported bug in `{{HOST_APPLICATION}}` must be resolved following 4 structured phases:
 **Reproduction → Root Cause Analysis (RCA) → Surgical Patch → Non-Regression Verification**.
 
+Before changing existing target code, obtain human approval unless an explicit
+`FULL_ALLOW` clearly covers the proposed non-destructive change. Within that
+bounded scope, choose secure-first, minimum changes. A technically writable or
+`OPEN` area does not grant permission. Destructive changes always require
+explicit human approval for the specific action.
+
+Treat the target's existing code, configuration, data, behavior, and existing
+documented behavior as the factual baseline. Forsetum templates guide the work
+but do not define facts about the target.
+
 ## 2. Four-Phase Procedure
 
 ### Phase 1: Bug Reproduction

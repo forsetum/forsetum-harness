@@ -36,6 +36,23 @@ Ikuti siklus bertahap yang ketat ini:
 
 ## 3. Batas Wewenang & Eskalasi ke Manusia
 
+### Prime Rule: Otoritas Manusia dan Baseline Brownfield
+
+Forsetum menyediakan kerangka berpikir dan cara kerja; Forsetum tidak
+menggantikan intent manusia atau scope yang disetujui. Pada proyek brownfield,
+kode, konfigurasi, data, perilaku existing, dan perilaku terdokumentasi yang
+sudah ada adalah baseline faktual. Template dan tooling Forsetum kanonik hanya
+untuk perilaku yang dihasilkannya; keduanya tidak menetapkan fakta proyek
+target.
+
+Tanpa `FULL_ALLOW` yang eksplisit dan dibatasi pada scope tertentu, minta
+persetujuan manusia sebelum mengubah berkas target existing. Di dalam scope
+tersebut, `FULL_ALLOW` mengizinkan agen memutuskan perubahan rutin yang tidak
+destruktif dengan prinsip secure-first dan perubahan minimum. Zona yang secara
+teknis dapat ditulis atau berstatus `OPEN` tidak dengan sendirinya memberi
+kewenangan. Tindakan destruktif selalu memerlukan persetujuan manusia yang
+eksplisit dan khusus untuk tindakan tersebut.
+
 Agen WAJIB berhenti dan meminta konfirmasi manusia apabila:
 1. Tindakan berpotensi mengakibatkan kehilangan data permanen atau dampak destruktif.
 2. Tindakan memerlukan kredensial rahasia, kunci API berbayar, atau pengeluaran finansial.

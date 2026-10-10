@@ -9,15 +9,23 @@ Dokumen ini memetakan batas arsitektur antara aplikasi induk (*upstream/host*) d
 - Bahasa pemrograman utama: `{{PRIMARY_LANGUAGE}}`
 - Pola ekstensi yang diizinkan: `{{EXTENSION_PATTERN}}`
 
-## 2. Zonasi Kode: Area Boleh Disentuh vs Area Terlarang
+Kode, konfigurasi, data, perilaku existing, dan perilaku terdokumentasi yang
+sudah ada pada target adalah baseline faktual sistem brownfield ini. Template
+dan tooling Forsetum memberi panduan keputusan, tetapi tidak menetapkan fakta
+target; pastikan kondisi sistem dari bukti di proyek yang sebenarnya. Setiap
+pengecualian atau penyimpangan yang diinginkan dari baseline ini merupakan
+keputusan manusia. Zona `OPEN` atau zona yang secara teknis dapat ditulis
+menjelaskan batas teknis, bukan izin untuk mengubahnya.
 
-Untuk mencegah kerusakan sistem dan menjaga stabilitas aplikasi, agen AI dan pengembang wajib mematuhi zonasi berikut:
+## 2. Zonasi Kode: Batas Teknis
 
-| Zona | Direktori / Komponen | Kebijakan Akses | Aturan Modifikasi |
+Zona berikut menetapkan batas teknis, bukan kewenangan. Minta persetujuan manusia kecuali `FULL_ALLOW` yang eksplisit dan terbatas mencakup perubahan rutin yang tidak destruktif; perubahan destruktif selalu memerlukan persetujuan manusia khusus tindakan. Untuk mencegah kerusakan sistem dan menjaga stabilitas aplikasi, agen AI dan pengembang wajib mematuhi zonasi berikut:
+
+| Zona | Direktori / Komponen | Batas Teknis | Aturan Modifikasi |
 |---|---|---|---|
 | **Zona Merah (No-Touch Core)** | Kernel aplikasi induk, migration file bawaan, core framework | DILARANG UBAH (*Read-Only*) | Dilarang memodifikasi langsung file core bawaan vendor/upstream. |
 | **Zona Kuning (Patch Window)** | Bug fix spesifik pada fungsi upstream | TERBATAS (*Surgical Patch*) | Hanya boleh diubah dengan file `.patch` terisolasi atau override modular. |
-| **Zona Hijau (Custom Modules)** | Direktori plugin/addons/ekstensi kustom (`/custom-addons`, `/plugins`) | BEBAS (*Isolated Dev*) | Area resmi penulisan fitur baru, skema tambahan, dan handler API. |
+| **Zona Hijau (Custom Modules)** | Direktori plugin/addons/ekstensi kustom (`/custom-addons`, `/plugins`) | OPEN (*Isolated Dev*) | Secara teknis sesuai untuk fitur baru, skema tambahan, dan handler API; perubahan tetap memerlukan persetujuan yang berlaku. |
 
 ## 3. Matriks Dependensi & Integrasi
 

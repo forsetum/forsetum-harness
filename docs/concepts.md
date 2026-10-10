@@ -15,6 +15,16 @@
 - **Module:** A domain-specific overlay added to the universal core.
 - **Harness:** The governance artifacts and tooling that guide AI-assisted
   work in a target project.
+- **Prime rule:** Forsetum provides a framework for decisions; human intent
+  and approved scope govern the work. In brownfield projects, existing code,
+  configuration, data, and documented existing behavior describe
+  the factual system baseline.
+  Forsetum templates and tools are canonical for the behavior they generate,
+  not for facts about the target project.
+- **Bounded `FULL_ALLOW`:** Explicit authority for routine, non-destructive
+  decisions within its stated scope. Delegated choices use secure-first,
+  minimum changes. Destructive actions always need explicit human approval
+  for that action.
 
 Important distinctions:
 

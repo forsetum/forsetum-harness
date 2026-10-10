@@ -36,6 +36,21 @@ Follow this strict phased loop:
 
 ## 3. Human Escalation & Boundaries
 
+### Prime Rule: Human Authority and Brownfield Baseline
+
+Forsetum provides a framework for thinking and working; it does not override
+human intent or approved scope. In a brownfield project, existing code,
+configuration, data, behavior, and existing documented behavior are the factual
+baseline. Forsetum templates and tools are canonical only for the behavior they
+generate; they do not establish facts about the target project.
+
+Without explicit `FULL_ALLOW` bounded to a stated scope, obtain human approval
+before changing existing target files. Within that scope, `FULL_ALLOW` lets the
+agent decide routine, non-destructive changes using secure-first and minimum
+changes. A technically writable or `OPEN` zone does not itself grant authority.
+Destructive actions always require explicit human approval for the specific
+action.
+
 The agent MUST stop and ask for human confirmation when:
 1. An action causes irreversible data loss or external destruction.
 2. An action requires confidential credentials, API keys, or financial expenditure.

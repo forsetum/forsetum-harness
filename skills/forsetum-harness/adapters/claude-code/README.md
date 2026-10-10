@@ -43,8 +43,8 @@ The adapter preserves every normalized contract state:
 | State | Claude Code behavior |
 | --- | --- |
 | `INSPECTION` | Read target and manifests only; no write tools or commands are invoked. |
-| `PROCEED_PENDING_APPROVAL` | Show the full preview and ask for approval before bootstrap. |
-| `CONFLICT_REVIEW` | Report exact paths, actions, and impact; stop and ask for a decision for each conflict. |
+| `PROCEED_PENDING_APPROVAL` | Show the full preview and ask for approval or verify bounded `FULL_ALLOW` covers it. |
+| `CONFLICT_REVIEW` | Report exact paths, actions, impact, and authorization basis. `FULL_ALLOW` may cover only `PRESERVE` or `SKIP`, which defer unchanged; other changes require a human decision. |
 | `BOOTSTRAP_APPROVED` | Proceed only for the exact preview the user approved. |
 | `VALIDATED` | Run the canonical validator and report its command and exit code. |
 | `CANCELLED` | Stop with `Mutation: none` and `Target: unchanged`. |
@@ -54,8 +54,15 @@ The adapter preserves every normalized contract state:
 The default permission behavior asks before Bash commands and file edits. Keep
 that behavior for this workflow. Do not enable `bypassPermissions`,
 `--dangerously-skip-permissions`, or broad `allowed-tools` rules for adoption.
-The skill's conversational conflict decision is separate from Claude Code's
-tool permission prompt: both gates must pass.
+The skill's conversational authorization is separate from Claude Code's tool
+permission prompt: both gates must pass. Record its basis as
+`HUMAN_APPROVAL` or `FULL_ALLOW` and bind it to the exact displayed target,
+path/action set, and current `PREVIEW_FINGERPRINT`.
+
+For conflicts, `FULL_ALLOW` may authorize only `PRESERVE` or `SKIP`; those
+decisions still produce `DEFERRED` with no mutation. `MERGE` requires human
+review and approval under D-027. `REPLACE_WITH_BACKUP` and every other
+destructive action require action-specific explicit human approval.
 
 ## Reference Flow
 
@@ -75,18 +82,22 @@ tool permission prompt: both gates must pass.
    ```text
    Path: <exact existing path>
    Operation: PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP
+   Authorization basis: HUMAN_APPROVAL | FULL_ALLOW
    Impact: <concrete effect on this exact path>
    Backup behavior: <none | exact protected content and timing>
    Backup path: <exact path | not_applicable>
    Rollback command: <exact command | not_applicable>
    Gitignore decision: YES | NO | not_applicable
-   Approval decision: <explicit decision for this exact path and operation>
+   Approval decision: <decision for this exact path and operation>
    Next state: <CONFLICT_REVIEW | BOOTSTRAP_APPROVED | CANCELLED | DEFERRED>
    ```
 
-   Inspector exit code `3` means `CONFLICT_REVIEW`; stop and collect explicit
-   decisions before any bootstrap or validation. A replacement requires its
-   displayed recovery metadata before its backup directory is created.
+   Inspector exit code `3` means `CONFLICT_REVIEW`; stop and resolve every
+   conflict before bootstrap or validation. `FULL_ALLOW` may cover only
+   `PRESERVE` or `SKIP`, which still defer without mutation. `MERGE` requires
+   human review and approval; replacement requires action-specific human
+   approval and its displayed recovery metadata before its backup directory
+   is created.
 
    ```text
    PRESERVE/SKIP outcome: State: DEFERRED, Mutation: none, Target: unchanged
@@ -96,9 +107,14 @@ tool permission prompt: both gates must pass.
    An approved `PRESERVE` or `SKIP` is not bootstrap approval for that target.
    Do not invoke the initializer or validator; leave the target unchanged and
    route to manual handling outside the skill or a changed target.
-5. After approval of the exact non-conflicting or explicitly resolved preview,
+5. After explicit approval of a non-conflicting action, or when bounded
+   `FULL_ALLOW` covers its exact displayed routine, non-destructive scope,
    route the target, language, module, complete per-path decision set, and
-   replacement backup mappings through the package-local handoff. Use
+   replacement backup mappings through the package-local handoff. Record
+   `Authorization basis: HUMAN_APPROVAL | FULL_ALLOW` with the exact preview;
+   existing handoff arguments remain unchanged, and the caller verifies this
+   basis before invoking it. `FULL_ALLOW` conflict decisions to preserve or
+   skip still defer and do not reach the handoff. Use
    `.claude/skills/forsetum-harness/scripts/decision-handoff.sh` on Unix-like
    hosts and `.claude/skills/forsetum-harness/scripts/decision-handoff.ps1`
    natively on Windows. The handoff verifies inventory/hash and creates each

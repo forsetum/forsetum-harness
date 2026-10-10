@@ -8,6 +8,22 @@ surface. It does not copy template content and does not implement a second
 scaffolder. The canonical skill, manifests, inspector, initializer, and
 validator remain authoritative.
 
+For brownfield adoption, inspect the actual target and treat its existing code,
+configuration, data, behavior, and existing documented behavior as the factual
+baseline. Establish facts from repository evidence before recommending a
+profile. Forsetum templates and tools guide the process and are canonical only
+for behavior they generate; they do not define target facts. A technically
+writable path or `OPEN` zone grants no authority. Without explicit bounded
+`FULL_ALLOW`, obtain human approval before changing target files. Within its
+scope, the agent may decide routine, non-destructive changes using
+secure-first, minimum changes. Destructive actions always require
+action-specific explicit human approval.
+
+For conflicts, `FULL_ALLOW` may authorize only `PRESERVE` or `SKIP`; those
+decisions still produce `DEFERRED` with no mutation. `MERGE` requires human
+review and approval under D-027. `REPLACE_WITH_BACKUP` and all other
+destructive actions require action-specific human approval.
+
 ## Evidence boundary
 
 OpenAI's official [Skills API documentation](https://developers.openai.com/api/reference/go/resources/skills)
@@ -25,9 +41,9 @@ states when presenting them in Codex:
 | State | Codex adapter behavior |
 | --- | --- |
 | `INSPECTION` | Collect repository and manifest facts read-only. No target mutation. |
-| `PROCEED_PENDING_APPROVAL` | Show the complete preview and wait for explicit approval. |
-| `CONFLICT_REVIEW` | Report every exact conflict path, impact, and decision option; hard stop before any write. |
-| `BOOTSTRAP_APPROVED` | Record approval for the exact displayed target, paths, action, and command, then invoke the canonical initializer. |
+| `PROCEED_PENDING_APPROVAL` | Show the complete preview and wait for explicit approval or verify the bounded `FULL_ALLOW` covers it. |
+| `CONFLICT_REVIEW` | Report every exact conflict path, impact, authorization basis, and decision option; hard stop before any write. `FULL_ALLOW` may cover only `PRESERVE` or `SKIP`, which defer unchanged. |
+| `BOOTSTRAP_APPROVED` | Record `HUMAN_APPROVAL` or verify a bounded `FULL_ALLOW` covers the exact displayed target, paths, action, and command, then invoke the canonical initializer. A `FULL_ALLOW` conflict decision to preserve or skip remains deferred and cannot bootstrap. |
 | `VALIDATED` | Run the canonical validator and report its command, output summary, and exit code. |
 | `CANCELLED` | Stop immediately with `Mutation: none` and `Target: unchanged`. |
 | `DEFERRED` | Stop pending a later decision with `Mutation: none` and `Target: unchanged`. |
@@ -58,18 +74,22 @@ change, remain in `CONFLICT_REVIEW`. Present one record per exact path:
 ```text
 Path: <exact existing path>
 Operation: PRESERVE | MERGE | REPLACE_WITH_BACKUP | SKIP
+Authorization basis: HUMAN_APPROVAL | FULL_ALLOW
 Impact: <concrete effect on this exact path>
 Backup behavior: <none | exact protected content and timing>
 Backup path: <exact path | not_applicable>
 Rollback command: <exact command | not_applicable>
 Gitignore decision: YES | NO | not_applicable
-Approval decision: <explicit decision for this exact path and operation>
+Approval decision: <decision for this exact path and operation, covered by
+                    the current explicit authorization>
 Next state: <CONFLICT_REVIEW | BOOTSTRAP_APPROVED | CANCELLED | DEFERRED>
 ```
 
 Do not invoke the initializer, merge, delete, rename, or validator while any
-conflict lacks a decision. A replacement requires all displayed recovery
-metadata before its backup directory is created.
+conflict lacks a decision. `FULL_ALLOW` may provide the basis only for
+`PRESERVE` or `SKIP`, which still defer without mutation. `MERGE` requires
+human review and approval; replacement requires action-specific human approval
+and all displayed recovery metadata before its backup directory is created.
 
 ```text
 PRESERVE/SKIP outcome: State: DEFERRED, Mutation: none, Target: unchanged
@@ -82,13 +102,22 @@ route to manual handling outside the skill or a changed target.
 
 ### 3. Explicit approval
 
-For a non-conflicting preview, ask the user to approve the exact displayed
-target, paths, profile, and commands. For conflicts, record one of
+Bind `Authorization basis: HUMAN_APPROVAL | FULL_ALLOW` to the exact displayed
+target, path/action set, and current `PREVIEW_FINGERPRINT`; changed scope or
+fingerprint invalidates it. For a
+non-conflicting preview, obtain explicit approval or confirm the bounded
+`FULL_ALLOW` covers the displayed routine, non-destructive action. For
+conflicts, `FULL_ALLOW` may cover only `PRESERVE` or `SKIP` (both defer without
+mutation); otherwise ask the user for a decision. A `MERGE` requires human
+review and approval, and replacement requires action-specific approval. Record
+one of
 `APPROVE_PRESERVE`, `APPROVE_MERGE`, `APPROVE_REPLACE_WITH_BACKUP`,
 `APPROVE_SKIP`, `CHANGE_TARGET`, `CANCEL`, or `DEFER` for every reported
 conflict. A changed preview invalidates the previous approval.
 
-Record the decision before mutation:
+Record the decision before mutation. `FULL_ALLOW` never authorizes a
+destructive action; replacement requires action-specific explicit human
+approval:
 
 ```text
 Decision: APPROVE_PRESERVE | APPROVE_MERGE | APPROVE_REPLACE_WITH_BACKUP | APPROVE_SKIP | CANCEL | DEFER | CHANGE_TARGET
@@ -101,13 +130,18 @@ Backup path: <exact path | not_applicable>
 Rollback command: <exact command | not_applicable>
 Gitignore decision: YES | NO | not_applicable
 Next state: <displayed next state>
-Scope: <preview files and command>
+Scope: <exact displayed paths, actions, and commands>
+Authorization basis: HUMAN_APPROVAL | FULL_ALLOW
+Preview fingerprint: <current PREVIEW_FINGERPRINT SHA-256>
 ```
 
 ### 4. Delegate to the canonical initializer
 
-After explicit approval only, route the exact target, language, module, and
-complete conflict decision set through `scripts/decision-handoff.sh`. For each
+After explicit approval, or when bounded `FULL_ALLOW` covers the exact
+displayed non-conflicting routine, non-destructive action, route the exact
+target, language, module, and complete conflict decision set through
+`scripts/decision-handoff.sh`. Conflict decisions under `FULL_ALLOW` are
+limited to `PRESERVE` or `SKIP` and never proceed to mutation. For each
 replacement, supply exact backup and rollback mappings; the handoff verifies
 inventory/hash and creates the backup before delegation.
 

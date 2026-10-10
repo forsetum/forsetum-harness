@@ -14,6 +14,13 @@ cancelled_result: {State: CANCELLED, Mutation: none, Target: unchanged}
 deferred_result: {State: DEFERRED, Mutation: none, Target: unchanged}
 allowed_operations: [PRESERVE, MERGE, REPLACE_WITH_BACKUP, SKIP]
 conflict_preview_fields: [path, operation, impact, backup_behavior, approval_decision, next_state]
+authorization_basis_values: [HUMAN_APPROVAL, FULL_ALLOW]
+authorization_basis_required: every authorization record; not an independent mutation grant
+authorization_basis_binding: exact displayed target, path/action set, current PREVIEW_FINGERPRINT
+authorization_basis_full_allow_conflicts: PRESERVE or SKIP only; outcome remains DEFERRED with Mutation: none
+authorization_basis_human_approval_conflicts: MERGE and REPLACE_WITH_BACKUP
+authorization_basis_human_approval_destructive: always action-specific
+authorization_basis_handoff: recorded in preview/approval context; no new handoff argument; caller verifies before existing handoff
 replace_with_backup_requirements: [backup_path, rollback_command, gitignore_decision]
 gitignore_decision: explicit YES or NO when a backup directory is created
 handoff_arguments: [target, language, module, preview_fingerprint, initializer, validator]
@@ -40,6 +47,7 @@ preserve_skip_next_action: manual handling | CHANGE_TARGET
 | `proposed_paths` | list | Exact paths proposed for creation or change. |
 | `conflicts` | list | Exact existing paths and a complete conflict preview record. Empty when no conflict exists. |
 | `decision` | string or null | Required before mutation when conflicts exist. |
+| `authorization_basis` | string | `HUMAN_APPROVAL` or `FULL_ALLOW`, bound to the exact displayed target, path/action set, and current preview fingerprint. |
 | `command_preview` | list | Exact initializer and validator commands shown before approval. |
 | `exit_code` | integer | Inspector/validator exit code, reported without reinterpretation. |
 | `validation_evidence` | list | Commands, outcomes, and relevant output after validation. |
@@ -57,6 +65,7 @@ be replaced with a vague label such as “documentation”.
 | `impact` | Concrete effect on the existing path. |
 | `backup_behavior` | Whether no backup applies or which existing content is protected before mutation. |
 | `approval_decision` | Explicit decision for this exact path and operation; it is not inherited from another path. |
+| `authorization_basis` | `HUMAN_APPROVAL` or `FULL_ALLOW`, bound to the exact displayed target, path/action set, and current preview fingerprint. |
 | `next_state` | The state reached if this decision is accepted; unresolved paths remain `CONFLICT_REVIEW`. |
 | `backup_path` | Exact backup path when a backup directory is created; otherwise `not_applicable`. |
 | `rollback_command` | Reproducible command that restores the exact protected path when a backup is created; otherwise `not_applicable`. |
@@ -74,6 +83,22 @@ Operation rules:
   `rollback_command`, and an explicit `YES` or `NO` `gitignore_decision`.
 - `SKIP` omits the proposed path from bootstrap and does not mutate that path.
 
+Authorization-basis rules:
+
+- `FULL_ALLOW` is explicit, bounded to the displayed scope, and may authorize
+  routine non-destructive decisions within it. For a reported conflict, its
+  only valid per-path decisions are `PRESERVE` and `SKIP`; both retain the
+  required `DEFERRED`, `Mutation: none`, `Target: unchanged` outcome.
+- `MERGE` requires `HUMAN_APPROVAL` after human review of the exact merge plan,
+  paths, impact, and current preview. This preserves D-027; `FULL_ALLOW` cannot
+  approve a merge.
+- `REPLACE_WITH_BACKUP` and every other destructive action require
+  `HUMAN_APPROVAL` specific to that action, regardless of `FULL_ALLOW`.
+- Record `authorization_basis` in the preview/approval record. The existing
+  handoff arguments remain unchanged and do not carry or upgrade this basis;
+  the caller must verify the record before invoking the handoff with the exact
+  operation, target, path set, and current fingerprint.
+
 A selected `PRESERVE` or `SKIP` operation for any conflict must not produce
 `BOOTSTRAP_APPROVED` for that target. The required result is `DEFERRED` with
 `Mutation: none` and `Target: unchanged`; the only next actions are manual
@@ -84,8 +109,13 @@ must not run for that deferred target.
 
 - `INSPECTION`: facts are being collected; no mutation is permitted.
 - `PROCEED_PENDING_APPROVAL`: no conflict was detected; preview awaits approval.
-- `CONFLICT_REVIEW`: conflicts exist; every conflict requires a user decision.
-- `BOOTSTRAP_APPROVED`: the exact displayed action was approved.
+- `CONFLICT_REVIEW`: conflicts exist; every conflict requires an exact per-path
+  decision and authorization basis. A bounded `FULL_ALLOW` may supply that
+  basis only for `PRESERVE` or `SKIP`, which defer unchanged and do not require
+  a separate mutation approval.
+- `BOOTSTRAP_APPROVED`: the exact displayed action is covered by either
+  `HUMAN_APPROVAL` or a bounded `FULL_ALLOW` for a conflict-free routine action;
+  conflict `PRESERVE`/`SKIP` outcomes remain `DEFERRED` and cannot bootstrap.
 - `VALIDATED`: canonical validation completed with evidence.
 - `CANCELLED`: user cancelled; mutation is `none`.
 - `DEFERRED`: user deferred a decision; mutation is `none`.
@@ -96,9 +126,13 @@ must not run for that deferred target.
 Allowed conflict decisions are `APPROVE_PRESERVE`, `APPROVE_MERGE`,
 `APPROVE_REPLACE_WITH_BACKUP`, `APPROVE_SKIP`, `CHANGE_TARGET`, `CANCEL`, and
 `DEFER`. Replacement must be approved as `APPROVE_REPLACE_WITH_BACKUP` with
-its displayed backup and rollback evidence. A decision is valid only for the
-exact target, path, operation, impact, backup behavior, and command shown in
-the current preview. A changed preview invalidates the previous decision.
+its displayed backup and rollback evidence under `HUMAN_APPROVAL`. `MERGE`
+requires `HUMAN_APPROVAL` following human review. A per-conflict
+`FULL_ALLOW` basis is valid only for `PRESERVE` or `SKIP`, which do not
+authorize bootstrap. A decision is valid only for the exact target, path,
+operation, impact, backup behavior, action set, command, authorization basis,
+and fingerprint shown in the current preview. A changed preview invalidates
+the previous decision.
 
 The following synthetic result illustrates a cancellation:
 
@@ -120,6 +154,7 @@ The following synthetic result illustrates a cancellation:
       "backup_path": ".forsetum-backups/2026-09-17T00-00-00Z/AGENTS.md",
       "rollback_command": "cp .forsetum-backups/2026-09-17T00-00-00Z/AGENTS.md AGENTS.md",
       "gitignore_decision": "NO",
+      "authorization_basis": "HUMAN_APPROVAL",
       "approval_decision": "CANCEL",
       "next_state": "CANCELLED"
     }
