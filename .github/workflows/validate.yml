@@ -1,0 +1,115 @@
+name: Validate template
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compatibility:
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Ubuntu Bash
+            os: ubuntu-24.04
+            shell: bash
+            kind: bash
+          - label: macOS Bash 4+
+            os: macos-14
+            shell: bash
+            kind: bash
+          - label: Windows Git Bash
+            os: windows-2022
+            shell: bash
+            kind: bash
+          - label: Windows PowerShell 5.1
+            os: windows-2022
+            shell: powershell
+            kind: powershell
+          - label: Windows PowerShell 7
+            os: windows-2022
+            shell: pwsh
+            kind: powershell
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Bash 4+ on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mkdir -p evidence
+          {
+            uname -a
+            brew list bash >/dev/null 2>&1 || brew install bash
+            echo "$(brew --prefix bash)/bin" >> "$GITHUB_PATH"
+          } 2>&1 | tee evidence/bash-setup.log
+
+      - name: Bash compatibility and source gates
+        if: matrix.kind == 'bash'
+        run: |
+          set -Eeuo pipefail
+          mkdir -p evidence
+          # macOS default bash is 3.2; invoke the selected executable explicitly.
+          {
+            uname -a
+            gate_bash="$(command -v bash)"
+            "$gate_bash" -c '(( BASH_VERSINFO[0] >= 4 ))'
+            "$gate_bash" --version
+            git --version
+            git rev-parse HEAD
+            find scripts skills/forsetum-harness -type f -name '*.sh' -exec "$gate_bash" -n {} +
+            "$gate_bash" scripts/test-compatibility.sh
+            if [[ -f scripts/export-public.sh ]]; then
+              "$gate_bash" scripts/validate-harness.sh --all
+              "$gate_bash" skills/forsetum-harness/tests/run-conformance.sh
+              "$gate_bash" skills/forsetum-harness/tests/test-public-export.sh
+              "$gate_bash" skills/forsetum-harness/tests/test-public-package-contract.sh
+              "$gate_bash" skills/forsetum-harness/tests/test-installed-package.sh
+              "$gate_bash" scripts/export-public.sh --output dist/public-ci-27-modules
+              "$gate_bash" dist/public-ci-27-modules/scripts/test-compatibility.sh
+            fi
+            git diff --check
+          } 2>&1 | tee evidence/compatibility.log
+
+      - name: Native PowerShell compatibility gate
+        if: matrix.kind == 'powershell'
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Path evidence -Force | Out-Null
+          Start-Transcript -Path evidence/compatibility.log
+          try {
+            $PSVersionTable | Format-List
+            [Environment]::OSVersion.VersionString
+            git --version
+            git rev-parse HEAD
+            if ($LASTEXITCODE -ne 0) { throw 'Git version evidence failed' }
+            & ./scripts/test-compatibility.ps1
+            if (-not $?) { throw 'Compatibility gate failed' }
+          } finally {
+            Stop-Transcript
+          }
+
+      - name: Upload environment and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compatibility-${{ matrix.os }}-${{ matrix.shell }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 14

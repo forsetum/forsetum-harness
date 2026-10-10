@@ -180,9 +180,11 @@ else
   printf '==> Scaffolding legacy AI Harness (%s) into: %s\n' "${LANG_VAL}" "${ABS_TARGET}"
   cp -R "${TEMPLATE_DIR}/." "${ABS_TARGET}/"
   mkdir -p "${ABS_TARGET}/scripts"
+  cp "${REPO_ROOT}/scripts/validate-harness.sh" "${ABS_TARGET}/scripts/validate-harness.sh"
+  cp "${REPO_ROOT}/scripts/validate-harness.ps1" "${ABS_TARGET}/scripts/validate-harness.ps1"
   cp "${REPO_ROOT}/scripts/validate-template.sh" "${ABS_TARGET}/scripts/validate-template.sh"
   cp "${REPO_ROOT}/scripts/validate-template.ps1" "${ABS_TARGET}/scripts/validate-template.ps1"
-  chmod +x "${ABS_TARGET}/scripts/validate-template.sh"
+  chmod +x "${ABS_TARGET}/scripts/validate-harness.sh" "${ABS_TARGET}/scripts/validate-template.sh"
 
   if [[ -n "${PROJECT_NAME}" ]]; then
     while IFS= read -r file; do
@@ -206,11 +208,11 @@ Modul domain:     ${MODULE_ID}
 Langkah Selanjutnya (Next Steps):
   1. Buka dan pelajari AGENTS.md dan README.md di direktori proyek.
   2. Jalankan validasi struktur template:
-     ./scripts/validate-template.sh
+     ./scripts/validate-harness.sh
   3. Mulai fase Instantiation and Discovery bersama Agen AI:
      - Lengkapi docs/08-reference/template-variables.md
      - Catat keputusan arsitektur di docs/08-reference/decision-register.md
-     - Jalankan ./scripts/validate-template.sh secara berkala untuk memantau kesiapan.
+     - Jalankan ./scripts/validate-harness.sh secara berkala untuk memantau kesiapan.
 ==================================================
 SUCCESS_MSG
 else
@@ -225,11 +227,11 @@ Domain module:     ${MODULE_ID}
 Next Steps:
   1. Review AGENTS.md and README.md in your project directory.
   2. Run the template harness validation:
-     ./scripts/validate-template.sh
+     ./scripts/validate-harness.sh
   3. Begin the Instantiation and Discovery phase with your AI agent:
      - Define project requirements and fill out docs/08-reference/template-variables.md
      - Record architectural decisions in docs/08-reference/decision-register.md
-     - Run ./scripts/validate-template.sh regularly to track implementation readiness.
+     - Run ./scripts/validate-harness.sh regularly to track implementation readiness.
 ==================================================
 SUCCESS_MSG
 fi

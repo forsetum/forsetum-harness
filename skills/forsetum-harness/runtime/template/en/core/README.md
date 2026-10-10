@@ -36,10 +36,10 @@ Run the project verification script to ensure documentation integrity, placehold
 
 **POSIX Shell (Linux / macOS / Git Bash):**
 ```bash
-./scripts/validate-template.sh
+./scripts/validate-harness.sh
 ```
 
 **Windows PowerShell:**
 ```powershell
-powershell -File .\scripts\validate-template.ps1
+powershell -File .\scripts\validate-harness.ps1
 ```

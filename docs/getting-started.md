@@ -33,13 +33,30 @@ provided.
 
 ## Validate
 
+From the source checkout, validate the template library and root harness:
+
 ```bash
-./scripts/validate-template.sh --all
+./scripts/validate-harness.sh --all
 ```
 
 ```powershell
-powershell -File .\scripts\validate-template.ps1 -All
+powershell -File .\scripts\validate-harness.ps1 -All
 ```
+
+After completing project context and resolving generated placeholders, validate
+the target as an instantiated project:
+
+```bash
+./scripts/validate-harness.sh --target ./my-project --mode instantiated
+```
+
+```powershell
+powershell -File .\scripts\validate-harness.ps1 -Target .\my-project -Mode instantiated
+```
+
+Validation provides evidence for the checks it runs. Agent behavior depends on
+runtime capabilities, permissions, shell, and configuration; native Windows
+PowerShell 5.1 evidence remains pending.
 
 ## Next Steps
 

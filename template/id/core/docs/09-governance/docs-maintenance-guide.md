@@ -19,4 +19,4 @@ Setiap kali pekerjaan memengaruhi arsitektur, konvensi, atau variabel proyek, be
 
 - Seluruh tautan relatif wajib mengarah ke berkas yang benar-benar ada (tidak boleh broken link).
 - Hindari anchor tag atau referensi yang tidak valid.
-- Selalu jalankan `./scripts/validate-template.sh` sebelum menyelesaikan perubahan.
+- Selalu jalankan `./scripts/validate-harness.sh` sebelum menyelesaikan perubahan.

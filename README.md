@@ -30,6 +30,10 @@ explicitly. The skill provides the adoption workflow, repository inspector,
 and bundled runtime generated from the canonical templates and scripts in
 this repository.
 
+These are intended public installation commands. The recorded local-path
+installation probe timed out; successful installation from the public GitHub
+revision has not yet been recorded.
+
 ### Use the CLI Directly
 
 Clone the public repository and initialize a project-local harness:
@@ -86,18 +90,24 @@ Readiness Gate lets each domain define relevant readiness requirements.
 
 ## Modules
 
-There are currently 11 modules in both English and Indonesian. Engineering
-modules are `web-fullstack`, `web-starter`, `mobile-app`, `cli-automation`,
-`app-maintenance`, and `it-infra-ops`. Additional domains are
-`landing-page`, `research-analysis`, `content-marketing`, `sales-outreach`,
-and `general-office`.
+All 27 canonical modules are approved for public distribution in English and
+Indonesian, including `business-growth`. See the [module catalog](docs/modules.md)
+for the complete list. The curated package now includes all 27 approved modules and a five-environment
+CI workflow. Actual CI results are recorded separately from package generation. This approval does
+not publish internal project documentation, customer data, or credentials.
 
-## Supported AI Agents
+## Agent Runtime Compatibility
 
 Forsetum is designed for repository-aware AI agents and coding assistants such
 as Claude Code, Cursor, Codex, Copilot, Gemini, Hermes, OpenClaw, and similar
 tools. This describes an integration pattern, not official partnership,
 certification, endorsement, or guaranteed compatibility with every version.
+The skill uses one entry point to select available manifest profiles. Its
+results depend on agent capabilities, permissions, shell, and configuration.
+Canonical templates, manifests, CLI, and validators remain authoritative.
+Codex and Claude Code remain evaluation candidates; interactive approval and
+native Windows PowerShell 5.1 evidence are incomplete. Installation alone
+does not establish runtime support.
 
 ## Local-First Model
 
@@ -118,13 +128,13 @@ access for their documented operations.
 ## Validation
 
 ```bash
-./scripts/validate-template.sh --all
+./scripts/validate-harness.sh --all
 ```
 
 The equivalent Windows command is:
 
 ```powershell
-powershell -File .\scripts\validate-template.ps1 -All
+powershell -File .\scripts\validate-harness.ps1 -All
 ```
 
 ## Forsetum Uses Forsetum

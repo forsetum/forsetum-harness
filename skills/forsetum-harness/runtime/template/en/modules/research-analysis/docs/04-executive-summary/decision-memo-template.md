@@ -37,7 +37,7 @@ Evaluate mutually exclusive decision pathways objectively:
 | Identified Risk | Severity | Likelihood | Mitigation Strategy | Owner |
 | :--- | :---: | :---: | :--- | :--- |
 | **Low team adoption of new harness** | High | Medium | Provide zero-friction CLI generator (`init.sh`) and team onboarding video. | Lead Maintainer |
-| **Drift between multilingual docs** | Medium | Low | Integrate automated parity tests (`validate-template.sh`) in pre-commit and CI. | QA / Tooling |
+| **Drift between multilingual docs** | Medium | Low | Integrate automated parity tests (`validate-harness.sh`) in pre-commit and CI. | QA / Tooling |
 | **Maintenance overhead across modules** | Medium | Low | Share universal `core/` files across all modules to eliminate duplicated docs. | Architecture Team |
 
 ---

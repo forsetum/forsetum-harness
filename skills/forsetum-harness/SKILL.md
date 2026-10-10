@@ -129,8 +129,8 @@ After bootstrap, the handoff runs the matching validator from the same package
 runtime with the approved target and `-Mode instantiated`/`--mode instantiated`
 context. Report its complete result and exit code:
 
-- Unix-like environments: `<skill-dir>/runtime/scripts/validate-template.sh --all`
-- Windows PowerShell: `<skill-dir>/runtime/scripts/validate-template.ps1 -All`
+- Unix-like environments: `<skill-dir>/runtime/scripts/validate-harness.sh --all`
+- Windows PowerShell: `<skill-dir>/runtime/scripts/validate-harness.ps1 -All`
 
 If the command fails, stop and report the failure; do not retry with
 destructive options. Preserve the user's unrelated changes and never expose or

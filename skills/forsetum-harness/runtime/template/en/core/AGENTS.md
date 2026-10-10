@@ -47,7 +47,7 @@ The agent MUST stop and ask for human confirmation when:
 - All deliverables (code, configurations, copy, scripts) must be verified using local commands before reporting completion.
 - When test suites or linting tools exist, run:
   ```bash
-  ./scripts/validate-template.sh
+  ./scripts/validate-harness.sh
   ```
   or corresponding project test commands.
 - Never assert success without showing terminal execution evidence.

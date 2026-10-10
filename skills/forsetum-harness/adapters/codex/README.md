@@ -138,11 +138,11 @@ Run the matching canonical validator after bootstrap and report the complete
 command and exit code:
 
 ```text
-<skill-dir>/runtime/scripts/validate-template.sh --all
+<skill-dir>/runtime/scripts/validate-harness.sh --all
 ```
 
 On PowerShell, the handoff passes `-Target <dir> -Mode instantiated` to
-`<skill-dir>/runtime/scripts/validate-template.ps1`; do not translate the
+`<skill-dir>/runtime/scripts/validate-harness.ps1`; do not translate the
 handoff through Bash or use `bash -x`. Only report `VALIDATED` after the
 validator completes successfully; report a failure without retrying with
 destructive options.

@@ -989,7 +989,1404 @@
         "FORBIDDEN: Hotpatching production environments directly without version control commits and peer review",
         "MANDATORY: Maintain a detailed rollback plan and snapshot before applying database migrations or runtime upgrades"
       ]
+    },
+    "procurement-tender": {
+      "name": "Procurement & Tender Management",
+      "category": "governance",
+      "description": "Structured harness for tender governance, technical specifications, bid proposals & BOQ, vendor evaluation, contracts, and handover certificates.",
+      "directory": "modules/procurement-tender",
+      "variables": [
+        {
+          "key": "PROCUREMENT_TYPE",
+          "description": "Type of procurement (Goods, Construction, Consulting, Other Services)"
+        },
+        {
+          "key": "PROCUREMENT_METHOD",
+          "description": "Vendor selection method (Open Tender, Limited Selection, Direct Appointment, E-Purchasing)"
+        },
+        {
+          "key": "BUDGET_SOURCE",
+          "description": "Funding source (State Budget, Regional Budget, Corporate, Private Investment)"
+        },
+        {
+          "key": "ESTIMATED_VALUE",
+          "description": "Estimated budget ceiling or Owner's Estimate (OE)"
+        },
+        {
+          "key": "REGULATORY_FRAMEWORK",
+          "description": "Governing regulatory framework (e.g. Public Procurement Law, Internal SOP, FIDIC)"
+        }
+      ],
+      "readiness_checks": [
+        "Scope of work, technical specifications, and owner's estimate have been approved",
+        "Vendor qualification requirements and mandatory bid documents have been established",
+        "Evaluation workflow, technical-price scoring weights, and clarification mechanisms have been confirmed"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Senior Procurement Specialist & Public Tender Officer",
+        "role_description": "senior procurement officer navigating public and corporate bidding, Owner's Estimates (HPS/OE), vendor evaluations, and audit compliance",
+        "target_user_title": "Procurement Manager, Tender Committee Lead, or Commercial Purchasing Specialist",
+        "domain_context": "bidding governance, public procurement regulations, HPS calculation, vendor scoring matrices, and anti-corruption audit trails",
+        "deliverable_title": "Standardized Procurement & Public Tender Documentation Dossier",
+        "decision_owner_roles": [
+          "Head of Procurement Committee",
+          "Tender Director",
+          "Chief Financial Officer (CFO)"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Procurement Package & Scope of Work",
+          "objective": "Identify procurement package title and required goods/services scope.",
+          "probing_guide": "Clarify technical specifications, delivery timeline, and commercial volume requirements.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Tender Method & Regulatory Framework",
+          "objective": "Establish bidding procurement method and statutory compliance standard.",
+          "probing_guide": "Select Open Public Tender vs Direct Selection in compliance with corporate bylaws and public statutes.",
+          "variables": [
+            "PROCUREMENT_TYPE",
+            "PROCUREMENT_METHOD"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Owner's Estimate (OE) & Evaluation Matrix",
+          "objective": "Determine Owner's Estimate methodology and vendor qualification scoring criteria.",
+          "probing_guide": "Establish weighted criteria balancing technical competence (60-70%) and price competitiveness (30-40%).",
+          "variables": [
+            "BUDGET_SOURCE",
+            "ESTIMATED_VALUE",
+            "REGULATORY_FRAMEWORK"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Tender Committee Chair & Official Sign-off",
+          "objective": "Designate the procurement committee chair authorized to sign tender awards.",
+          "probing_guide": "Provide the name and title of the authorized procurement official.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Allowing AI agents or automated scripts to make final vendor winning selections; human committee sign-off is legally mandatory",
+        "FORBIDDEN: Leaking confidential Owner's Estimate (HPS/OE) pricing or vendor competitor bids during the bidding period",
+        "MANDATORY: Enforce transparent audit logs and anti-conflict-of-interest declarations for all procurement evaluators"
+      ]
+    },
+    "hr-people-ops": {
+      "name": "HR & People Operations",
+      "category": "operations",
+      "description": "Structured harness for end-to-end employee lifecycle management spanning recruitment, onboarding, performance reviews, and offboarding.",
+      "directory": "modules/hr-people-ops",
+      "variables": [
+        {
+          "key": "HR_SCOPE",
+          "description": "Scope of HR function (Recruitment, Onboarding, Performance Review, Offboarding, or Full Lifecycle)"
+        },
+        {
+          "key": "EMPLOYEE_SCALE",
+          "description": "Organizational employee scale (Startup <50, SME 50-200, Enterprise 200+)"
+        },
+        {
+          "key": "PERFORMANCE_CYCLE",
+          "description": "Performance review cadence (Quarterly, Semi-Annual, Annual)"
+        },
+        {
+          "key": "COMPLIANCE_STANDARD",
+          "description": "Labor compliance reference standard (e.g., Labor Law, Company Policy, ISO 30405)"
+        }
+      ],
+      "readiness_checks": [
+        "End-to-end recruitment pipeline and candidate selection criteria have been defined",
+        "Competency matrix and periodic performance evaluation templates have been established",
+        "New hire onboarding SOP and offboarding knowledge transfer checklists have been documented"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Human Resources Director & People Operations Consultant",
+        "role_description": "senior People Operations executive formulating talent acquisition frameworks, performance appraisal rubrics, employee relations, and labor law compliance",
+        "target_user_title": "HR Director, Head of People Ops, Talent Acquisition Manager, or HR Business Partner",
+        "domain_context": "HR governance, labor law compliance, compensation & benefits, performance management, and employee confidentiality",
+        "deliverable_title": "Comprehensive People Operations & HR Policy Framework",
+        "decision_owner_roles": [
+          "Chief Human Resources Officer (CHRO)",
+          "Head of People & Culture",
+          "Director of Human Resources"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "People Ops Scope & Policy Objectives",
+          "objective": "Identify HR initiative title and core organizational objective.",
+          "probing_guide": "Clarify whether initiative focuses on employee onboarding, performance management, or retention policies.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION",
+            "EMPLOYEE_SCALE"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Labor Law Jurisdiction & Employment Types",
+          "objective": "Establish statutory labor law standards and contract classifications.",
+          "probing_guide": "Align contracts with statutory employment standards (full-time, fixed-term, remote independent contractors).",
+          "variables": [
+            "HR_SCOPE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Performance Evaluation & Appraisal Cadence",
+          "objective": "Establish performance review cycle and evaluation criteria.",
+          "probing_guide": "Implement OKR / KPI frameworks with bi-annual peer reviews and 360-degree feedback.",
+          "variables": [
+            "PERFORMANCE_CYCLE",
+            "COMPLIANCE_STANDARD"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "HR Leadership & Executive Policy Sign-off",
+          "objective": "Designate the Chief Human Resources Officer holding policy sign-off authority.",
+          "probing_guide": "Provide the name and title of the head of HR or People Ops lead.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Storing or disclosing employee personal health data, national identification, or payroll records without strict role-based access",
+        "FORBIDDEN: Introducing automated disciplinary actions or employment termination decisions without human HR review",
+        "MANDATORY: Comply with national labor regulations regarding working hours, severance obligations, and equal opportunity standards"
+      ]
+    },
+    "education-training": {
+      "name": "Education & Training",
+      "category": "operations",
+      "description": "Structured harness for curriculum design, modular syllabus authoring, training session delivery, and participant learning assessment.",
+      "directory": "modules/education-training",
+      "variables": [
+        {
+          "key": "TRAINING_TYPE",
+          "description": "Training format (In-Person Workshop, E-Learning/LMS, Blended Learning, Intensive Bootcamp)"
+        },
+        {
+          "key": "TARGET_LEARNER",
+          "description": "Target learner profile (Internal Employees, External Partners, General Public, Students)"
+        },
+        {
+          "key": "CURRICULUM_SCOPE",
+          "description": "Curriculum domain scope (Technical Skills, Soft Skills, Compliance Training, Professional Certification)"
+        },
+        {
+          "key": "ASSESSMENT_METHOD",
+          "description": "Learner assessment method (Online Quizzes, Practical Labs, Project Portfolio, Certification Exam)"
+        }
+      ],
+      "readiness_checks": [
+        "Syllabus, modular curriculum structure, and session durations have been defined",
+        "Instructional materials, practical lab manuals, and delivery platforms have been prepared",
+        "Graduation thresholds, evaluation rubrics, and feedback survey mechanisms have been established"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Curriculum Designer & Corporate Instructional Architect",
+        "role_description": "lead instructional designer crafting competency-based training programs, adult learning pedagogies (ANDRAGOGY), and workforce skill assessments",
+        "target_user_title": "Training Director, Corporate Trainer, L&D Specialist, or Curriculum Designer",
+        "domain_context": "learning experience design, competency frameworks, Kirkpatrick evaluation model, and corporate LMS integration",
+        "deliverable_title": "Corporate Training & Competency Development Program Blueprint",
+        "decision_owner_roles": [
+          "Head of Learning & Development (L&D)",
+          "Chief Education Officer",
+          "Lead Instructional Designer"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Training Program Scope & Objectives",
+          "objective": "Identify training program name and target skill competency outcome.",
+          "probing_guide": "Define specific behavioral changes and job competencies expected after completion.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Learner Profile & Delivery Method",
+          "objective": "Define target audience and training delivery methodology.",
+          "probing_guide": "Evaluate instructor-led workshops (ILT) vs asynchronous e-learning vs blended cohort bootcamps.",
+          "variables": [
+            "TRAINING_TYPE",
+            "TARGET_LEARNER"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Competency Assessment & Evaluation Standards",
+          "objective": "Establish mastery rubrics and Kirkpatrick evaluation metrics.",
+          "probing_guide": "Incorporate practical simulation assessments and pre/post knowledge testing benchmarks.",
+          "variables": [
+            "CURRICULUM_SCOPE",
+            "ASSESSMENT_METHOD"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "L&D Leadership & Training Curriculum Sign-off",
+          "objective": "Designate the L&D director holding curriculum approval authority.",
+          "probing_guide": "Provide the name and title of the training director or education lead.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Issuing professional certification credentials without verified proctored assessment records",
+        "FORBIDDEN: Using copyrighted instructional content or external proprietary modules without authorized licensing",
+        "MANDATORY: Align learning objectives with measurable Bloom's taxonomy outcomes and practical workplace simulations"
+      ]
+    },
+    "supply-chain-logistics": {
+      "name": "Supply Chain & Logistics",
+      "category": "operations",
+      "description": "Operational harness for supply chain workflows, warehouse inventory control, freight dispatch, and return merchandise handling.",
+      "directory": "modules/supply-chain-logistics",
+      "variables": [
+        {
+          "key": "SUPPLY_CHAIN_SCOPE",
+          "description": "Operational supply chain scope (Inbound/Procurement, Warehousing, Outbound/Distribution, or End-to-End)"
+        },
+        {
+          "key": "INVENTORY_METHOD",
+          "description": "Inventory valuation method (FIFO, LIFO, Average Cost, Batch/Lot Tracking)"
+        },
+        {
+          "key": "WAREHOUSE_SYSTEM",
+          "description": "Warehouse management system (Manual/Spreadsheet, Dedicated WMS, ERP Module)"
+        },
+        {
+          "key": "DELIVERY_MODEL",
+          "description": "Distribution delivery model (Third-Party Carrier, Dedicated Fleet, Drop-ship, Hybrid)"
+        }
+      ],
+      "readiness_checks": [
+        "Inbound receiving workflows, QC inspection, and non-conformance handling have been defined",
+        "Warehouse zoning layout, reorder point thresholds, and stock audit SOPs have been established",
+        "Picking/packing/dispatch procedures and reverse logistics return handling have been documented"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Supply Chain Solutions Director & Logistics Operations Consultant",
+        "role_description": "senior supply chain architect optimizing inventory turnover, warehouse logistics (WMS), route delivery economics, and freight forwarding",
+        "target_user_title": "Supply Chain Manager, Logistics Director, Warehouse Superintendent, or Fleet Manager",
+        "domain_context": "supply chain visibility, inventory safety stock, cold-chain integrity, reverse logistics, and transport fleet utilization",
+        "deliverable_title": "Integrated Supply Chain & Logistics Operations Manual",
+        "decision_owner_roles": [
+          "VP of Supply Chain / Logistics",
+          "Director of Logistics Operations",
+          "Head of Warehouse & Distribution"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Logistics Network Scope & Operational Mandate",
+          "objective": "Identify supply chain project name and distribution scope.",
+          "probing_guide": "Clarify regional distribution boundaries, delivery turnaround SLAs, and warehouse hubs.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Inventory Strategy & Warehouse Operations",
+          "objective": "Define inventory control model and warehouse layout system.",
+          "probing_guide": "Compare Just-in-Time (JIT) vs Safety Stock buffering with automated WMS barcode picking.",
+          "variables": [
+            "SUPPLY_CHAIN_SCOPE",
+            "WAREHOUSE_SYSTEM"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Freight Mode & Cold-Chain Integrity",
+          "objective": "Establish transportation modes and temperature monitoring protocols.",
+          "probing_guide": "Specify refrigerated truck monitoring, GPS telematics, and cross-docking routes.",
+          "variables": [
+            "INVENTORY_METHOD",
+            "DELIVERY_MODEL"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Supply Chain Leadership & Operations Approval",
+          "objective": "Designate the logistics director holding operational sign-off authority.",
+          "probing_guide": "Provide the name and title of the head of supply chain operations.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Modifying freight transport safety manifests or gross vehicle weight ratings to cut logistics costs",
+        "FORBIDDEN: Operating temperature-sensitive food or medical cold chains without calibrated continuous temperature data logging",
+        "MANDATORY: Conduct regular cycle counts and reconcile inventory discrepancies between physical stock and WMS systems"
+      ]
+    },
+    "event-project-mgmt": {
+      "name": "Event & Non-Technical Project Management",
+      "category": "operations",
+      "description": "Structured harness for planning and executing non-technical corporate projects or events with stakeholder mapping, timelines, budgets, and risk mitigation.",
+      "directory": "modules/event-project-mgmt",
+      "variables": [
+        {
+          "key": "PROJECT_TYPE",
+          "description": "Project or event type (Corporate Event, Conference, CSR Program, Non-IT Internal Project, Public Campaign)"
+        },
+        {
+          "key": "TIMELINE_HORIZON",
+          "description": "Timeline duration horizon (Sprint 1-4 Weeks, Medium 1-3 Months, Long-term 3-12 Months)"
+        },
+        {
+          "key": "STAKEHOLDER_MAP",
+          "description": "Key stakeholder mapping and RACI responsibility assignment"
+        },
+        {
+          "key": "RISK_FRAMEWORK",
+          "description": "Risk management approach (Formal Risk Register, Light Contingency Checklist, Ad-Hoc)"
+        }
+      ],
+      "readiness_checks": [
+        "Project charter, scope boundaries, and KPI success criteria have been confirmed",
+        "Stakeholder mapping and RACI responsibility matrix have been established",
+        "Phased milestone schedule, financial budget plan, and risk register have been documented"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Executive Event Producer & Senior Project Director",
+        "role_description": "senior project director coordinating large-scale corporate events, festivals, critical-path project milestones, and crisis management",
+        "target_user_title": "Event Director, Senior Project Manager, Event Producer, or Program Coordinator",
+        "domain_context": "critical path scheduling, venue crowd safety, vendor stage coordination, run-of-show cue sheets, and crisis contingencies",
+        "deliverable_title": "Master Event Production & Project Execution Blueprint",
+        "decision_owner_roles": [
+          "Executive Event Director",
+          "Senior Project Director",
+          "Lead Event Producer"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Event Mandate & Production Milestone Vision",
+          "objective": "Identify event project name and executive production milestones.",
+          "probing_guide": "Clarify event date, target attendee experience, and key stakeholder success metrics.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Event Scale & Venue Logistics",
+          "objective": "Determine attendee capacity tier and venue technical requirements.",
+          "probing_guide": "Assess indoor convention center vs outdoor festival grounds, staging, power, and permits.",
+          "variables": [
+            "PROJECT_TYPE",
+            "TIMELINE_HORIZON"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Production Run-of-Show & Crisis Protocol",
+          "objective": "Establish minute-by-minute run-of-show and emergency crisis plan.",
+          "probing_guide": "Detail backstage cue sheets, AV production backups, and crowd evacuation routes.",
+          "variables": [
+            "STAKEHOLDER_MAP",
+            "RISK_FRAMEWORK"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Executive Producer & Project Sign-off",
+          "objective": "Designate the executive producer holding final operational sign-off.",
+          "probing_guide": "Provide the name and title of the lead event director.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Staging live venue events exceeding certified maximum crowd capacity or without marked emergency egress routes",
+        "FORBIDDEN: Operating high-voltage stage lighting, audio rigging, or pyrotechnics without certified electrical inspections",
+        "MANDATORY: Conduct full dry-run rehearsals and establish dedicated communication frequencies for event medical and security leads"
+      ]
+    },
+    "ui-ux-design": {
+      "name": "UI/UX Design & Design Systems",
+      "category": "tech",
+      "description": "Transform concept briefs into standard design tokens, responsive wireframe hierarchies, user research protocols, and seamless developer handoff specs.",
+      "directory": "modules/ui-ux-design",
+      "variables": [
+        {
+          "key": "DESIGN_TOOL",
+          "description": "Primary design tool (Figma, Penpot, Sketch, Adobe XD)"
+        },
+        {
+          "key": "DESIGN_SYSTEM_FRAMEWORK",
+          "description": "Design token framework (Tailwind Tokens, Radix UI/Shadcn, Material Design 3, Apple HIG, Custom Token JSON)"
+        },
+        {
+          "key": "TARGET_DEVICES",
+          "description": "Priority screen form factor (Mobile First iOS & Android, Responsive Web Desktop & Tablet, Multi-Screen Dashboard)"
+        },
+        {
+          "key": "HANDOFF_SPEC_FORMAT",
+          "description": "Developer handoff documentation format (Storybook Component Docs, Figma Dev Mode Specs, Style Dictionary JSON)"
+        }
+      ],
+      "readiness_checks": [
+        "Design tokens (colors, typography, spacing, radii) and dark/light themes defined",
+        "Canonical user flows, critical wireframe screens, and navigation hierarchy approved",
+        "Usability testing protocol and developer asset handoff checklist documented"
+      ],
+      "tier": "pro",
+      "persona": {
+        "title": "Lead Product Designer & Design Systems Architect",
+        "role_description": "principal UI/UX strategist establishing scalable design token systems, user journey wireframing, WCAG accessibility, and design tokens",
+        "target_user_title": "Product Designer, Lead UI/UX Designer, Design Technologist, or UX Researcher",
+        "domain_context": "design systems, interaction design, usability testing, micro-animations, and responsive accessibility",
+        "deliverable_title": "Enterprise Product UI/UX Design System Specification",
+        "decision_owner_roles": [
+          "Head of Design / VP of Design",
+          "Principal Product Designer",
+          "Design Systems Lead"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Design Initiative & User Experience Scope",
+          "objective": "Identify design project name and core product interface mission.",
+          "probing_guide": "Clarify primary target personas, user journeys, and key conversion moments.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Design Token Palette & Typography Hierarchy",
+          "objective": "Define color tokens, dark mode harmony, and typographic scale.",
+          "probing_guide": "Specify primary/neutral color tokens, accessible contrast, and geometric sans-serif typefaces.",
+          "variables": [
+            "DESIGN_TOOL",
+            "DESIGN_SYSTEM_FRAMEWORK"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Component Library Architecture & Accessibility",
+          "objective": "Select base component architecture and WCAG compliance target.",
+          "probing_guide": "Standardize on WCAG 2.1 AA contrast standards, keyboard focus states, and aria attributes.",
+          "variables": [
+            "TARGET_DEVICES",
+            "HANDOFF_SPEC_FORMAT"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Head of Product Design & Design Token Sign-off",
+          "objective": "Designate the design director holding design system token approval.",
+          "probing_guide": "Provide the name and title of the lead product designer.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Releasing digital interface mockups with text color contrast ratios falling below WCAG 2.1 AA (minimum 4.5:1 for normal text)",
+        "FORBIDDEN: Creating interactive design elements lacking visible keyboard focus states and clear screen reader aria labels",
+        "MANDATORY: Validate critical user flows through empirical usability testing before freezing design system tokens"
+      ]
+    },
+    "content-creator": {
+      "name": "Content Creator & Digital Media",
+      "category": "growth",
+      "description": "Viral content engine: structured video scriptwriting, 3-second hook formulas, scene storyboards, multi-channel editorial calendars, and audience retention playbooks.",
+      "directory": "modules/content-creator",
+      "variables": [
+        {
+          "key": "PRIMARY_PLATFORM",
+          "description": "Primary video distribution channel (YouTube Long-form, TikTok & Reels Short-form, Podcasting, Multi-Channel Syndication)"
+        },
+        {
+          "key": "CONTENT_NICHE",
+          "description": "Core content niche (Tech & Software, Business & Finance, Education & Career, Lifestyle & Entertainment)"
+        },
+        {
+          "key": "PRODUCTION_CADENCE",
+          "description": "Production rhythm (Daily, 2-3 Videos per Week, Scheduled Weekly, Seasonal Batch Production)"
+        },
+        {
+          "key": "MONETIZATION_MODEL",
+          "description": "Primary monetization model (AdSense / Creator Fund, Brand Sponsorships, Digital Products & Courses, Paid Community)"
+        }
+      ],
+      "readiness_checks": [
+        "Core content pillars, audience persona propositions, and hook formulas established",
+        "Scene scriptwriting templates (Hook-Story-Offer) and thumbnail guidelines prepared",
+        "Weekly release calendar and video retention/CTR metrics matrix documented"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Digital Content Producer & Creator Studio Strategist",
+        "role_description": "senior creative director producing short-form video hooks, multi-platform creator programming, YouTube storytelling, and sponsor brand deals",
+        "target_user_title": "Content Creator, YouTuber, TikTok Producer, Video Editor, or Podcast Host",
+        "domain_context": "creator economy, 3-second retention hooks, thumbnail psychology, copyright licensing, and multi-format syndication",
+        "deliverable_title": "High-Engagement Creator Content Production Strategy",
+        "decision_owner_roles": [
+          "Lead Content Creator / Studio Director",
+          "Executive Creative Director",
+          "Managing Producer"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Creator Studio Brand & Channel Mission",
+          "objective": "Identify creator brand title and core niche value proposition.",
+          "probing_guide": "Define content niche, audience avatar, and unique storytelling style.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Primary Platforms & Video/Audio Formats",
+          "objective": "Establish primary distribution channels and production formats.",
+          "probing_guide": "Prioritize YouTube long-form deep-dives vs TikTok/Shorts vertical video clips.",
+          "variables": [
+            "PRIMARY_PLATFORM",
+            "CONTENT_NICHE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Retention Hooks & Monetization Strategy",
+          "objective": "Define retention hook frameworks and sponsorship integration.",
+          "probing_guide": "Design 3-second visual hooks, pattern interrupts, and authentic brand sponsorships.",
+          "variables": [
+            "PRODUCTION_CADENCE",
+            "MONETIZATION_MODEL"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Studio Director & Publishing Sign-off",
+          "objective": "Designate the lead creator holding video publishing approval.",
+          "probing_guide": "Provide the name of the creator or managing producer.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Monetizing media content utilizing copyrighted background audio, video clips, or imagery without commercial clearance",
+        "FORBIDDEN: Publishing sponsored endorsements or affiliate promotions without clear FTC / ASA sponsor disclosures",
+        "MANDATORY: Audit raw footage for accidental exposure of personal telephone numbers, home addresses, or financial data before upload"
+      ]
+    },
+    "digital-advertising": {
+      "name": "Digital Advertising & Paid Traffic",
+      "category": "growth",
+      "description": "High-conversion advertising architecture: compelling ad copy formulas, competitor angle research, Meta/Google ad set structuring, and target ROAS modeling.",
+      "directory": "modules/digital-advertising",
+      "variables": [
+        {
+          "key": "AD_CHANNELS",
+          "description": "Primary paid channels (Meta Ads / FB & IG, Google Ads Search & Performance Max, TikTok Ads, LinkedIn B2B Ads)"
+        },
+        {
+          "key": "CAMPAIGN_OBJECTIVE",
+          "description": "Campaign business objective (Direct Sales / E-Commerce, B2B Lead Generation, App Installs, Brand Retargeting)"
+        },
+        {
+          "key": "BUDGET_ALLOCATION",
+          "description": "Monthly advertising budget (Testing < $500/mo, Scale-up $1k-$5k/mo, Enterprise $10k+/mo)"
+        },
+        {
+          "key": "TARGET_ROAS_OR_CPA",
+          "description": "Cost efficiency indicator (Target ROAS > 3.0x, Target CPA < $20/lead, Target Cost per Acquisition)"
+        }
+      ],
+      "readiness_checks": [
+        "Ad account funnel structure (Top of Funnel, Middle of Funnel, Retargeting) mapped",
+        "Ad copy text variants, creative visual angles, and destination landing pages aligned",
+        "Conversion tracking pixel (CAPI/GA4) and stop-loss budget benchmarks configured"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Performance Marketing Director & Paid Media Strategist",
+        "role_description": "senior paid acquisition specialist managing Meta/Google ad budgets, ROAS optimization, audience retargeting, and server-side conversion APIs",
+        "target_user_title": "Performance Marketer, Media Buyer, Paid Ads Specialist, or CMO",
+        "domain_context": "paid media optimization, CAC/LTV economics, Conversion API (CAPI), creative split testing, and ad policy compliance",
+        "deliverable_title": "Full-Funnel Digital Advertising Campaign Architecture",
+        "decision_owner_roles": [
+          "Head of Paid Acquisition / Performance Marketing",
+          "Chief Marketing Officer (CMO)",
+          "Lead Media Buyer"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Advertising Campaign Mandate & Commercial Goals",
+          "objective": "Identify ad campaign name and primary performance KPI.",
+          "probing_guide": "Clarify target Customer Acquisition Cost (CAC) and minimum acceptable Return on Ad Spend (ROAS).",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION",
+            "CAMPAIGN_OBJECTIVE"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Ad Networks & Audience Targeting Profile",
+          "objective": "Select ad network mix and target audience segmentation.",
+          "probing_guide": "Allocate ad spend across Meta Ads, Google Search/Performance Max, and TikTok Ads.",
+          "variables": [
+            "AD_CHANNELS",
+            "BUDGET_ALLOCATION"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Conversion Tracking & Creative Testing",
+          "objective": "Establish server-side tracking (CAPI) and weekly creative split testing.",
+          "probing_guide": "Implement server-side Meta CAPI / Google Offline Conversions and creative hook testing.",
+          "variables": [
+            "TARGET_ROAS_OR_CPA"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Performance Marketing Director & Budget Sign-off",
+          "objective": "Designate the paid acquisition director holding ad budget authority.",
+          "probing_guide": "Provide the name and title of the performance marketing lead.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Deploying ad copy containing exaggerated health claims, deceptive get-rich guarantees, or violating platform advertising policies",
+        "FORBIDDEN: Scaling daily ad campaign budgets without verified conversion attribution and live ROAS break-even monitoring",
+        "MANDATORY: Verify server-side Conversion API (CAPI) deduplication events before optimizing algorithm bidding"
+      ]
+    },
+    "academic-education": {
+      "name": "Academic Research & Higher Ed",
+      "category": "operations",
+      "description": "Scholarly research and teaching framework: course syllabus (RPS) drafting, structured literature reviews, academic rubrics, and research ethics protocols.",
+      "directory": "modules/academic-education",
+      "variables": [
+        {
+          "key": "ACADEMIC_LEVEL",
+          "description": "Target academic tier (Undergraduate / Bachelor, Postgraduate / Master-PhD, Applied Vocational, Teacher Training)"
+        },
+        {
+          "key": "DISCIPLINE_FIELD",
+          "description": "Academic discipline (Science & Technology, Social & Humanities, Economics & Business, Health Sciences)"
+        },
+        {
+          "key": "RESEARCH_METHODOLOGY",
+          "description": "Research methodology (Quantitative Experimental, Qualitative Phenomenological, Mixed Methods, Systematic Literature Review)"
+        },
+        {
+          "key": "PUBLICATION_TARGET",
+          "description": "Target publication venue (Peer-Reviewed National Journal, Indexed Scopus/WoS Journal, International Conference, Textbook)"
+        }
+      ],
+      "readiness_checks": [
+        "Semester Course Syllabus (RPS) and Learning Outcomes (CPL) mapped",
+        "PRISMA-based literature review protocol and research gap matrix established",
+        "Student authentic assessment rubrics and academic research ethics checklist documented"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Academic Dean & Higher Education Curriculum Director",
+        "role_description": "senior academic administrator structuring university curricula, academic accreditation standards, faculty peer reviews, and syllabus design",
+        "target_user_title": "Academic Dean, Department Chair, Senior Lecturer, or University Curriculum Director",
+        "domain_context": "higher education accreditation, academic semester credit systems (ECTS/SKS), peer-reviewed syllabi, and student learning outcomes",
+        "deliverable_title": "Accredited Academic Curriculum & Syllabus Framework",
+        "decision_owner_roles": [
+          "Academic Dean / Vice Rector of Academic Affairs",
+          "Head of Academic Department",
+          "Chair of Curriculum Committee"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Academic Program & Accreditation Vision",
+          "objective": "Identify degree program title and target academic accreditation level.",
+          "probing_guide": "Define graduate learning outcomes (GLOs) and international accreditation criteria.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Degree Level & Credit System Structure",
+          "objective": "Establish degree award level and semester credit framework.",
+          "probing_guide": "Structure curriculum into core major credits, electives, and capstone dissertations.",
+          "variables": [
+            "ACADEMIC_LEVEL",
+            "DISCIPLINE_FIELD",
+            "RESEARCH_METHODOLOGY"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Course Modules & Assessment Methodology",
+          "objective": "Define course syllabus modules and student assessment rubrics.",
+          "probing_guide": "Balance midterm/final examinations with peer-reviewed research papers and lab practicums.",
+          "variables": [
+            "PUBLICATION_TARGET"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Academic Dean & Curriculum Sign-off",
+          "objective": "Designate the academic dean holding curriculum approval authority.",
+          "probing_guide": "Provide the name and title of the academic dean or department chair.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Conferring academic course credits or degrees without documented proctored exams and validated attendance records",
+        "FORBIDDEN: Tolerating plagiarism or unverified algorithmic synthesis in student dissertations and published research papers",
+        "MANDATORY: Map all course syllabi to national higher education qualifications framework (KKNI / Bologna Process) outcomes"
+      ]
+    },
+    "health-medical": {
+      "name": "Healthcare Operations & Medical Records",
+      "category": "governance",
+      "description": "Healthcare compliance & clinical operations: Electronic Medical Records (EMR) documentation standards, patient education sheets, clinic QA, and health data privacy safeguards.",
+      "directory": "modules/health-medical",
+      "variables": [
+        {
+          "key": "HEALTHCARE_FACILITY_TYPE",
+          "description": "Healthcare facility type (Primary Clinic, General / Specialized Hospital, Diagnostic Laboratory, Independent Medical Practice)"
+        },
+        {
+          "key": "EMR_STANDARD",
+          "description": "Electronic Medical Record standard (National EMR Regulation, SATUSEHAT Interoperability, HL7 FHIR Standard, ICD-10 Coding)"
+        },
+        {
+          "key": "PATIENT_SERVICE_FLOW",
+          "description": "Clinical service flow (Outpatient / Ambulatory, Inpatient & Emergency, Telemedicine & Homecare, Medical Check-Up)"
+        },
+        {
+          "key": "DATA_PRIVACY_TIER",
+          "description": "Patient health data tier (Strictly Confidential / PHI, National Health Ministry Standard, Hospital Accreditation Audit)"
+        }
+      ],
+      "readiness_checks": [
+        "Registration workflow, informed consent, and EMR documentation templates validated by medical director",
+        "Patient education sheets, discharge planning leaflets, and medical data confidentiality SOP established",
+        "National Health Interoperability checklist and clinical incident reporting register documented"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Clinical Informatics Specialist & Healthcare Operations Director",
+        "role_description": "senior healthcare IT consultant navigating hospital management systems (SIMRS), SatuSehat/FHIR interoperability, clinical governance, and patient data privacy",
+        "target_user_title": "Hospital Medical Director, Chief Medical Officer (CMO), or Healthcare Informatics Lead",
+        "domain_context": "clinical workflows, HL7 FHIR / SatuSehat electronic medical records (EMR), patient data privacy (HIPAA/UU PDP), and medical board compliance",
+        "deliverable_title": "Clinical Healthcare Operations & Electronic Medical Record (EMR) Protocol",
+        "decision_owner_roles": [
+          "Hospital Medical Director / CMO",
+          "Chief of Clinical Governance",
+          "Lead Medical Informatics Officer"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Clinical Service Unit & Healthcare Scope",
+          "objective": "Identify healthcare unit name and clinical delivery scope.",
+          "probing_guide": "Clarify outpatient clinic, inpatient ward, emergency room (ER), or telemedicine service scope.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Electronic Medical Records & Interoperability",
+          "objective": "Establish EMR system architecture and national health exchange compliance.",
+          "probing_guide": "Ensure HL7 FHIR data exchange compliance and SatuSehat integration readiness.",
+          "variables": [
+            "HEALTHCARE_FACILITY_TYPE",
+            "EMR_STANDARD"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Patient Privacy Safeguards & Clinical Triage",
+          "objective": "Establish patient data encryption policies and emergency triage escalation protocols.",
+          "probing_guide": "Enforce strict HIPAA / UU PDP medical privacy boundaries and Emergency Severity Index (ESI) triage.",
+          "variables": [
+            "PATIENT_SERVICE_FLOW",
+            "DATA_PRIVACY_TIER"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Medical Director & Clinical Sign-off",
+          "objective": "Designate the licensed medical director holding clinical governance sign-off authority.",
+          "probing_guide": "Provide the name and medical title of the hospital director or CMO.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Permitting AI agents to issue autonomous clinical diagnosis or drug prescription orders without licensed physician validation",
+        "FORBIDDEN: Exporting or storing unmasked Patient Health Information (PHI/PII) outside certified HIPAA/UU PDP compliant medical records",
+        "MANDATORY: Comply with national statutory health interoperability standards (SatuSehat / HL7 FHIR) and electronic medical record retention mandates"
+      ]
+    },
+    "construction-civil": {
+      "name": "Construction & Civil Engineering",
+      "category": "operations",
+      "description": "Civil project execution control: technical specifications (RKS), Bill of Quantities (BoQ), subcontractor management, S-Curve scheduling, and construction HSE inspections.",
+      "directory": "modules/construction-civil",
+      "variables": [
+        {
+          "key": "CONSTRUCTION_TYPE",
+          "description": "Physical project classification (High-Rise Commercial Building, Road & Bridge Infrastructure, Residential Housing, Commercial Interior Fitout)"
+        },
+        {
+          "key": "CONTRACT_MODEL",
+          "description": "Construction contract model (Lump Sum Fixed Price, Unit Price, Design & Build, Construction Management)"
+        },
+        {
+          "key": "PROJECT_VALUATION_TIER",
+          "description": "Project capital scale (Micro < $100k, Mid-Scale $100k-$1M, Major Scale > $1M)"
+        },
+        {
+          "key": "HSE_STANDARD",
+          "description": "Construction safety regulation (PUPR Construction SMKK, OHSAS 18001 / ISO 45001, Standard Civil Safety Checklist)"
+        }
+      ],
+      "readiness_checks": [
+        "Technical specifications (RKS), Bill of Quantities (BoQ), and working drawings verified by Quantity Surveyor / Site Engineer",
+        "S-Curve execution schedule, weekly milestone timeline, and subcontractor authority matrix approved",
+        "Material quality inspection procedures (QC), submittal approvals, and Construction Safety Management (SMKK) documented"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Civil Project Director & Structural Engineering Consultant",
+        "role_description": "senior civil engineer overseeing infrastructure construction, structural load calculations, FIDIC contracts, bill of quantities (BOQ), and site safety",
+        "target_user_title": "Project Director, Senior Civil Engineer, Construction Project Manager, or Structural Lead",
+        "domain_context": "civil engineering, structural integrity, FIDIC/PUPR construction contracts, material quality testing, and jobsite safety (K3 Konstruksi)",
+        "deliverable_title": "Civil Engineering Project Execution & Construction Quality Dossier",
+        "decision_owner_roles": [
+          "Project Director / Chief Engineer",
+          "Principal Structural Engineer",
+          "Senior Construction Manager"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Civil Project Scope & Structure Type",
+          "objective": "Identify construction project name and structural typology.",
+          "probing_guide": "Clarify high-rise building, commercial bridge, transport highway, or industrial warehouse structure.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Engineering Codes & Contractual Model",
+          "objective": "Establish national structural building codes and construction contract standards.",
+          "probing_guide": "Select FIDIC / National PUPR standard contracts and seismic structural design codes.",
+          "variables": [
+            "CONSTRUCTION_TYPE",
+            "CONTRACT_MODEL"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Quality Assurance (QA/QC) & Jobsite Safety",
+          "objective": "Define concrete batch testing standards and on-site occupational safety (K3 Konstruksi).",
+          "probing_guide": "Require slump testing, cylinder compressive strength tests, and fall-arrest safety protocols.",
+          "variables": [
+            "PROJECT_VALUATION_TIER",
+            "HSE_STANDARD"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Project Director & Licensed Structural Engineer Sign-off",
+          "objective": "Designate the licensed Professional Engineer (PE) holding structural sign-off authority.",
+          "probing_guide": "Provide the name and engineering license details of the chief project engineer.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Altering reinforced concrete or structural steel bar specifications without written sign-off from a certified Professional Engineer (PE)",
+        "FORBIDDEN: Pouring concrete or erecting load-bearing structures without passing on-site slump tests and certified lab batch tests",
+        "MANDATORY: Enforce jobsite safety standards (K3 Konstruksi) including mandatory personal protective equipment (PPE) and zero-tolerance falls protection"
+      ]
+    },
+    "manufacturing-hse": {
+      "name": "Manufacturing, HSE & Plant Ops",
+      "category": "governance",
+      "description": "Zero accident & plant efficiency harness: Job Safety Analysis (JSA), HSE hazard mitigation, 5S audit checklists, OEE tracking, and preventive maintenance routines.",
+      "directory": "modules/manufacturing-hse",
+      "variables": [
+        {
+          "key": "INDUSTRY_SECTOR",
+          "description": "Manufacturing industrial sector (Automotive & Machinery, Food & Beverage / F&B, Chemicals & Pharma, Textile & Apparel)"
+        },
+        {
+          "key": "PLANT_OPERATION_SCALE",
+          "description": "Plant operational scale (Mid-sized Fabrication Workshop, 24/7 Automated Production Line, Multi-Shift Facility)"
+        },
+        {
+          "key": "SAFETY_COMPLIANCE_STANDARD",
+          "description": "Safety compliance standard (National SMK3 Regulation, ISO 14001 & ISO 45001, OSHA International)"
+        },
+        {
+          "key": "MAINTENANCE_STRATEGY",
+          "description": "Equipment maintenance strategy (Total Productive Maintenance / TPM, Time-Based Preventive, Condition-Based Monitoring)"
+        }
+      ],
+      "readiness_checks": [
+        "Job Safety Analysis (JSA) per workstation and hazard identification risk assessment (HIRADC) approved by HSE team",
+        "Standard Operating Procedures (SOP) for machinery operations and daily 5S inspection checklists validated",
+        "Periodic preventive maintenance schedules and near-miss incident investigation protocols documented"
+      ],
+      "tier": "team",
+      "persona": {
+        "title": "Plant General Manager & Industrial HSE Director",
+        "role_description": "senior plant director managing factory operations, Total Productive Maintenance (TPM), ISO 45001 / SMK3 occupational safety, and zero-accident manufacturing",
+        "target_user_title": "Plant General Manager, Manufacturing Director, or Industrial HSE Lead",
+        "domain_context": "industrial plant operations, assembly line throughput, Lockout-Tagout (LOTO), hazardous materials, and predictive machine maintenance",
+        "deliverable_title": "Industrial Manufacturing Operations & Plant HSE Governance Blueprint",
+        "decision_owner_roles": [
+          "Plant General Manager / Director of Manufacturing",
+          "Head of HSE / Safety Director",
+          "Lead Operations Superintendent"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Plant Facility Scope & Manufacturing Goals",
+          "objective": "Identify manufacturing facility name and daily production output goal.",
+          "probing_guide": "Clarify production plant capacity, overall equipment effectiveness (OEE) target, and plant footprint.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Industry Sector & Plant Shift Operations",
+          "objective": "Determine manufacturing sector and working shift rotation schedule.",
+          "probing_guide": "Compare 2-shift operations with continuous 24/7 3-shift industrial operations.",
+          "variables": [
+            "INDUSTRY_SECTOR",
+            "PLANT_OPERATION_SCALE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Occupational Safety (HSE) & TPM Maintenance",
+          "objective": "Establish ISO 45001 safety compliance and Total Productive Maintenance strategy.",
+          "probing_guide": "Standardize on predictive maintenance sensors and mandatory Lockout-Tagout (LOTO) protocols.",
+          "variables": [
+            "SAFETY_COMPLIANCE_STANDARD",
+            "MAINTENANCE_STRATEGY"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Plant General Manager & HSE Authority Sign-off",
+          "objective": "Designate the plant general manager holding safety stop-work veto authority.",
+          "probing_guide": "Provide the name and title of the plant manager or head of HSE.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Bypassing safety interlocks or ignoring Lockout-Tagout (LOTO) protocols to chase daily production quotas",
+        "FORBIDDEN: Assigning machine operators to hazardous heavy machinery without certified technical licensing and occupational safety induction",
+        "MANDATORY: Report, investigate, and document all near-miss safety incidents within 24 hours to prevent catastrophic workplace injuries"
+      ]
+    },
+    "culinary-fnb": {
+      "name": "Culinary, Restaurant & F&B Management",
+      "category": "operations",
+      "description": "Kitchen profitability & taste consistency: Food Cost and COGS calculation, standardized batch recipe sheets, HACCP kitchen hygiene SOPs, and daily waste control.",
+      "directory": "modules/culinary-fnb",
+      "variables": [
+        {
+          "key": "OUTLET_FORMAT",
+          "description": "Culinary outlet format (Cafe & Coffee Shop, Casual Dine-In Restaurant, Cloud Kitchen & Delivery, Fast Food / Franchise Kiosk)"
+        },
+        {
+          "key": "FOOD_COST_TARGET",
+          "description": "Target food cost percentage (Strict Target 25-28%, Casual Standard 28-32%, Premium Dining 32-38%)"
+        },
+        {
+          "key": "SERVICE_STYLE",
+          "description": "Customer service hospitality style (Self-Service / Quick Order, Table Service / Full Hospitality, Drive-Thru & Takeaway)"
+        },
+        {
+          "key": "FOOD_SAFETY_STANDARD",
+          "description": "Food safety and hygiene certification (Halal Certification, National Health Department Hygiene Standard, HACCP Kitchen SOP)"
+        }
+      ],
+      "readiness_checks": [
+        "Standardized recipe cards (spice grammages, portion sizes, yield percentages) and menu COGS calculated",
+        "Kitchen opening/closing hygiene checklists and food sanitation standards prepared",
+        "Daily raw ingredient waste tracking logs and cold storage minimum thresholds documented"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Executive Chef & Food & Beverage Operations Director",
+        "role_description": "senior culinary operations consultant managing restaurant cost of goods sold (COGS 28-32%), HACCP kitchen sanitation, recipe grammage standardization, and Halal assurance",
+        "target_user_title": "Executive Chef, Restaurant Owner, F&B Director, or Central Kitchen Manager",
+        "domain_context": "culinary operations, food cost accounting (COGS), kitchen waste sheets, HACCP / BPOM sanitation, cold-chain refrigeration, and recipe consistency",
+        "deliverable_title": "Standardized Culinary F&B Kitchen Operations & Cost Control Manual",
+        "decision_owner_roles": [
+          "Executive Chef / F&B Director",
+          "Restaurant General Manager",
+          "Central Kitchen Operations Lead"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Culinary Concept & Restaurant Brand Proposition",
+          "objective": "Identify restaurant brand name and culinary concept style.",
+          "probing_guide": "Explore fast-casual dining, fine dining, or cloud kitchen delivery models.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Food Cost Control (COGS) & Menu Engineering",
+          "objective": "Establish target food cost percentage (28-32%) and menu pricing strategy.",
+          "probing_guide": "Implement standardized recipe yield calculations and raw ingredient price fluctuation buffers.",
+          "variables": [
+            "OUTLET_FORMAT",
+            "SERVICE_STYLE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Kitchen Sanitation, HACCP & Storage Protocol",
+          "objective": "Establish kitchen hygiene certifications and cold storage standards.",
+          "probing_guide": "Enforce HACCP food safety standards, temperature logs (below 4°C for chillers, -18°C for freezers), and Halal segregation.",
+          "variables": [
+            "FOOD_COST_TARGET",
+            "FOOD_SAFETY_STANDARD"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Executive Chef & F&B Operations Approval",
+          "objective": "Designate the executive chef or F&B operations manager holding menu and recipe sign-off authority.",
+          "probing_guide": "Provide the name and title of the executive chef or restaurant general manager.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Modifying standardized recipe grammage or ingredient substitutions without documented culinary director approval",
+        "FORBIDDEN: Serving raw or undercooked perishable poultry or seafood stored outside certified food safety temperature danger zones (4°C - 60°C)",
+        "MANDATORY: Maintain daily food waste tracking sheets and ensure kitchen staff follow certified personal hygiene standards"
+      ]
+    },
+    "agribusiness-farming": {
+      "name": "Agribusiness, Crop & Livestock Farming",
+      "category": "operations",
+      "description": "Precision crop and harvest management: irrigation & fertilizer schedules, feed formulation for livestock, unit crop cost accounting, and cold-chain post-harvest storage.",
+      "directory": "modules/agribusiness-farming",
+      "variables": [
+        {
+          "key": "FARMING_SECTOR",
+          "description": "Agribusiness commodity sector (Premium Horticulture & Vegetables, Fruit Orchards / Coffee, Poultry & Livestock, Aquaculture & Fish Farming)"
+        },
+        {
+          "key": "CULTIVATION_SCALE",
+          "description": "Cultivation methodology (Open Field Farming, Smart Hydroponic Greenhouse, Intensive Ponds, Closed-House Poultry)"
+        },
+        {
+          "key": "HARVEST_CYCLE",
+          "description": "Harvest schedule interval (Rapid 30-45 Day Cycle, Seasonal 3-6 Months, Perennial Commodity)"
+        },
+        {
+          "key": "OFFTAKER_MODEL",
+          "description": "Harvest marketing channel (Direct to Consumer B2C, Supermarket / Horeca Supply, Wholesale Central Market Aggregator, Export Contract)"
+        }
+      ],
+      "readiness_checks": [
+        "Agronomic calendar schedule (seeding, scheduled fertilization, integrated pest control) established",
+        "Cost budgeting for seedlings, fertilizer/feed, and yield tonnage projections completed",
+        "Post-harvest handling SOPs (grading, cold chain cooling, packaging) and offtaker logistics routes documented"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "Principal Agronomist & Agricultural Operations Consultant",
+        "role_description": "senior agricultural consultant optimizing farm crop yields, precision drip irrigation, Good Agricultural Practices (GAP/GlobalGAP), and post-harvest cold chains",
+        "target_user_title": "Chief Agronomist, Farm Operations Manager, Estate Superintendent, or Agricultural Enterprise Lead",
+        "domain_context": "agronomy, crop rotation, soil health testing, precision fertilization, integrated pest management (IPM), and post-harvest handling",
+        "deliverable_title": "Enterprise Agribusiness & Crop Cultivation Operations Dossier",
+        "decision_owner_roles": [
+          "Chief Agronomist / Head of Farm Operations",
+          "Estate General Superintendent",
+          "Director of Agribusiness"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Agricultural Estate Scope & Crop Commodities",
+          "objective": "Identify farm enterprise name and primary crop commodity.",
+          "probing_guide": "Clarify whether crop is horticulture, commercial grains, fruit orchards, or plantation crops.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Farm Scale, Soil Health & Irrigation Strategy",
+          "objective": "Define cultivated acreage scale and precision irrigation system.",
+          "probing_guide": "Compare smart sensor drip irrigation with pivot sprinkler systems and baseline soil organic matter.",
+          "variables": [
+            "FARMING_SECTOR",
+            "CULTIVATION_SCALE"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Good Agricultural Practices (GAP) & Pest Management",
+          "objective": "Establish GAP / GlobalGAP certifications and Integrated Pest Management (IPM) protocols.",
+          "probing_guide": "Balance biological pest controls with strict chemical pesticide withholding periods.",
+          "variables": [
+            "HARVEST_CYCLE",
+            "OFFTAKER_MODEL"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Chief Agronomist & Farm Operations Sign-off",
+          "objective": "Designate the chief agronomist or estate manager holding cultivation sign-off authority.",
+          "probing_guide": "Provide the name and title of the lead agronomist.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Applying synthetic chemical pesticides within statutory pre-harvest withholding intervals (PHI) to prevent consumer chemical toxicity",
+        "FORBIDDEN: Cultivating crops without verifying agricultural runoff protection near natural river waterways and local drinking aquifers",
+        "MANDATORY: Conduct certified soil nutrient testing and water pH analysis before commencing commercial fertilization cycles"
+      ]
+    },
+    "sme-business": {
+      "name": "SME Operations & Retail Management",
+      "category": "growth",
+      "description": "Small business & retail accelerator: customer fast-reply chat playbooks, COGS margin pricing calculators, daily cash register logs, and recurring promo broadcast campaigns.",
+      "directory": "modules/sme-business",
+      "variables": [
+        {
+          "key": "BUSINESS_MODEL",
+          "description": "Store operational model (Brick & Mortar Offline Retail, Online Store / Marketplace, Local Services, Reseller / Dropshipper)"
+        },
+        {
+          "key": "DAILY_SALES_VOLUME",
+          "description": "Average daily order volume (Micro < 20 orders/day, Growing 20-100 orders/day, Retail Scale > 100 orders/day)"
+        },
+        {
+          "key": "PAYMENT_METHODS",
+          "description": "Accepted payment methods (Cash & Static QRIS, Manual Bank Transfer, EDC / Multi-Payment POS)"
+        },
+        {
+          "key": "CUSTOMER_CARE_CHANNEL",
+          "description": "Primary customer communication channel (WhatsApp Business CS, Instagram & TikTok DM, Marketplace Live Chat)"
+        }
+      ],
+      "readiness_checks": [
+        "Fast-reply chat templates (greeting auto-reply, order formats, official bank account info) prepared",
+        "Selling price calculator sheets (COGS + target profit margin) and daily cash register logs established",
+        "Monthly promotional calendar and fast-moving inventory stock count checklists documented"
+      ],
+      "tier": "individual",
+      "persona": {
+        "title": "SME Business Growth Consultant & Commercial Advisor",
+        "role_description": "senior business advisory consultant guiding small-and-medium enterprise (SME) unit economics, working capital cashflow, omnichannel point-of-sale, and tax compliance",
+        "target_user_title": "SME Business Owner, Founder, Commercial Director, or Managing Partner",
+        "domain_context": "small business management, unit economics, gross margins, inventory working capital, local tax filing, and omnichannel sales",
+        "deliverable_title": "SME Commercial Growth & Business Operational Playbook",
+        "decision_owner_roles": [
+          "Managing Director / Business Owner",
+          "Chief Financial Officer (CFO)",
+          "Head of Business Operations"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Enterprise Venture Identity & Commercial Proposition",
+          "objective": "Identify business enterprise name and core value proposition.",
+          "probing_guide": "Clarify market differentiator, primary customer demographic, and key revenue streams.",
+          "variables": [
+            "PROJECT_NAME",
+            "PROJECT_MISSION"
+          ]
+        },
+        {
+          "phase": 2,
+          "name": "Business Model, Target Market & Pricing Strategy",
+          "objective": "Define commercial revenue model (B2B/B2C) and gross margin targets.",
+          "probing_guide": "Ensure healthy unit economics with product gross margins sustaining operating overhead.",
+          "variables": [
+            "BUSINESS_MODEL",
+            "DAILY_SALES_VOLUME"
+          ]
+        },
+        {
+          "phase": 3,
+          "name": "Working Capital, Point of Sale & Tax Compliance",
+          "objective": "Establish cash flow management, omnichannel POS, and tax filing discipline.",
+          "probing_guide": "Set 60-to-90 day working capital cash reserves and unified POS inventory synchronization.",
+          "variables": [
+            "PAYMENT_METHODS",
+            "CUSTOMER_CARE_CHANNEL"
+          ]
+        },
+        {
+          "phase": 4,
+          "name": "Managing Director & Executive Sign-off",
+          "objective": "Designate the SME business owner or commercial director holding executive sign-off authority.",
+          "probing_guide": "Provide the name and title of the business owner or managing partner.",
+          "variables": [
+            "DECISION_OWNER"
+          ]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Commingling personal founder bank accounts with company operational cashflows without formal accounting reconciliation",
+        "FORBIDDEN: Incurring high-interest operational debt without stress-testing debt service coverage ratios (DSCR > 1.25)",
+        "MANDATORY: Maintain daily cash reconciliation ledgers and reserve statutory local business tax withholding funds"
+      ]
+    },
+    "business-growth": {
+      "name": "Business Growth & Productized Services",
+      "category": "growth",
+      "description": "Founder-level management harness for positioning, productized services, repeatable acquisition, recurring value, retention, capacity, and growth measurement.",
+      "directory": "modules/business-growth",
+      "variables": [
+        { "key": "TARGET_CUSTOMER", "description": "Priority customer segment and buying context" },
+        { "key": "CORE_PROBLEM", "description": "Observable customer problem and its current cost" },
+        { "key": "OFFER_MODEL", "description": "Defined productized service or offer structure" },
+        { "key": "ACQUISITION_CHANNELS", "description": "Selected acquisition channels and their owners" },
+        { "key": "REVENUE_MODEL", "description": "Commercial and recurring revenue model" },
+        { "key": "DELIVERY_CAPACITY", "description": "Delivery capacity, response expectations, and constraints" },
+        { "key": "RETENTION_SIGNAL", "description": "Observable signal of recurring customer value and renewal health" },
+        { "key": "DECISION_OWNER", "description": "Founder, CEO, or business owner authorized to confirm decisions" }
+      ],
+      "readiness_checks": [
+        "Positioning and priority customer problem are explicitly defined",
+        "Offer scope, delivery workflow, capacity, and margin assumptions are documented",
+        "Acquisition and conversion process has owners, qualification rules, and measurable stages",
+        "Recurring value, retention signals, and sustainability KPIs have evidence sources and review cadence"
+      ],
+      "tier": "pro",
+      "persona": {
+        "title": "Founder / CEO / Business Growth Advisor",
+        "role_description": "management advisor helping service businesses make positioning, offer, delivery, acquisition, and sustainability decisions without treating hypotheses as proven results",
+        "target_user_title": "Founder, CEO, business owner, or managing partner",
+        "domain_context": "service-business positioning, productized offers, repeatable growth, recurring value, retention, capacity, and margin",
+        "deliverable_title": "Business Growth and Productized Service Blueprint",
+        "decision_owner_roles": [
+          "Founder / CEO / Business Owner",
+          "Managing Partner",
+          "Head of Business Operations"
+        ]
+      },
+      "interview_phases": [
+        {
+          "phase": 1,
+          "name": "Positioning and Customer Focus",
+          "objective": "Choose the priority customer, observable problem, and focused market position.",
+          "probing_guide": "Separate evidence from assumptions and identify the cost of the current customer workaround.",
+          "variables": ["TARGET_CUSTOMER", "CORE_PROBLEM"]
+        },
+        {
+          "phase": 2,
+          "name": "Offer and Delivery Model",
+          "objective": "Define a repeatable offer with explicit scope, delivery quality, capacity, and margin assumptions.",
+          "probing_guide": "Clarify what is included, excluded, delegated, measured, and charged separately.",
+          "variables": ["OFFER_MODEL", "DELIVERY_CAPACITY"]
+        },
+        {
+          "phase": 3,
+          "name": "Acquisition and Conversion Engine",
+          "objective": "Select acquisition channels and define qualification and conversion stages.",
+          "probing_guide": "Choose channels that match buying behavior and distinguish activity from validated traction.",
+          "variables": ["ACQUISITION_CHANNELS", "REVENUE_MODEL"]
+        },
+        {
+          "phase": 4,
+          "name": "Sustainability and Executive Sign-off",
+          "objective": "Define recurring value, retention signals, sustainability KPIs, and decision authority.",
+          "probing_guide": "Set review cadence and identify founder dependencies before declaring the operating model healthy.",
+          "variables": ["RETENTION_SIGNAL", "DECISION_OWNER"]
+        }
+      ],
+      "domain_guardrails": [
+        "FORBIDDEN: Presenting customer, revenue, retention, or market-validation hypotheses as proven results without evidence",
+        "FORBIDDEN: Promising service scope, response time, or recurring delivery beyond documented capacity and margin assumptions",
+        "MANDATORY: Keep outreach personalized, privacy-safe, opt-out compliant, and within approved sending limits",
+        "MANDATORY: Separate founder dependency, recurring value, retention, capacity, and margin signals in the review record"
+      ]
     }
+
   },
   "interview_contract": {
     "question_budget": "3-7 targeted consultation phases (proportionate per module, with early finalization option)",

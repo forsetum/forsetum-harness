@@ -110,7 +110,7 @@ tool permission prompt: both gates must pass.
    instantiated mode; record its exit code and evidence.
 
    ```bash
-   <skill-dir>/runtime/scripts/validate-template.sh --all
+   <skill-dir>/runtime/scripts/validate-harness.sh --all
    ```
 
 The installed skill's runtime is package-local and must not use a private

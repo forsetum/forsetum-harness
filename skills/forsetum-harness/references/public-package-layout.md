@@ -5,6 +5,15 @@ This is the package contract for the curated distribution discovered by
 canonical repository; runtime copies are distribution output, not a second
 authoring source.
 
+## Publication Policy
+
+All 27 canonical EN/ID modules are approved for public distribution under
+upstream D-011, including `business-growth`. The exporter selects these IDs
+explicitly and preserves their complete canonical metadata in the templates
+and generated package-local runtime. Private documents, customer data, and
+credentials remain excluded. Actual cross-platform CI status is recorded
+separately from package generation.
+
 ## Package invariants
 
 discoverable_entrypoint: skills/forsetum-harness/SKILL.md
@@ -44,22 +53,47 @@ skills/forsetum-harness/runtime/scripts/init.sh <- scripts/init.sh
 skills/forsetum-harness/runtime/scripts/init.ps1 <- scripts/init.ps1
 skills/forsetum-harness/runtime/scripts/bundle.sh <- scripts/bundle.sh
 skills/forsetum-harness/runtime/scripts/bundle.ps1 <- scripts/bundle.ps1
+skills/forsetum-harness/runtime/scripts/validate-harness.sh <- scripts/validate-harness.sh
+skills/forsetum-harness/runtime/scripts/validate-harness.ps1 <- scripts/validate-harness.ps1
 skills/forsetum-harness/runtime/scripts/validate-template.sh <- scripts/validate-template.sh
 skills/forsetum-harness/runtime/scripts/validate-template.ps1 <- scripts/validate-template.ps1
-skills/forsetum-harness/runtime/template/id/ <- filtered public template/id/ (11 approved modules)
-skills/forsetum-harness/runtime/template/en/ <- filtered public template/en/ (11 approved modules)
+skills/forsetum-harness/runtime/template/id/ <- filtered public template/id/ (27 approved modules)
+skills/forsetum-harness/runtime/template/en/ <- filtered public template/en/ (27 approved modules)
 ```
 
-The curated package contains exactly these module IDs in both languages:
+The curated package contains exactly these approved IDs in both languages:
 
 ```text
-web-fullstack, landing-page, sales-outreach, general-office, mobile-app,
-cli-automation, content-marketing, research-analysis, web-starter,
-it-infra-ops, app-maintenance
+web-fullstack,
+landing-page,
+sales-outreach,
+general-office,
+mobile-app,
+cli-automation,
+content-marketing,
+research-analysis,
+web-starter,
+it-infra-ops,
+app-maintenance,
+procurement-tender,
+hr-people-ops,
+education-training,
+supply-chain-logistics,
+event-project-mgmt,
+ui-ux-design,
+content-creator,
+digital-advertising,
+academic-education,
+health-medical,
+construction-civil,
+manufacturing-hse,
+culinary-fnb,
+agribusiness-farming,
+sme-business,
+business-growth
 ```
 
-Canonical module directories outside this list and their manifest objects are
-private and must not appear in the public tree or package-local runtime.
+Other module IDs remain unapproved and must be filtered out.
 
 Reviewed adapters and references beside the entry point are package content.
 Private plans, repository metadata, credentials, and unlisted files are not.
@@ -83,13 +117,15 @@ bash <skill-dir>/scripts/inspect-repository.sh \
   -Initializer <runtime-init-command> -Validator <runtime-validator-command>
 <skill-dir>/runtime/scripts/init.sh --lang <id|en> \
   --module <manifest-module-id> --target <target> --name <name>
-<skill-dir>/runtime/scripts/validate-template.sh --all
+<skill-dir>/runtime/scripts/validate-harness.sh --all
 ```
 
 The inspector receives the runtime root explicitly and reads
 `<skill-dir>/runtime/template/{id,en}/manifest.json`. The initializer and
 validator are the canonical scripts copied into the same runtime and retain
-their existing relative layout.
+their existing relative layout. The `validate-template.*` files are temporary
+compatibility wrappers that delegate to the canonical `validate-harness.*`
+files.
 
 The decision handoff is package-local and fail-closed. It returns `CANCELLED`
 for `CANCEL`, `DEFERRED` for `DEFER`, `PRESERVE`, or `SKIP`, and delegates the

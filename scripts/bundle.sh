@@ -168,9 +168,11 @@ done
 
 # Inject validator scripts
 mkdir -p "${STAGING_DIR}/scripts"
+cp "${REPO_ROOT}/scripts/validate-harness.sh" "${STAGING_DIR}/scripts/validate-harness.sh"
+cp "${REPO_ROOT}/scripts/validate-harness.ps1" "${STAGING_DIR}/scripts/validate-harness.ps1"
 cp "${REPO_ROOT}/scripts/validate-template.sh" "${STAGING_DIR}/scripts/validate-template.sh"
 cp "${REPO_ROOT}/scripts/validate-template.ps1" "${STAGING_DIR}/scripts/validate-template.ps1"
-chmod +x "${STAGING_DIR}/scripts/validate-template.sh"
+chmod +x "${STAGING_DIR}/scripts/validate-harness.sh" "${STAGING_DIR}/scripts/validate-template.sh"
 
 # Module-specific stitching definitions
 INDEX_TABLE=""
