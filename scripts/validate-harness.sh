@@ -331,6 +331,31 @@ manifest_module_shape() {
       -e 's/(:[[:space:]]*)[0-9]+/\1<number>/g'
 }
 
+manifest_block_has_tier_field() {
+  awk '
+    function brace_delta(line,    i, ch, escaped, in_string, delta) {
+      escaped=0
+      in_string=0
+      delta=0
+      for (i=1; i<=length(line); i++) {
+        ch=substr(line, i, 1)
+        if (in_string) {
+          if (escaped) escaped=0
+          else if (ch == "\\") escaped=1
+          else if (ch == "\"") in_string=0
+        } else if (ch == "\"") in_string=1
+        else if (ch == "{") delta++
+        else if (ch == "}") delta--
+      }
+      return delta
+    }
+    NR == 1 { depth=brace_delta($0); next }
+    depth == 1 && /^[[:space:]]*"tier"[[:space:]]*:/ { found=1; exit }
+    { depth+=brace_delta($0) }
+    END { exit(found ? 0 : 1) }
+  '
+}
+
 module_directory_ids() {
   local modules_dir="$1"
   local path
@@ -356,12 +381,17 @@ validate_manifest_module() {
   local field
   local field_type
   local missing=0
-  for field in category tier variables persona interview_phases domain_guardrails readiness_checks directory; do
+  for field in category variables persona interview_phases domain_guardrails readiness_checks directory; do
     if ! grep -Eq "^      \"${field}\":[[:space:]]*" <<<"${block}"; then
       printf '  [FAIL] Module %s is missing manifest field: %s\n' "${module_id}" "${field}" >&2
       missing=$((missing + 1))
     fi
   done
+
+  if manifest_block_has_tier_field <<<"${block}"; then
+    printf '  [FAIL] Module %s contains unsupported commercial tier metadata\n' "${module_id}" >&2
+    missing=$((missing + 1))
+  fi
 
   for field_type in variables interview_phases domain_guardrails readiness_checks; do
     if ! grep -Eq "^      \"${field_type}\":[[:space:]]*\[" <<<"${block}"; then

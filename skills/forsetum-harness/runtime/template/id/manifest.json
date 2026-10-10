@@ -59,7 +59,6 @@
         "Halaman profil pengguna dan pengelolaan akun hybrid (Credentials vs OAuth SSO) telah didefinisikan",
         "Target deployment dan konfigurasi lingkungan telah diverifikasi"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Solutions Architect Perangkat Lunak Fullstack & Cloud",
         "role_description": "konsultan senior perancang arsitektur web fullstack, microservices, basis data relasional, dan tata kelola coding agent repositori",
@@ -168,7 +167,6 @@
         "Hierarki tata letak (wireframe) dan responsivitas mobile telah ditentukan",
         "Penyedia hosting publik dan pelacakan analitik telah dikonfirmasi"
       ],
-      "tier": "free",
       "persona": {
         "title": "Web Conversion Specialist & Landing Page Strategist",
         "role_description": "spesialis perancang landing page berkonversi tinggi, hierarki visual persuasif, dan optimasi Call-to-Action",
@@ -251,7 +249,6 @@
         "Template pesan penawaran dan skrip penanganan keberatan telah ditinjau",
         "Batas wewenang diskon dan jadwal tindak lanjut (follow-up) telah ditetapkan"
       ],
-      "tier": "individual",
       "persona": {
         "title": "B2B Sales Pipeline & Cold Outreach Strategist",
         "role_description": "konsultan senior perancang kampanye penjangkauan B2B terarah, segmentasi profil pelanggan ideal, dan sequensing pesan persuasif",
@@ -338,7 +335,6 @@
         "Akses perangkat/sumber daya dan data masukan telah diverifikasi",
         "Format hasil deliverable dan tonggak peninjauan telah dikonfirmasi"
       ],
-      "tier": "free",
       "persona": {
         "title": "Konsultan Efisiensi Alur Kerja & SOP Perkantoran",
         "role_description": "spesialis standardisasi tata kelola administrasi kantor, pengarsipan dokumen digital, dan Service Level Agreement (SLA) internal",
@@ -429,7 +425,6 @@
         "Izin perangkat keras dan deklarasi privasi telah terdokumentasi",
         "Kepatuhan App Store/Google Play serta kunci penandatanganan telah dikonfigurasi"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Mobile App Solutions Architect",
         "role_description": "konsultan senior perancang aplikasi seluler lintas platform (iOS & Android), manajemen state offline, dan integrasi API",
@@ -518,7 +513,6 @@
         "Penanganan sinyal proses dan daur hidup daemon telah ditetapkan",
         "Logika retry batch dan prosedur karantina kegagalan telah terdokumentasi"
       ],
-      "tier": "individual",
       "persona": {
         "title": "DevOps & Systems Automation Scripting Specialist",
         "role_description": "spesialis otomasi alur kerja terminal, parsing argumen POSIX, daemon supervisor, dan skrip pipa data",
@@ -606,7 +600,6 @@
         "Klaster kata kunci SEO dan niat pencarian telah dipetakan",
         "Panduan tone of voice merek dan daftar periksa tinjauan telah disetujui"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Content Marketing Strategist & Editorial Lead",
         "role_description": "spesialis strategi konten inbound, riset kata kunci otoritatif, pilar konten tematik, dan konsistensi suara merek",
@@ -694,7 +687,6 @@
         "Hierarki sumber data primer dan standar sitasi telah ditentukan",
         "Format memo keputusan eksekutif dan kriteria kompromi risiko telah ditetapkan"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Market Research & Business Intelligence Analyst",
         "role_description": "analis riset pasar senior, metodologi sintesis data primer-sekunder, dan penyusunan laporan wawasan eksekutif",
@@ -770,7 +762,6 @@
         "Framework, arsitektur komponen, dan pendekatan styling telah dikonfirmasi",
         "Persistensi data dan kriteria pengujian dasar telah ditetapkan"
       ],
-      "tier": "free",
       "persona": {
         "title": "Web Developer & Rapid Prototyping Specialist",
         "role_description": "spesialis pengembangan web modular cepat, fondasi antarmuka responsif, dan struktur proyek berstandar bersih",
@@ -857,7 +848,6 @@
         "SOP pemeliharaan rutin dan runbook insiden kritis telah disetujui",
         "Jadwal backup berkala dan prosedur mitigasi rollback telah diverifikasi"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Infrastructure & Site Reliability Engineering (SRE) Consultant",
         "role_description": "insinyur senior pemeliharaan server, cadangan terenkripsi, stabilitas runtime sistem, dan disaster recovery plan",
@@ -945,7 +935,6 @@
         "SOP reproduksi bug, pelacakan dampak, dan daftar periksa non-regresi telah ditetapkan",
         "Pola isolasi modul custom dan strategi kompatibilitas upstream telah dikonfirmasi"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Brownfield Software Architect & Codebase Refactoring Specialist",
         "role_description": "arsitek spesialis audit kode warisan (legacy), modifikasi fitur brownfield aman, dan mitigasi regresi sistem",
@@ -1027,7 +1016,6 @@
         "Syarat kualifikasi penyedia dan dokumen penawaran wajib telah ditetapkan",
         "Alur evaluasi, bobot penilaian teknis-harga, dan mekanisme klarifikasi telah dikonfirmasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "Auditor Senior Pengadaan, Tender & Vendor Management",
         "role_description": "auditor spesialis penyusunan HPS/Owner Estimate, evaluasi tender terbuka, mitigasi risiko sanggah hukum, dan kepatuhan kontrak",
@@ -1116,7 +1104,6 @@
         "Matriks kompetensi dan formulir evaluasi kinerja berkala telah ditetapkan",
         "SOP onboarding karyawan baru dan checklist serah terima offboarding telah terdokumentasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "People Operations & Human Capital Specialist",
         "role_description": "spesialis manajemen talenta organisasi, siklus evaluasi kinerja, kepatuhan ketenagakerjaan, dan alur kerja HR",
@@ -1204,7 +1191,6 @@
         "Materi ajar, lembar lab praktis, dan platform delivery telah disiapkan",
         "Kriteria kelulusan, rubrik penilaian, dan mekanisme survei feedback telah ditetapkan"
       ],
-      "tier": "team",
       "persona": {
         "title": "Instructional Designer & Corporate Learning Consultant",
         "role_description": "spesialis perancang kurikulum pelatihan vokasi/perusahaan, rubrik evaluasi kompetensi, dan modul pembelajaran terapan",
@@ -1292,7 +1278,6 @@
         "SOP tata letak gudang, threshold reorder point, dan stock opname telah ditetapkan",
         "Prosedur picking/packing/dispatch dan mekanisme eskalasi retur telah terdokumentasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "Supply Chain & Logistics Operations Consultant",
         "role_description": "konsultan logistik multi-titik, tata kelola pergudangan WMS, rotasi stok FIFO presisi, dan mitigasi risiko armada",
@@ -1380,7 +1365,6 @@
         "Peta pemangku kepentingan dan matriks akuntabilitas RACI telah ditetapkan",
         "Jadwal milestone fase kerja, alokasi anggaran biaya, dan rencana register risiko telah terdokumentasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "Event Director & Strategic Project Management Consultant",
         "role_description": "spesialis perencana acara skala besar, manajemen batas waktu kritis, mitigasi risiko lapangan, dan koordinasi multi-vendor",
@@ -1468,7 +1452,6 @@
         "User flow kanonikal, wireframe layar kritis, dan hierarki navigasi telah disetujui",
         "Protokol uji kegunaan (usability testing) dan checklist handoff aset developer telah terdokumentasi"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Lead Product Designer & Design Systems Specialist",
         "role_description": "desainer produk digital senior, arsitek fondasi design tokens, pedoman aksesibilitas, dan spesifikasi handoff developer",
@@ -1556,7 +1539,6 @@
         "Template scriptwriting adegan (Hook-Story-Offer) dan pedoman visual thumbnail telah disiapkan",
         "Kalender rilis mingguan dan matriks evaluasi metrik retensi/CTR video telah terdokumentasi"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Digital Creator & Media Production Strategist",
         "role_description": "spesialis perancang alur produksi konten video/audio, monetisasi audiens digital, dan jadwal publikasi terjaga",
@@ -1644,7 +1626,6 @@
         "Variasi teks ad copy, creative angle visual, dan landing page tujuan telah diselaraskan",
         "Tracking pixel konversi (CAPI/GA4) dan benchmark batas rugi (stop-loss budget) telah ditetapkan"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Performance Marketing & Paid Acquisition Specialist",
         "role_description": "spesialis alokasi anggaran iklan digital, pengujian materi kreatif A/B testing, dan optimasi efisiensi konversi ROAS/CPA",
@@ -1732,7 +1713,6 @@
         "Protokol literature review berbasis PRISMA dan matriks gap penelitian telah ditetapkan",
         "Rubrik penilaian autentik mahasiswa dan checklist kepatuhan etika akademik telah terdokumentasi"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Konsultan Riset Akademik & Tata Kelola Pendidikan Tinggi",
         "role_description": "spesialis metodologi riset ilmiah, kepatuhan sitasi akademik, integritas data penelitian, dan publikasi jurnal terakreditasi",
@@ -1820,7 +1800,6 @@
         "Materi edukasi pasien, leaflet discharge planning, dan SOP kerahasiaan data medis telah ditetapkan",
         "Checklist kepatuhan SATUSEHAT Kemenkes RI dan register penanganan insiden klinis telah terdokumentasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "Konsultan Administrasi Faskes & Kepatuhan Rekam Medis (RME)",
         "role_description": "konsultan tata kelola fasilitas kesehatan, kepatuhan integrasi SatuSehat Kemenkes, perlindungan data privasi medis UU PDP, dan SOP klinis",
@@ -1908,7 +1887,6 @@
         "Kurva S jadwal pelaksanaan, timeline milestone mingguan, dan matriks wewenang subkontraktor telah disetujui",
         "Prosedur inspeksi mutu bahan (QC), approval material, dan checklist Keselamatan Konstruksi (SMKK) telah terdokumentasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "Project Engineer & Construction Management Specialist",
         "role_description": "insinyur sipil senior pengawas proyek fisik, spesifikasi teknis material, keselamatan kerja K3 konstruksi, dan kontrak pemborongan",
@@ -1996,7 +1974,6 @@
         "Instruksi kerja standar (SOP) operasional mesin dan checklist harian inspeksi 5S telah disahkan",
         "Jadwal perawatan preventif berkala mesin produksi dan formulir investigasi nyaris celaka (near-miss) telah terdokumentasi"
       ],
-      "tier": "team",
       "persona": {
         "title": "Manufaktur, Keselamatan Kerja K3 (HSE) & Operasional Pabrik",
         "role_description": "spesialis manajemen lantai pabrik, sistem manajemen K3 ISO 45001 / SMK3, strategi pemeliharaan mesin TPM, dan efisiensi produksi",
@@ -2084,7 +2061,6 @@
         "SOP higienitas pembukaan/penutupan dapur (opening/closing kitchen checklist) telah disiapkan",
         "Prosedur pencatatan limbah bahan baku (waste sheet) dan batas minimum stok kulkas dingin telah terdokumentasi"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Konsultan Manajemen Restoran & Operasional Kuliner F&B",
         "role_description": "konsultan perancang SOP dapur komersial, kalkulasi Food Cost & COGS ketat, standardisasi resep baku, dan higienitas HACCP",
@@ -2172,7 +2148,6 @@
         "RAB kalkulasi biaya bibit, pupuk/pakan, dan estimasi hasil tonase panen telah dihitung",
         "SOP penanganan pasca-panen (sortir grading, pendinginan, pengemasan) dan jalur logistik offtaker telah terdokumentasi"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Konsultan Agribisnis & Pertanian Presisi",
         "role_description": "konsultan manajemen budidaya pertanian/peternakan terukur, jadwal nutrisi presisi, rantai dingin pasca-panen, dan kontrak offtaker",
@@ -2260,7 +2235,6 @@
         "Lembar kalkulasi penetapan harga jual (HPP + margin untung) dan register kas harian telah dibuat",
         "Jadwal promo bulanan dan checklist stok opname barang terlaris (fast-moving items) telah terdokumentasi"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Konsultan Manajemen Operasional UMKM & Ritel Modern",
         "role_description": "konsultan pendamping bisnis skala kecil-menengah, digitalisasi pencatatan kas harian, dan standarisasi layanan pelanggan",
@@ -2341,7 +2315,6 @@
         "Proses akuisisi dan konversi memiliki pemilik, aturan kualifikasi, dan tahap terukur",
         "Nilai recurring, sinyal retensi, dan KPI sustainability memiliki sumber bukti serta ritme review"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Founder / CEO / Advisor Pertumbuhan Bisnis",
         "role_description": "advisor manajemen yang membantu bisnis jasa mengambil keputusan positioning, penawaran, delivery, akuisisi, dan sustainability tanpa menganggap hipotesis sebagai hasil terbukti",

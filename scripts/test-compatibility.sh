@@ -9,6 +9,28 @@ fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 MODULES=(web-fullstack landing-page sales-outreach general-office mobile-app cli-automation content-marketing research-analysis web-starter it-infra-ops app-maintenance procurement-tender hr-people-ops education-training supply-chain-logistics event-project-mgmt ui-ux-design content-creator digital-advertising academic-education health-medical construction-civil manufacturing-hse culinary-fnb agribusiness-farming sme-business business-growth)
 ids() { awk '/^  "modules": \{/ {active=1;next} active && /^    "[^"]+": \{/ {s=$0;sub(/^    "/,"",s);sub(/".*$/,"",s);print s} active && /^  }/ {exit}' "$1" | LC_ALL=C sort; }
 block() { awk -v wanted="$2" '/^    "[^"]+": \{/ {s=$0;sub(/^    "/,"",s);sub(/".*$/,"",s);active=(s==wanted)} active {print} active && /^    }/ {exit}' "$1"; }
+block_has_top_level_tier() {
+  awk '
+    function brace_delta(line, i, ch, escaped, in_string, delta) {
+      escaped=0; in_string=0; delta=0
+      for (i=1; i<=length(line); i++) {
+        ch=substr(line,i,1)
+        if (in_string) {
+          if (escaped) escaped=0
+          else if (ch == "\\") escaped=1
+          else if (ch == "\"") in_string=0
+        } else if (ch == "\"") in_string=1
+        else if (ch == "{") delta++
+        else if (ch == "}") delta--
+      }
+      return delta
+    }
+    NR == 1 { depth=brace_delta($0); next }
+    depth == 1 && /^[[:space:]]*"tier"[[:space:]]*:/ { found=1; exit }
+    { depth+=brace_delta($0) }
+    END { exit(found ? 0 : 1) }
+  '
+}
 fingerprint() { (cd "$1"; find . -type f -print | LC_ALL=C sort | while IFS= read -r file; do cksum "$file"; done; find . -print | LC_ALL=C sort); }
 expected="$(printf '%s\n' "${MODULES[@]}" | LC_ALL=C sort)"
 printf 'OS: '; uname -a
@@ -42,9 +64,10 @@ for lang in en id; do
   diff -r "$ROOT/template/$lang" "$RUNTIME/template/$lang" >/dev/null || fail "$lang runtime template drift"
   for module in "${MODULES[@]}"; do
     metadata="$(block "$manifest" "$module")"
-    for field in name category description directory variables readiness_checks tier persona interview_phases domain_guardrails; do
+    for field in name category description directory variables readiness_checks persona interview_phases domain_guardrails; do
       [[ "$metadata" == *"\"$field\":"* ]] || fail "$lang/$module missing metadata: $field"
     done
+    ! block_has_top_level_tier <<<"$metadata" || fail "$lang/$module contains commercial tier metadata"
     init_target="$WORK/$lang/$module/init target"
     bundle_target="$WORK/$lang/$module/bundle target"
     bash "$RUNTIME/scripts/init.sh" --lang "$lang" --module "$module" --name 'Compatibility Fixture' --target "$init_target" >/dev/null

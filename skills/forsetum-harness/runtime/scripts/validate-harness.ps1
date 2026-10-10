@@ -242,13 +242,18 @@ function Test-ManifestModule {
     }
 
     $entry = $entryProperty.Value
-    $required = @('category', 'tier', 'variables', 'persona', 'interview_phases', 'domain_guardrails', 'readiness_checks', 'directory')
+    $required = @('category', 'variables', 'persona', 'interview_phases', 'domain_guardrails', 'readiness_checks', 'directory')
     $ok = $true
     foreach ($field in $required) {
         if ($null -eq $entry.PSObject.Properties[$field]) {
             Write-Host "  [FAIL] Module $ModuleId is missing manifest field: $field" -ForegroundColor Red
             $ok = $false
         }
+    }
+
+    if ($null -ne $entry.PSObject.Properties['tier']) {
+        Write-Host "  [FAIL] Module $ModuleId contains unsupported commercial tier metadata" -ForegroundColor Red
+        $ok = $false
     }
 
     foreach ($field in @('variables', 'interview_phases', 'domain_guardrails', 'readiness_checks')) {

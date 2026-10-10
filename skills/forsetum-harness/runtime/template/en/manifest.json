@@ -54,7 +54,6 @@
         "User profile page and hybrid account management (Credentials vs OAuth SSO) are defined",
         "Deployment targets and environment configurations verified"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Fullstack & Cloud Software Solutions Architect",
         "role_description": "senior consultant architecting fullstack web systems, microservices, relational databases, and repository coding agent governance",
@@ -163,7 +162,6 @@
         "Section wireframe hierarchy and mobile responsiveness defined",
         "Publishing host and analytics tracking confirmed"
       ],
-      "tier": "free",
       "persona": {
         "title": "Conversion Rate Optimization (CRO) & Growth Web Specialist",
         "role_description": "lead growth strategist and conversion specialist optimizing landing page messaging, conversion funnels, and high-performance lead acquisition",
@@ -246,7 +244,6 @@
         "Pitch messaging templates and objection scripts reviewed",
         "Discount approval boundaries and follow-up cadence established"
       ],
-      "tier": "individual",
       "persona": {
         "title": "B2B Sales Outreach & Pipeline Acceleration Strategist",
         "role_description": "senior revenue operations consultant orchestrating cold outreach cadences, ICP qualification, deliverability safeguards, and CRM synchronization",
@@ -333,7 +330,6 @@
         "Resource access and data inputs verified",
         "Deliverable formats and review milestones confirmed"
       ],
-      "tier": "free",
       "persona": {
         "title": "Corporate Administration & Office Operations Director",
         "role_description": "senior executive administrator streamlining corporate documentation, SOP compliance, operational approval workflows, and record retention",
@@ -424,7 +420,6 @@
         "Hardware permissions and privacy manifests documented",
         "App Store and Google Play compliance and signing keys configured"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Lead Mobile App Architect & Platform Engineer",
         "role_description": "senior mobile solutions architect guiding cross-platform and native app development, offline state persistence, API synchronization, and store compliance",
@@ -513,7 +508,6 @@
         "Process signal handling and daemon lifecycle established",
         "Batch retry logic and failure quarantine procedures documented"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Systems Automation & CLI Tooling Engineer",
         "role_description": "senior DevOps tooling engineer crafting robust terminal applications, automated scripts, idempotent workflows, and shell integration",
@@ -601,7 +595,6 @@
         "SEO keyword clusters and search intent mapped",
         "Brand tone of voice guidelines and review checklist approved"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Content Marketing Strategist & Editorial Director",
         "role_description": "senior editorial director developing multi-channel editorial calendars, SEO content clusters, brand storytelling, and audience retention",
@@ -689,7 +682,6 @@
         "Primary data sources and citation standards defined",
         "Executive decision memo format and risk trade-off criteria established"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Lead Research Analyst & Market Intelligence Strategist",
         "role_description": "senior market research director formulating research methodologies, primary and secondary data synthesis, and actionable strategic insights",
@@ -765,7 +757,6 @@
         "Framework, component architecture, and styling approach confirmed",
         "Data persistence and basic testing criteria established"
       ],
-      "tier": "free",
       "persona": {
         "title": "Web Developer & Rapid Prototyping Specialist",
         "role_description": "front-end engineer crafting lightweight, high-performance web applications with clean semantic HTML, modern styling, and zero build bloat",
@@ -852,7 +843,6 @@
         "Routine maintenance SOP and critical incident runbooks approved",
         "Backup cadence and rollback mitigation procedures verified"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Cloud Infrastructure Architect & SRE Lead",
         "role_description": "senior site reliability engineer managing cloud infrastructure as code (IaC), container orchestration, zero-downtime CI/CD, and disaster recovery",
@@ -940,7 +930,6 @@
         "Bug reproduction SOP, impact assessment, and non-regression checklist established",
         "Custom module isolation and upstream compatibility strategy confirmed"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Application Maintenance & Reliability Specialist",
         "role_description": "senior maintenance engineer diagnosing legacy codebases, dependency vulnerability lifecycles, bug regression triage, and refactoring",
@@ -1022,7 +1011,6 @@
         "Vendor qualification requirements and mandatory bid documents have been established",
         "Evaluation workflow, technical-price scoring weights, and clarification mechanisms have been confirmed"
       ],
-      "tier": "team",
       "persona": {
         "title": "Senior Procurement Specialist & Public Tender Officer",
         "role_description": "senior procurement officer navigating public and corporate bidding, Owner's Estimates (HPS/OE), vendor evaluations, and audit compliance",
@@ -1111,7 +1099,6 @@
         "Competency matrix and periodic performance evaluation templates have been established",
         "New hire onboarding SOP and offboarding knowledge transfer checklists have been documented"
       ],
-      "tier": "team",
       "persona": {
         "title": "Human Resources Director & People Operations Consultant",
         "role_description": "senior People Operations executive formulating talent acquisition frameworks, performance appraisal rubrics, employee relations, and labor law compliance",
@@ -1199,7 +1186,6 @@
         "Instructional materials, practical lab manuals, and delivery platforms have been prepared",
         "Graduation thresholds, evaluation rubrics, and feedback survey mechanisms have been established"
       ],
-      "tier": "team",
       "persona": {
         "title": "Curriculum Designer & Corporate Instructional Architect",
         "role_description": "lead instructional designer crafting competency-based training programs, adult learning pedagogies (ANDRAGOGY), and workforce skill assessments",
@@ -1287,7 +1273,6 @@
         "Warehouse zoning layout, reorder point thresholds, and stock audit SOPs have been established",
         "Picking/packing/dispatch procedures and reverse logistics return handling have been documented"
       ],
-      "tier": "team",
       "persona": {
         "title": "Supply Chain Solutions Director & Logistics Operations Consultant",
         "role_description": "senior supply chain architect optimizing inventory turnover, warehouse logistics (WMS), route delivery economics, and freight forwarding",
@@ -1375,7 +1360,6 @@
         "Stakeholder mapping and RACI responsibility matrix have been established",
         "Phased milestone schedule, financial budget plan, and risk register have been documented"
       ],
-      "tier": "team",
       "persona": {
         "title": "Executive Event Producer & Senior Project Director",
         "role_description": "senior project director coordinating large-scale corporate events, festivals, critical-path project milestones, and crisis management",
@@ -1463,7 +1447,6 @@
         "Canonical user flows, critical wireframe screens, and navigation hierarchy approved",
         "Usability testing protocol and developer asset handoff checklist documented"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Lead Product Designer & Design Systems Architect",
         "role_description": "principal UI/UX strategist establishing scalable design token systems, user journey wireframing, WCAG accessibility, and design tokens",
@@ -1551,7 +1534,6 @@
         "Scene scriptwriting templates (Hook-Story-Offer) and thumbnail guidelines prepared",
         "Weekly release calendar and video retention/CTR metrics matrix documented"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Digital Content Producer & Creator Studio Strategist",
         "role_description": "senior creative director producing short-form video hooks, multi-platform creator programming, YouTube storytelling, and sponsor brand deals",
@@ -1639,7 +1621,6 @@
         "Ad copy text variants, creative visual angles, and destination landing pages aligned",
         "Conversion tracking pixel (CAPI/GA4) and stop-loss budget benchmarks configured"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Performance Marketing Director & Paid Media Strategist",
         "role_description": "senior paid acquisition specialist managing Meta/Google ad budgets, ROAS optimization, audience retargeting, and server-side conversion APIs",
@@ -1727,7 +1708,6 @@
         "PRISMA-based literature review protocol and research gap matrix established",
         "Student authentic assessment rubrics and academic research ethics checklist documented"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Academic Dean & Higher Education Curriculum Director",
         "role_description": "senior academic administrator structuring university curricula, academic accreditation standards, faculty peer reviews, and syllabus design",
@@ -1815,7 +1795,6 @@
         "Patient education sheets, discharge planning leaflets, and medical data confidentiality SOP established",
         "National Health Interoperability checklist and clinical incident reporting register documented"
       ],
-      "tier": "team",
       "persona": {
         "title": "Clinical Informatics Specialist & Healthcare Operations Director",
         "role_description": "senior healthcare IT consultant navigating hospital management systems (SIMRS), SatuSehat/FHIR interoperability, clinical governance, and patient data privacy",
@@ -1903,7 +1882,6 @@
         "S-Curve execution schedule, weekly milestone timeline, and subcontractor authority matrix approved",
         "Material quality inspection procedures (QC), submittal approvals, and Construction Safety Management (SMKK) documented"
       ],
-      "tier": "team",
       "persona": {
         "title": "Civil Project Director & Structural Engineering Consultant",
         "role_description": "senior civil engineer overseeing infrastructure construction, structural load calculations, FIDIC contracts, bill of quantities (BOQ), and site safety",
@@ -1991,7 +1969,6 @@
         "Standard Operating Procedures (SOP) for machinery operations and daily 5S inspection checklists validated",
         "Periodic preventive maintenance schedules and near-miss incident investigation protocols documented"
       ],
-      "tier": "team",
       "persona": {
         "title": "Plant General Manager & Industrial HSE Director",
         "role_description": "senior plant director managing factory operations, Total Productive Maintenance (TPM), ISO 45001 / SMK3 occupational safety, and zero-accident manufacturing",
@@ -2079,7 +2056,6 @@
         "Kitchen opening/closing hygiene checklists and food sanitation standards prepared",
         "Daily raw ingredient waste tracking logs and cold storage minimum thresholds documented"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Executive Chef & Food & Beverage Operations Director",
         "role_description": "senior culinary operations consultant managing restaurant cost of goods sold (COGS 28-32%), HACCP kitchen sanitation, recipe grammage standardization, and Halal assurance",
@@ -2167,7 +2143,6 @@
         "Cost budgeting for seedlings, fertilizer/feed, and yield tonnage projections completed",
         "Post-harvest handling SOPs (grading, cold chain cooling, packaging) and offtaker logistics routes documented"
       ],
-      "tier": "individual",
       "persona": {
         "title": "Principal Agronomist & Agricultural Operations Consultant",
         "role_description": "senior agricultural consultant optimizing farm crop yields, precision drip irrigation, Good Agricultural Practices (GAP/GlobalGAP), and post-harvest cold chains",
@@ -2255,7 +2230,6 @@
         "Selling price calculator sheets (COGS + target profit margin) and daily cash register logs established",
         "Monthly promotional calendar and fast-moving inventory stock count checklists documented"
       ],
-      "tier": "individual",
       "persona": {
         "title": "SME Business Growth Consultant & Commercial Advisor",
         "role_description": "senior business advisory consultant guiding small-and-medium enterprise (SME) unit economics, working capital cashflow, omnichannel point-of-sale, and tax compliance",
@@ -2336,7 +2310,6 @@
         "Acquisition and conversion process has owners, qualification rules, and measurable stages",
         "Recurring value, retention signals, and sustainability KPIs have evidence sources and review cadence"
       ],
-      "tier": "pro",
       "persona": {
         "title": "Founder / CEO / Business Growth Advisor",
         "role_description": "management advisor helping service businesses make positioning, offer, delivery, acquisition, and sustainability decisions without treating hypotheses as proven results",

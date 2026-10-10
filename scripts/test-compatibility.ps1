@@ -114,9 +114,10 @@ param(
         Assert (($directories -join ',') -eq (($modules | Sort-Object) -join ',')) "$lang approved 27 module directory inventory"
         foreach ($module in $modules) {
             $metadata = $manifest.modules.$module
-            foreach ($field in @('name','category','description','directory','variables','readiness_checks','tier','persona','interview_phases','domain_guardrails')) {
+            foreach ($field in @('name','category','description','directory','variables','readiness_checks','persona','interview_phases','domain_guardrails')) {
                 Assert ($metadata.PSObject.Properties.Name -contains $field) "$lang/$module missing metadata: $field"
             }
+            Assert ($metadata.PSObject.Properties.Name -notcontains 'tier') "$lang/$module contains commercial tier metadata"
             $initTarget = Join-Path $work "$lang/$module/init target"
             $bundleTarget = Join-Path $work "$lang/$module/bundle target"
             $global:LASTEXITCODE = 0
