@@ -37,7 +37,7 @@ Evaluasi secara objektif alternatif keputusan yang saling bersaing:
 | Identifikasi Risiko | Tingkat Keparahan | Probabilitas | Strategi Mitigasi Terencana | Penanggung Jawab |
 | :--- | :---: | :---: | :--- | :--- |
 | **Rendahnya adopsi tim pada framework baru** | Tinggi | Sedang | Sediakan CLI scaffolding instan (`init.sh`) dan video panduan ringkas. | Lead Maintainer |
-| **Perbedaan makna antara dokumen bilingual** | Sedang | Rendah | Jalankan validasi paritas otomatis (`validate-template.sh`) di CI. | Tim QA / Tooling |
+| **Perbedaan makna antara dokumen bilingual** | Sedang | Rendah | Jalankan validasi paritas otomatis (`validate-harness.sh`) di CI. | Tim QA / Tooling |
 | **Beban pemeliharaan dokumen yang membengkak** | Sedang | Rendah | Bagikan berkas `core/` universal ke seluruh modul tanpa duplikasi. | Tim Arsitektur |
 
 ---

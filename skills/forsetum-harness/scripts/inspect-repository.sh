@@ -91,7 +91,7 @@ printf 'LANGUAGE=%s\n' "${LANG_VAL}"
 printf 'MODULE=%s\n' "${MODULE_ID}"
 printf 'MANIFEST=%s\n' "${MANIFEST}"
 printf 'INITIALIZER=init.%s\n' "$([[ "${OSTYPE:-}" == msys* || "${OSTYPE:-}" == cygwin* ]] && printf 'ps1' || printf 'sh')"
-printf 'VALIDATOR=validate-template.%s\n' "$([[ "${OSTYPE:-}" == msys* || "${OSTYPE:-}" == cygwin* ]] && printf 'ps1' || printf 'sh')"
+printf 'VALIDATOR=validate-harness.%s\n' "$([[ "${OSTYPE:-}" == msys* || "${OSTYPE:-}" == cygwin* ]] && printf 'ps1' || printf 'sh')"
 
 conflict_count=0
 PREVIEW_BACKUP_ROOT='.forsetum-backups/forsetum-harness-preview'
@@ -122,7 +122,7 @@ preview_fingerprint() {
   {
     printf 'target=%s\nlang=%s\nmodule=%s\n' "$TARGET_DIR" "$LANG_VAL" "$MODULE_ID"
     for governance_path in AGENTS.md README.md backlog.md mission.md governance.md docs/; do
-      if [[ -e "${TARGET_DIR}/${governance_path}" ]]; then
+      if [[ -e "${TARGET_DIR}/${governance_path}" || -L "${TARGET_DIR}/${governance_path}" ]]; then
         printf 'path=%s\n' "$governance_path"
         path_snapshot "${TARGET_DIR}/${governance_path%/}"
       else
@@ -140,7 +140,7 @@ printf 'PREVIEW_FINGERPRINT=%s\n' "$(preview_fingerprint)"
 
 report_governance_path() {
   local relative_path="$1"
-  if [[ -e "${TARGET_DIR}/${relative_path}" ]]; then
+  if [[ -e "${TARGET_DIR}/${relative_path}" || -L "${TARGET_DIR}/${relative_path}" ]]; then
     printf 'CONFLICT=%s\n' "${relative_path}"
     printf 'PREVIEW_PATH=%s\n' "${relative_path}"
     printf 'PATH=%s\n' "${relative_path}"

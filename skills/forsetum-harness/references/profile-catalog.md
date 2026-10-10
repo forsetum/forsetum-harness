@@ -19,6 +19,22 @@ signals for the adoption conversation.
 | `web-starter` | `tech` | A lightweight MVP, prototype, or beginner web project |
 | `it-infra-ops` | `operations` | On-premises infrastructure maintenance or incident runbooks |
 | `app-maintenance` | `tech` | Existing-system bug fixing or isolated brownfield extensions |
+| `procurement-tender` | `governance` | Structured harness for tender governance, technical specifications, bid proposals & BOQ, vendor evaluation, contracts, and handover certificates. |
+| `hr-people-ops` | `operations` | Structured harness for end-to-end employee lifecycle management spanning recruitment, onboarding, performance reviews, and offboarding. |
+| `education-training` | `operations` | Structured harness for curriculum design, modular syllabus authoring, training session delivery, and participant learning assessment. |
+| `supply-chain-logistics` | `operations` | Operational harness for supply chain workflows, warehouse inventory control, freight dispatch, and return merchandise handling. |
+| `event-project-mgmt` | `operations` | Structured harness for planning and executing non-technical corporate projects or events with stakeholder mapping, timelines, budgets, and risk mitigation. |
+| `ui-ux-design` | `tech` | Transform concept briefs into standard design tokens, responsive wireframe hierarchies, user research protocols, and seamless developer handoff specs. |
+| `content-creator` | `growth` | Viral content engine: structured video scriptwriting, 3-second hook formulas, scene storyboards, multi-channel editorial calendars, and audience retention playbooks. |
+| `digital-advertising` | `growth` | High-conversion advertising architecture: compelling ad copy formulas, competitor angle research, Meta/Google ad set structuring, and target ROAS modeling. |
+| `academic-education` | `operations` | Scholarly research and teaching framework: course syllabus (RPS) drafting, structured literature reviews, academic rubrics, and research ethics protocols. |
+| `health-medical` | `governance` | Healthcare compliance & clinical operations: Electronic Medical Records (EMR) documentation standards, patient education sheets, clinic QA, and health data privacy safeguards. |
+| `construction-civil` | `operations` | Civil project execution control: technical specifications (RKS), Bill of Quantities (BoQ), subcontractor management, S-Curve scheduling, and construction HSE inspections. |
+| `manufacturing-hse` | `governance` | Zero accident & plant efficiency harness: Job Safety Analysis (JSA), HSE hazard mitigation, 5S audit checklists, OEE tracking, and preventive maintenance routines. |
+| `culinary-fnb` | `operations` | Kitchen profitability & taste consistency: Food Cost and COGS calculation, standardized batch recipe sheets, HACCP kitchen hygiene SOPs, and daily waste control. |
+| `agribusiness-farming` | `operations` | Precision crop and harvest management: irrigation & fertilizer schedules, feed formulation for livestock, unit crop cost accounting, and cold-chain post-harvest storage. |
+| `sme-business` | `growth` | Small business & retail accelerator: customer fast-reply chat playbooks, COGS margin pricing calculators, daily cash register logs, and recurring promo broadcast campaigns. |
+| `business-growth` | `growth` | Founder-level management harness for positioning, productized services, repeatable acquisition, recurring value, retention, capacity, and growth measurement. |
 
 ## Selection Rules
 

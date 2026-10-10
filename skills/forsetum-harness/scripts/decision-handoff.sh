@@ -167,7 +167,7 @@ calculate_preview_fingerprint() {
   {
     printf 'target=%s\nlang=%s\nmodule=%s\n' "$(cd -- "$TARGET" && pwd -P)" "$LANG_VAL" "$MODULE_ID"
     for governance_path in AGENTS.md README.md backlog.md mission.md governance.md docs/; do
-      if [[ -e "$TARGET/${governance_path}" ]]; then
+      if [[ -e "$TARGET/${governance_path}" || -L "$TARGET/${governance_path}" ]]; then
         printf 'path=%s\n' "$governance_path"
         path_snapshot "$TARGET/${governance_path%/}"
       else
@@ -201,10 +201,12 @@ esac
 declare -A actual_conflicts=() approved_decisions=() backup_map=() rollback_map=() source_snapshot=()
 declare -A backup_destinations=()
 declare -a actual_paths=()
-if [[ -e "$TARGET/AGENTS.md" || -L "$TARGET/AGENTS.md" ]]; then
-  actual_conflicts['AGENTS.md']=1
-  actual_paths+=(AGENTS.md)
-fi
+for governance_path in AGENTS.md README.md backlog.md mission.md governance.md; do
+  if [[ -e "$TARGET/$governance_path" || -L "$TARGET/$governance_path" ]]; then
+    actual_conflicts["$governance_path"]=1
+    actual_paths+=("$governance_path")
+  fi
+done
 if [[ -d "$TARGET/docs" ]]; then
   actual_conflicts['docs/']=1
   actual_paths+=(docs/)

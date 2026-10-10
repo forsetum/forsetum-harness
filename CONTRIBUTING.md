@@ -12,7 +12,7 @@ This is the source for the future public contribution guide.
 - Update both manifests and the relevant variable registries for template
   changes.
 - Update public documentation when public behavior or terminology changes.
-- Run `./scripts/validate-template.sh --all` before submitting a change.
+- Run `./scripts/validate-harness.sh --all` before submitting a change.
 
 Prefer focused changes, clear documentation, and evidence from supported
 platforms. Never include secrets or private project context.

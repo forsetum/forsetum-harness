@@ -36,10 +36,10 @@ Jalankan skrip validator proyek untuk memverifikasi integritas dokumentasi, regi
 
 **POSIX Shell (Linux / macOS / Git Bash):**
 ```bash
-./scripts/validate-template.sh
+./scripts/validate-harness.sh
 ```
 
 **Windows PowerShell:**
 ```powershell
-powershell -File .\scripts\validate-template.ps1
+powershell -File .\scripts\validate-harness.ps1
 ```

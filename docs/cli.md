@@ -35,18 +35,18 @@ Combines core and one module into a directory or ZIP:
 Use `--dir`/`-Dir` instead of `--output`/`-Output` for an uncompressed
 directory. The module is required and exactly one output form is required.
 
-## validate-template
+## validate-harness
 
 Validates template files, manifests, links, and placeholder registration:
 
 ```bash
-./scripts/validate-template.sh --all
-./scripts/validate-template.sh --template en
+./scripts/validate-harness.sh --all
+./scripts/validate-harness.sh --template en
 ```
 
 ```powershell
-powershell -File .\scripts\validate-template.ps1 -All
-powershell -File .\scripts\validate-template.ps1 -Template en
+powershell -File .\scripts\validate-harness.ps1 -All
+powershell -File .\scripts\validate-harness.ps1 -Template en
 ```
 
 Validation exits non-zero on an error.

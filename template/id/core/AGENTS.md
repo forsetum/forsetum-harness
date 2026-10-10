@@ -47,7 +47,7 @@ Agen WAJIB berhenti dan meminta konfirmasi manusia apabila:
 - Seluruh hasil deliverable (kode, konfigurasi, naskah copywriting, skrip, laporan) wajib diverifikasi menggunakan perintah lokal sebelum melaporkan penyelesaian.
 - Jika terdapat test suite atau alat validator, jalankan:
   ```bash
-  ./scripts/validate-template.sh
+  ./scripts/validate-harness.sh
   ```
   atau perintah pengujian spesifik proyek.
 - Jangan pernah mengklaim berhasil tanpa menyertakan bukti keluaran eksekusi terminal.

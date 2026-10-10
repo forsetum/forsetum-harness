@@ -159,6 +159,8 @@ if (Test-Path $coreDir) {
     if (-not (Test-Path $targetScriptsDir)) {
         New-Item -ItemType Directory -Path $targetScriptsDir -Force | Out-Null
     }
+    Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-harness.sh") -Destination (Join-Path $targetScriptsDir "validate-harness.sh") -Force
+    Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-harness.ps1") -Destination (Join-Path $targetScriptsDir "validate-harness.ps1") -Force
     Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-template.sh") -Destination (Join-Path $targetScriptsDir "validate-template.sh") -Force
     Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-template.ps1") -Destination (Join-Path $targetScriptsDir "validate-template.ps1") -Force
 
@@ -185,11 +187,11 @@ if ($Lang -eq 'id') {
     Write-Host "Langkah Selanjutnya (Next Steps):" -ForegroundColor Yellow
     Write-Host "  1. Buka dan pelajari AGENTS.md dan README.md di direktori proyek."
     Write-Host "  2. Jalankan validasi struktur template:"
-    Write-Host "     .\scripts\validate-template.ps1"
+    Write-Host "     .\scripts\validate-harness.ps1"
     Write-Host "  3. Mulai fase Instantiation and Discovery bersama Agen AI:
      - Lengkapi docs/08-reference/template-variables.md
      - Catat keputusan arsitektur di docs/08-reference/decision-register.md
-     - Jalankan .\scripts\validate-template.ps1 secara berkala untuk memantau kesiapan."
+     - Jalankan .\scripts\validate-harness.ps1 secara berkala untuk memantau kesiapan."
     Write-Host "==================================================" -ForegroundColor Green
 } else {
     Write-Host "==================================================" -ForegroundColor Green
@@ -202,10 +204,10 @@ if ($Lang -eq 'id') {
     Write-Host "Next Steps:" -ForegroundColor Yellow
     Write-Host "  1. Review AGENTS.md and README.md in your project directory."
     Write-Host "  2. Run the template harness validation:"
-    Write-Host "     .\scripts\validate-template.ps1"
+    Write-Host "     .\scripts\validate-harness.ps1"
     Write-Host "  3. Begin the Instantiation and Discovery phase with your AI agent:
      - Define project requirements and fill out docs/08-reference/template-variables.md
      - Record architectural decisions in docs/08-reference/decision-register.md
-     - Run .\scripts\validate-template.ps1 regularly to track implementation readiness."
+     - Run .\scripts\validate-harness.ps1 regularly to track implementation readiness."
     Write-Host "==================================================" -ForegroundColor Green
 }

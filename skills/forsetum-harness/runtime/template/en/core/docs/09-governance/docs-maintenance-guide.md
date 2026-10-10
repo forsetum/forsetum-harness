@@ -19,4 +19,4 @@ Whenever work impacts architecture, conventions, or project variables, the follo
 
 - All relative links must resolve to existing files.
 - Avoid broken anchor tags or missing references.
-- Always run `./scripts/validate-template.sh` before finalizing changes.
+- Always run `./scripts/validate-harness.sh` before finalizing changes.

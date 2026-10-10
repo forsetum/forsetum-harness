@@ -110,6 +110,8 @@ try {
     if (-not (Test-Path $stagingScripts)) {
         New-Item -ItemType Directory -Path $stagingScripts -Force | Out-Null
     }
+    Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-harness.sh") -Destination (Join-Path $stagingScripts "validate-harness.sh") -Force
+    Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-harness.ps1") -Destination (Join-Path $stagingScripts "validate-harness.ps1") -Force
     Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-template.sh") -Destination (Join-Path $stagingScripts "validate-template.sh") -Force
     Copy-Item -Path (Join-Path $RepoRoot "scripts\validate-template.ps1") -Destination (Join-Path $stagingScripts "validate-template.ps1") -Force
 
