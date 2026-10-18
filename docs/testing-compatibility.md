@@ -62,6 +62,11 @@ fresh build and rejects drift. Do not author the runtime independently.
 
 ## Test coverage
 
+`scripts/test-product.sh` also runs the isolated one-way repository synchronization
+fixtures on Linux, macOS Bash and Windows Git Bash. Run them directly with
+`bash scripts/tests/test-repository-sync.sh`; they do not contact product remotes.
+This developer-only suite does not regenerate runtime assets.
+
 `scripts/test-product.sh` runs template validation, package path safety,
 inspector and handoff fixtures, contract and adapter checks, catalog mutation
 fixtures, business-growth assembly, installed runtime behavior, and the

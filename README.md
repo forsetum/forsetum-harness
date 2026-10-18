@@ -8,6 +8,16 @@ implementation and tooling: it gives repository-aware AI agents the context,
 decisions, constraints, readiness gates, and verification workflow they need
 before they change a project.
 
+## Source and Contribution Ownership
+
+GitLab `iddevops-lab/forsetum-harness` is the canonical product source. GitHub
+`forsetum/forsetum-harness` is the public distribution and contribution entry
+point. Maintainers review imported GitHub changes in GitLab before synchronizing
+the approved canonical SHA downstream. Canonical-source cutover is pending
+review of the exact candidate and successful evidence from all five GitHub CI
+environments. See the [repository runbook](docs/repository-sync.md),
+[contribution guide](CONTRIBUTING.md) and [public decisions](docs/decisions.md).
+
 ## Quick Start
 
 ### Install as an Agent Skill
@@ -136,6 +146,12 @@ The equivalent Windows command is:
 ```powershell
 powershell -File .\scripts\validate-harness.ps1 -All
 ```
+
+For complete source and package checks, run `bash scripts/test-product.sh` or
+`./scripts/test-product.ps1` in native PowerShell. Build an installable skill to
+a new destination with `bash scripts/build-skill.sh --output /tmp/forsetum-skill`
+or `./scripts/build-skill.ps1 -Output C:\temp\forsetum-skill`.
+See [testing compatibility](docs/testing-compatibility.md) for prerequisites.
 
 ## Forsetum Uses Forsetum
 

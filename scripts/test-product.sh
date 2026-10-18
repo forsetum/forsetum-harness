@@ -7,5 +7,6 @@ for test in test-build-skill test-bundle-stitching test-inspect-repository test-
   printf '==> %s\n' "$test"
   bash "$ROOT/skills/forsetum-harness/tests/$test.sh"
 done
+bash "$ROOT/scripts/tests/test-repository-sync.sh"
 bash "$ROOT/scripts/test-compatibility.sh"
 printf 'PASS: standalone product suite\n'

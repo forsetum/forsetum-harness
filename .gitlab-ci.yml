@@ -1,0 +1,43 @@
+# Requires a maintained Linux shell runner with Bash 4+, Git and native utilities.
+# Repository credentials, branch protection and runner isolation are maintainer setup.
+stages:
+  - validate
+  - synchronize
+
+variables:
+  GIT_DEPTH: "0"
+  GIT_SUBMODULE_STRATEGY: none
+
+product-validation:
+  stage: validate
+  script:
+    - bash --version
+    - git --version
+    - git rev-parse HEAD
+    - bash scripts/test-product.sh
+    - git diff --check
+
+sync-github-main:
+  stage: synchronize
+  needs: [product-validation]
+  resource_group: github-product-main
+  interruptible: false
+  allow_failure: false
+  rules:
+    - if: '$CI_SERVER_HOST == "gitlab.com" && $CI_PROJECT_PATH == "iddevops-lab/forsetum-harness" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "web" && $SYNC_ENABLE == "true" && $SYNC_APPROVED_SHA && $SYNC_EXPECTED_DESTINATION'
+      when: manual
+    - when: never
+  script:
+    - |
+      set -eu
+      test "$CI_COMMIT_SHA" = "$SYNC_APPROVED_SHA"
+      test -n "${SYNC_SSH_PRIVATE_KEY:-}"
+      test -n "${SYNC_KNOWN_HOSTS:-}"
+      test -s "$SYNC_SSH_PRIVATE_KEY"
+      test -s "$SYNC_KNOWN_HOSTS"
+      chmod 600 "$SYNC_SSH_PRIVATE_KEY"
+      # Protected file variables, supplied and fingerprint-verified by a maintainer.
+      # Do not discover/trust host keys dynamically in CI.
+      export GIT_SSH_COMMAND='ssh -F /dev/null -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o IdentityAgent=none -i "$SYNC_SSH_PRIVATE_KEY" -o UserKnownHostsFile="$SYNC_KNOWN_HOSTS"'
+      bash scripts/sync-product.sh --ref refs/heads/main --approved-sha "$SYNC_APPROVED_SHA" --expected-destination "$SYNC_EXPECTED_DESTINATION"
+      bash scripts/sync-product.sh --ref refs/heads/main --approved-sha "$SYNC_APPROVED_SHA" --expected-destination "$SYNC_EXPECTED_DESTINATION" --apply
