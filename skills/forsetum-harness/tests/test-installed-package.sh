@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd -- "${SCRIPT_DIR}/../../.." && pwd)"
 BUILDER="${ROOT_DIR}/scripts/build-skill.sh"
 TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/forsetum-installed-package.XXXXXX")"
+TMP_DIR="$(cd -- "$TMP_DIR" && pwd -P)"
 INSTALLED_SKILL="${TMP_DIR}/installed skill"
 trap 'rm -rf -- "$TMP_DIR"' EXIT
 
