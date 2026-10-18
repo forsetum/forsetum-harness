@@ -36,18 +36,10 @@ expected="$(printf '%s\n' "${MODULES[@]}" | LC_ALL=C sort)"
 printf 'OS: '; uname -a
 printf 'Bash: %s\nRoot: %s\n' "$BASH_VERSION" "$ROOT"
 INSTALLED="$WORK/installed skill"
-mkdir -p "$INSTALLED"
-cp -R "$ROOT/skills/forsetum-harness/." "$INSTALLED/"
-if [[ ! -d "$INSTALLED/runtime" ]]; then
-  # Canonical checkout: materialize the same self-contained installation layout.
-  [[ -f "$ROOT/scripts/export-public.sh" ]] || fail 'public package is missing installed runtime'
-  mkdir -p "$INSTALLED/runtime/scripts"
-  cp -R "$ROOT/template" "$INSTALLED/runtime/template"
-  for name in init bundle validate-harness validate-template; do
-    cp "$ROOT/scripts/$name.sh" "$ROOT/scripts/$name.ps1" "$INSTALLED/runtime/scripts/"
-  done
-fi
+bash "$ROOT/scripts/build-skill.sh" --output "$INSTALLED"
+
 RUNTIME="$INSTALLED/runtime"
+diff -r "$ROOT/skills/forsetum-harness/runtime" "$RUNTIME" >/dev/null || fail 'tracked runtime drift; regenerate with build-skill.sh'
 for name in init bundle validate-harness validate-template; do
   for extension in sh ps1; do
     cmp -s "$ROOT/scripts/$name.$extension" "$RUNTIME/scripts/$name.$extension" || fail "runtime script drift: $name.$extension"
@@ -78,7 +70,36 @@ for lang in en id; do
       while IFS= read -r source; do
         relative="${source#"$ROOT/template/$lang/modules/$module/"}"
         [[ -f "$target/$relative" ]] || fail "$lang/$module overlay missing: $relative"
+        if [[ "$relative" == docs/*.md ]]; then
+          doc="${relative#docs/}"
+          case "$doc" in
+            INDEX.md|08-reference/template-variables.md|09-governance/implementation-readiness.md)
+              # Legacy module copies are intentionally replaced by core stitching targets.
+              grep -Fq -- "$doc" "$target/docs/INDEX.md" || fail "$lang/$module core index omitted protected document: $doc"
+              ;;
+            *)
+              index="$(sed -n '/<!-- MODULE_DOCS_START -->/,/<!-- MODULE_DOCS_END -->/p' "$target/docs/INDEX.md")"
+              [[ "$index" == *"($doc)"* ]] || fail "$lang/$module stitched index omitted module document: $doc"
+              ;;
+          esac
+        fi
       done < <(find "$ROOT/template/$lang/modules/$module" -type f -print)
+    done
+    for target in "$init_target" "$bundle_target"; do
+      while IFS= read -r key; do
+        grep -Fq -- "{{${key}}}" "$target/docs/08-reference/template-variables.md" || fail "$lang/$module stitched registry omitted $key"
+      done < <(printf '%s\n' "$metadata" | sed -n 's/^[[:space:]]*"key": "\([^"]*\)".*/\1/p')
+      for field in readiness_checks domain_guardrails; do
+        checks="$(printf '%s\n' "$metadata" | awk -v field="$field" '
+          $0 ~ "^      \"" field "\": \\[" { active=1; next }
+          active && /^      \]/ { exit }
+          active { sub(/^[[:space:]]*"/, ""); sub(/",?[[:space:]]*$/, ""); print }
+        ')"
+        [[ -n "$checks" ]] || fail "$lang/$module manifest $field empty"
+        while IFS= read -r check; do
+          grep -Fq -- "$check" "$target/docs/09-governance/implementation-readiness.md" || fail "$lang/$module stitched readiness omitted $field: $check"
+        done <<<"$checks"
+      done
     done
     diff -r "$init_target" "$bundle_target" >/dev/null || fail "$lang/$module init/bundle mismatch"
     cases=$((cases + 1))
