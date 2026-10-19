@@ -33,6 +33,7 @@ jobs:
             os: windows-2022
             shell: bash
             kind: bash
+            msys: winsymlinks:nativestrict
           - label: Windows PowerShell 5.1
             os: windows-2022
             shell: powershell
@@ -41,6 +42,8 @@ jobs:
             os: windows-2022
             shell: pwsh
             kind: powershell
+    env:
+      MSYS: ${{ matrix.msys }}
     defaults:
       run:
         shell: ${{ matrix.shell }}
@@ -60,6 +63,24 @@ jobs:
             echo "$(brew --prefix bash)/bin" >> "$GITHUB_PATH"
           } 2>&1 | tee evidence/bash-setup.log
 
+      - name: Verify native Windows symlink fixtures
+        if: runner.os == 'Windows' && matrix.kind == 'bash'
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mkdir -p evidence
+          preflight="$(mktemp -d "${TMPDIR:-/tmp}/forsetum-symlinks.XXXXXX")"
+          trap 'rm -rf -- "$preflight"' EXIT
+          {
+            printf 'MSYS=%s\n' "$MSYS"
+            printf 'fixture target\n' >"$preflight/real"
+            ln -s "$preflight/real" "$preflight/link"
+            [[ -L "$preflight/link" && -f "$preflight/link" ]] || { printf 'FAIL: real native symlink required\n' >&2; exit 1; }
+            ln -s "$preflight/missing" "$preflight/dangling"
+            [[ -L "$preflight/dangling" && ! -e "$preflight/dangling" ]] || { printf 'FAIL: dangling native symlink required\n' >&2; exit 1; }
+            printf 'PASS: real and dangling native symlink fixtures\n'
+          } 2>&1 | tee evidence/symlink-preflight.log
+
       - name: Bash compatibility and source gates
         if: matrix.kind == 'bash'
         run: |
@@ -74,16 +95,7 @@ jobs:
             git --version
             git rev-parse HEAD
             find scripts skills/forsetum-harness -type f -name '*.sh' -exec "$gate_bash" -n {} +
-            "$gate_bash" scripts/test-compatibility.sh
-            if [[ -f scripts/export-public.sh ]]; then
-              "$gate_bash" scripts/validate-harness.sh --all
-              "$gate_bash" skills/forsetum-harness/tests/run-conformance.sh
-              "$gate_bash" skills/forsetum-harness/tests/test-public-export.sh
-              "$gate_bash" skills/forsetum-harness/tests/test-public-package-contract.sh
-              "$gate_bash" skills/forsetum-harness/tests/test-installed-package.sh
-              "$gate_bash" scripts/export-public.sh --output dist/public-ci-27-modules
-              "$gate_bash" dist/public-ci-27-modules/scripts/test-compatibility.sh
-            fi
+            "$gate_bash" scripts/test-product.sh
             git diff --check
           } 2>&1 | tee evidence/compatibility.log
 
@@ -99,8 +111,8 @@ jobs:
             git --version
             git rev-parse HEAD
             if ($LASTEXITCODE -ne 0) { throw 'Git version evidence failed' }
-            & ./scripts/test-compatibility.ps1
-            if (-not $?) { throw 'Compatibility gate failed' }
+            & ./scripts/test-product.ps1
+            if (-not $?) { throw 'Product gate failed' }
           } finally {
             Stop-Transcript
           }
@@ -113,3 +125,30 @@ jobs:
           path: evidence/
           if-no-files-found: error
           retention-days: 14
+
+  # Preserve existing required-check names while gating on all five environments.
+  linux-validation:
+    name: Linux Validation
+    runs-on: ubuntu-24.04
+    needs: compatibility
+    if: always()
+    steps:
+      - name: Require complete compatibility success
+        env:
+          RESULT: ${{ needs.compatibility.result }}
+        run: |
+          test "$RESULT" = success
+          echo 'All five compatibility jobs passed.'
+
+  windows-powershell-validation:
+    name: Windows PowerShell Validation
+    runs-on: ubuntu-24.04
+    needs: compatibility
+    if: always()
+    steps:
+      - name: Require complete compatibility success
+        env:
+          RESULT: ${{ needs.compatibility.result }}
+        run: |
+          test "$RESULT" = success
+          echo 'All five compatibility jobs passed.'

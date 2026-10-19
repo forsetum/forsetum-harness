@@ -582,7 +582,8 @@ done <<<"${MODULE_BLOCK}"
 # Stitch INDEX.md
 INDEX_FILE="${STAGING_DIR}/docs/INDEX.md"
 if [[ -f "${INDEX_FILE}" ]]; then
-  awk -v tbl="${INDEX_TABLE}" '
+  STITCH_TABLE="${INDEX_TABLE}" awk '
+    BEGIN { tbl = ENVIRON["STITCH_TABLE"] }
     /<!-- MODULE_DOCS_START -->/ {
       print $0
       print tbl
@@ -595,13 +596,15 @@ if [[ -f "${INDEX_FILE}" ]]; then
       next
     }
     !skip { print }
-  ' "${INDEX_FILE}" > "${INDEX_FILE}.tmp" && mv "${INDEX_FILE}.tmp" "${INDEX_FILE}"
+  ' "${INDEX_FILE}" > "${INDEX_FILE}.tmp"
+  mv "${INDEX_FILE}.tmp" "${INDEX_FILE}"
 fi
 
 # Stitch template-variables.md
 VARS_FILE="${STAGING_DIR}/docs/08-reference/template-variables.md"
 if [[ -f "${VARS_FILE}" ]]; then
-  awk -v tbl="${VARS_TABLE}" '
+  STITCH_TABLE="${VARS_TABLE}" awk '
+    BEGIN { tbl = ENVIRON["STITCH_TABLE"] }
     /<!-- MODULE_VARS_START -->/ {
       print $0
       print tbl
@@ -614,13 +617,15 @@ if [[ -f "${VARS_FILE}" ]]; then
       next
     }
     !skip { print }
-  ' "${VARS_FILE}" > "${VARS_FILE}.tmp" && mv "${VARS_FILE}.tmp" "${VARS_FILE}"
+  ' "${VARS_FILE}" > "${VARS_FILE}.tmp"
+  mv "${VARS_FILE}.tmp" "${VARS_FILE}"
 fi
 
 # Stitch implementation-readiness.md
 READINESS_FILE="${STAGING_DIR}/docs/09-governance/implementation-readiness.md"
 if [[ -f "${READINESS_FILE}" ]]; then
-  awk -v tbl="${READINESS_TABLE}" '
+  STITCH_TABLE="${READINESS_TABLE}" awk '
+    BEGIN { tbl = ENVIRON["STITCH_TABLE"] }
     /<!-- MODULE_READINESS_START -->/ {
       print $0
       print tbl
@@ -633,7 +638,8 @@ if [[ -f "${READINESS_FILE}" ]]; then
       next
     }
     !skip { print }
-  ' "${READINESS_FILE}" > "${READINESS_FILE}.tmp" && mv "${READINESS_FILE}.tmp" "${READINESS_FILE}"
+  ' "${READINESS_FILE}" > "${READINESS_FILE}.tmp"
+  mv "${READINESS_FILE}.tmp" "${READINESS_FILE}"
 fi
 
 # Interpolate PROJECT_NAME if specified

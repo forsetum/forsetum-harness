@@ -79,18 +79,9 @@ param(
     Assert ($process.ExitCode -ne 0) 'wrapper swallowed canonical terminating error'
     Write-Output 'PASS: wrapper canonical nonzero exit and terminating error propagation'
     $installed = Join-Path $work 'installed skill'
-    Copy-Item -LiteralPath (Join-Path $Root 'skills/forsetum-harness') -Destination $installed -Recurse
+    & (Join-Path $Root 'scripts/build-skill.ps1') -Output $installed
     $runtime = Join-Path $installed 'runtime'
-    if (-not (Test-Path -LiteralPath $runtime)) {
-        Assert (Test-Path -LiteralPath (Join-Path $Root 'scripts/export-public.sh')) 'public package missing runtime'
-        New-Item -ItemType Directory -Path (Join-Path $runtime 'scripts') -Force | Out-Null
-        Copy-Item -LiteralPath (Join-Path $Root 'template') -Destination (Join-Path $runtime 'template') -Recurse
-        foreach ($name in @('init','bundle','validate-harness','validate-template')) {
-            foreach ($extension in @('sh','ps1')) {
-                Copy-Item -LiteralPath (Join-Path $Root "scripts/$name.$extension") -Destination (Join-Path $runtime 'scripts')
-            }
-        }
-    }
+    Assert ((Inventory (Join-Path $Root 'skills/forsetum-harness/runtime')) -eq (Inventory $runtime)) 'tracked runtime drift; regenerate with build-skill.ps1'
     foreach ($name in @('init','bundle','validate-harness','validate-template')) {
         foreach ($extension in @('sh','ps1')) {
             $a = (Get-FileHash -LiteralPath (Join-Path $Root "scripts/$name.$extension")).Hash
@@ -133,6 +124,27 @@ param(
                 foreach ($item in Get-ChildItem -LiteralPath (Join-Path $source "modules/$module") -Force -Recurse -File) {
                     $relative = $item.FullName.Substring((Join-Path $source "modules/$module").Length).TrimStart("\","/")
                     Assert (Test-Path -LiteralPath (Join-Path $target $relative) -PathType Leaf) "$lang/$module overlay missing: $relative"
+                    $relativeDoc = $relative -replace '\\','/'
+                    if ($relativeDoc.StartsWith('docs/') -and $relativeDoc.EndsWith('.md')) {
+                        $doc = $relativeDoc.Substring(5)
+                        $index = Get-Content -LiteralPath (Join-Path $target 'docs/INDEX.md') -Raw
+                        if ($doc -in @('INDEX.md','08-reference/template-variables.md','09-governance/implementation-readiness.md')) {
+                            Assert ($index.Contains($doc)) "$lang/$module core index omitted protected document: $doc"
+                        } else {
+                            $section = [regex]::Match($index, '(?s)<!-- MODULE_DOCS_START -->(.*?)<!-- MODULE_DOCS_END -->')
+                            Assert ($section.Success -and $section.Groups[1].Value.Contains('(' + $doc + ')')) "$lang/$module stitched index omitted module document: $doc"
+                        }
+                    }
+                }
+            }
+            foreach ($target in @($initTarget,$bundleTarget)) {
+                $registry = Get-Content -LiteralPath (Join-Path $target 'docs/08-reference/template-variables.md') -Raw
+                foreach ($variable in $metadata.variables) {
+                    Assert ($registry.Contains('{{' + $variable.key + '}}')) "$lang/$module registry omitted $($variable.key)"
+                }
+                $readiness = Get-Content -LiteralPath (Join-Path $target 'docs/09-governance/implementation-readiness.md') -Raw
+                foreach ($check in @($metadata.readiness_checks) + @($metadata.domain_guardrails)) {
+                    Assert ($readiness.Contains($check)) "$lang/$module readiness omitted: $check"
                 }
             }
             Assert ((Inventory $initTarget) -eq (Inventory $bundleTarget)) "$lang/$module init/bundle mismatch"
