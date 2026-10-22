@@ -1,0 +1,115 @@
+name: Validate canonical GitLab candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full 40-character SHA of canonical GitLab main
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canonical-candidate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compatibility:
+    name: ${{ matrix.label }}
+    environment: canonical-source-validation
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Ubuntu Bash
+            os: ubuntu-24.04
+            shell: bash
+            kind: bash
+          - label: macOS Bash 4+
+            os: macos-14
+            shell: bash
+            kind: bash
+          - label: Windows Git Bash
+            os: windows-2022
+            shell: bash
+            kind: bash
+            msys: winsymlinks:nativestrict
+          - label: Windows PowerShell 5.1
+            os: windows-2022
+            shell: powershell
+            kind: powershell
+          - label: Windows PowerShell 7
+            os: windows-2022
+            shell: pwsh
+            kind: powershell
+    env:
+      MSYS: ${{ matrix.msys }}
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - name: Fetch and verify exact canonical main SHA
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          CANONICAL_GITLAB_READ_KEY: ${{ secrets.CANONICAL_GITLAB_READ_KEY }}
+          CANONICAL_GITLAB_KNOWN_HOSTS: ${{ secrets.CANONICAL_GITLAB_KNOWN_HOSTS }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || { echo "Run this workflow only from main." >&2; exit 1; }
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "source_sha must be a full lowercase 40-character SHA." >&2; exit 1; }
+          [[ -n "$CANONICAL_GITLAB_READ_KEY" && -n "$CANONICAL_GITLAB_KNOWN_HOSTS" ]] || { echo "Protected canonical GitLab environment secrets are not configured." >&2; exit 1; }
+
+          ssh_dir="$(mktemp -d "${TMPDIR:-/tmp}/forsetum-canonical-ssh.XXXXXX")"
+          candidate_dir="$GITHUB_WORKSPACE/candidate"
+          trap 'rm -rf -- "$ssh_dir"' EXIT
+          printf '%s\n' "$CANONICAL_GITLAB_READ_KEY" >"$ssh_dir/id_ed25519"
+          printf '%s\n' "$CANONICAL_GITLAB_KNOWN_HOSTS" >"$ssh_dir/known_hosts"
+          chmod 600 "$ssh_dir/id_ed25519" "$ssh_dir/known_hosts"
+          unset CANONICAL_GITLAB_READ_KEY CANONICAL_GITLAB_KNOWN_HOSTS
+          export GIT_SSH_COMMAND="ssh -i $ssh_dir/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=$ssh_dir/known_hosts -o StrictHostKeyChecking=yes -o BatchMode=yes"
+
+          source_url='git@gitlab.com:iddevops-lab/forsetum-harness.git'
+          observed_sha="$(git ls-remote --exit-code --refs "$source_url" refs/heads/main | awk 'NR == 1 { print $1 }')"
+          [[ "$observed_sha" == "$SOURCE_SHA" ]] || { echo "Requested SHA is not the observed canonical main tip." >&2; exit 1; }
+          git init --quiet "$candidate_dir"
+          git -C "$candidate_dir" remote add canonical "$source_url"
+          git -C "$candidate_dir" fetch --quiet --depth=1 canonical refs/heads/main
+          fetched_sha="$(git -C "$candidate_dir" rev-parse FETCH_HEAD^{commit})"
+          [[ "$fetched_sha" == "$SOURCE_SHA" ]] || { echo "Fetched source SHA differs from the requested SHA." >&2; exit 1; }
+          git -C "$candidate_dir" checkout --quiet --detach "$fetched_sha"
+          final_sha="$(git ls-remote --exit-code --refs "$source_url" refs/heads/main | awk 'NR == 1 { print $1 }')"
+          [[ "$final_sha" == "$SOURCE_SHA" ]] || { echo "Canonical main moved during validation setup; rerun against its reviewed tip." >&2; exit 1; }
+          echo "Validated exact canonical GitLab main SHA: $fetched_sha"
+
+      - name: Bash compatibility and source gates
+        if: matrix.kind == 'bash'
+        working-directory: candidate
+        run: |
+          set -Eeuo pipefail
+          uname -a
+          gate_bash="$(command -v bash)"
+          "$gate_bash" -c '(( BASH_VERSINFO[0] >= 4 ))'
+          "$gate_bash" --version
+          git --version
+          git rev-parse HEAD
+          find scripts skills/forsetum-harness -type f -name '*.sh' -exec "$gate_bash" -n {} +
+          "$gate_bash" scripts/test-product.sh
+          git diff --check
+
+      - name: Native PowerShell compatibility gate
+        if: matrix.kind == 'powershell'
+        working-directory: candidate
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSVersionTable | Format-List
+          [Environment]::OSVersion.VersionString
+          git --version
+          git rev-parse HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Git SHA evidence failed' }
+          & ./scripts/test-product.ps1
+          if (-not $?) { throw 'Product gate failed' }
